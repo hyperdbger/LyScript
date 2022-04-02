@@ -1203,7 +1203,7 @@ if __name__ == "__main__":
         print(hex(index),end="")
     print()
 
-    # 反汇编一个序列
+    # 汇编一个序列
     asm_list = ["xor eax,eax", "xor ebx,ebx", "mov eax,1"]
     for index in asm_list:
         byte_array = get_opcode_from_assemble(dbg, index)
