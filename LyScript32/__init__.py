@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import socket,struct,time
+import socket,struct
 from ctypes import *
+
 class MyStruct(Structure):
     _pack_ = 1
     _fields_ = [
