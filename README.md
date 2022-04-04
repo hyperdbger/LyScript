@@ -1351,7 +1351,7 @@ if __name__ == "__main__":
     dbg.connect()
 
     # 需要搜索的指令集片段
-    search_asm = ['pop ecx','xor eax,eax', 'push eax', 'jmp esp']
+    search_asm = ['pop ecx','mov edi,edi', 'push eax', 'jmp esp']
     opcode = []
 
     # 将汇编指令转为机器码,放入opcode
@@ -1363,17 +1363,20 @@ if __name__ == "__main__":
     # 循环搜索指令集内存地址
     for index,entry in zip(range(0,len(opcode)), dbg.get_all_module()):
         eip = entry.get("entry")
+        base_name = entry.get("name")
         if eip != 0:
             dbg.set_register("eip",eip)
-            search_address = dbg.scan_memory_one(opcode[index])
+            search_address = dbg.scan_memory_all(opcode[index])
 
-            if search_address != 0:
-                print("指令: {} --> 地址: {}".format(search_asm[index],hex(search_address)))
+            if search_address != False:
+                print("指令: {} --> 模块: {} --> 个数: {}".format(search_asm[index],base_name,len(search_address)))
+
+                for search_index in search_address:
+                    print("[*] {}".format(hex(search_index)))
             else:
-                print("指令: {} --> 未找到".format(search_asm[index]))
+                print("a")
 
         time.sleep(0.3)
-
     dbg.close()
  ```
  
