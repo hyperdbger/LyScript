@@ -1273,3 +1273,36 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**内存字节变更后回写:** 封装字节函数`write_opcode_list()`传入内存地址，对该地址中的字节更改后再回写到原来的位置。
+```Python
+from LyScript32 import MyDebug
+
+# 对每一个字节如何处理
+def write_func(x):
+    x = x + 10
+    return x
+
+# 对指定内存地址机器码进行相应处理
+def write_opcode_list(dbg_ptr, address, count, function_ptr):
+    for index in range(0, count):
+        read = dbg_ptr.read_memory_byte(address + index)
+
+        ref = function_ptr(read)
+        print("处理后结果: {}".format(ref))
+
+        dbg.write_memory_byte(address + index, ref)
+    return True
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 得到EIP
+    eip = dbg.get_register("eip")
+
+    # 对指定内存中的数据+10后写回去
+    write_opcode_list(dbg,eip,100,write_func)
+
+    dbg.close()
+```
