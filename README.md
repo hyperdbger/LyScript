@@ -1337,7 +1337,10 @@ from LyScript32 import MyDebug
 
 # 将bytearray转为字符串
 def get_string(byte_array):
-  pass
+    ref_string = str()
+    for index in byte_array:
+        ref_string = ref_string + "".join(str(index))
+    return ref_string
 
 # 传入汇编代码,得到对应机器码
 def get_opcode_from_assemble(dbg_ptr,asm):
