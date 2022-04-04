@@ -1240,7 +1240,7 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-如何执行函数呢？很简单，看一下案例
+如何执行函数呢？很简单，看以下代码是如何实现的，相信你能看懂。
 ```Python
 from LyScript32 import MyDebug
 
