@@ -1330,3 +1330,48 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**指令集探针快速检索:** 快速检索当前程序中所有模块中是否存在特定的指令集片段，存在则返回内存地址。
+```Python
+from LyScript32 import MyDebug
+
+# 将bytearray转为字符串
+def get_string(byte_array):
+  pass
+
+# 传入汇编代码,得到对应机器码
+def get_opcode_from_assemble(dbg_ptr,asm):
+  pass
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 需要搜索的指令集片段
+    search_asm = ['pop ecx','xor eax,eax', 'push eax', 'jmp esp']
+    opcode = []
+
+    # 将汇编指令转为机器码,放入opcode
+    for index in range(len(search_asm)):
+        byt = bytearray()
+        byt = get_opcode_from_assemble(dbg, search_asm[index])
+        opcode.append(get_string(byt))
+
+    # 循环搜索指令集内存地址
+    for index,entry in zip(range(0,len(opcode)), dbg.get_all_module()):
+        eip = entry.get("entry")
+        if eip != 0:
+            dbg.set_register("eip",eip)
+            search_address = dbg.scan_memory_one(opcode[index])
+
+            if search_address != 0:
+                print("指令: {} --> 地址: {}".format(search_asm[index],hex(search_address)))
+            else:
+                print("指令: {} --> 未找到".format(search_asm[index]))
+
+        time.sleep(0.3)
+
+    dbg.close()
+ ```
+ 
+ 
