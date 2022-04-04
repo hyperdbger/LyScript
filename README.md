@@ -1240,7 +1240,7 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-如何执行函数呢？很简单，看以下代码是如何实现的，相信你能看懂。
+如何执行函数呢？很简单，看以下代码是如何实现的，相信你能看懂，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
 ```Python
 from LyScript32 import MyDebug
 
@@ -1272,5 +1272,4 @@ if __name__ == "__main__":
     dbg.set_debug("Run")
 
     dbg.close()
-    
 ```
