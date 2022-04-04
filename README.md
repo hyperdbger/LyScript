@@ -1122,6 +1122,26 @@ if __name__ == "__main__":
     print(timedate)
 ```
 
+**全模块特征匹配:** 针对所有模块中的特征码模糊匹配，找到会返回内存地址。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    for entry in dbg.get_all_module():
+        eip = entry.get("entry")
+
+        if eip != 0:
+            dbg.set_register("eip",eip)
+
+            search = dbg.scan_memory_one("ff 25 ??")
+            print(hex(search))
+
+    dbg.close()
+```
+
 **运用Python搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
 ```Python
 from LyScript32 import MyDebug
