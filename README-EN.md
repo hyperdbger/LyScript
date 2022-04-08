@@ -30,11 +30,11 @@ After the plug-in is loaded successfully, you will see the specific binding info
 
 ![image](https://user-images.githubusercontent.com/52789403/161062658-0452fe0c-3e11-4df4-a83b-b026f74884d0.png)
 
-If remote debugging is required, you only need to input the IP address of the opposite end when initializing the 'mydebug()' class. If you do not fill in the parameters, the '127.0.0.1' address is used by default. Please ensure that the opposite end releases the '6589' port, otherwise you cannot connect.
+If remote debugging is required, you only need to input the IP address of the opposite end when initializing the `mydebug()` class. If you do not fill in the parameters, the `127.0.0.1` address is used by default. Please ensure that the opposite end releases the `6589` port, otherwise you cannot connect.
 
 ![image](https://user-images.githubusercontent.com/52789403/161062393-df04aabb-2d70-4434-80b9-a46974bccf8a.png)
 
-Run the x64dbg program and manually load the executable file to be analyzed. Then we can connect to the debugger through the 'connect()' method. After connecting, a persistent session will be created until the python script ends, and the connection will be forcibly disconnected. During this period, ` is can be called_ Connect() ` check whether the link still exists. The specific code is as follows.
+Run the x64dbg program and manually load the executable file to be analyzed. Then we can connect to the debugger through the `connect()` method. After connecting, a persistent session will be created until the python script ends, and the connection will be forcibly disconnected. During this period, ` is_connect() ` check whether the link still exists. The specific code is as follows.
 ```Python
 from LyScript32 import MyDebug
 
@@ -56,11 +56,11 @@ if __name__ == "__main__":
 
 ### Register class
 
-**get_register():** 该函数主要用于实现，对特定寄存器的获取操作，用户需传入需要获取的寄存器名字即可。
+**get_register():** This function is mainly used to obtain a specific register. The user needs to pass in the name of the register to be obtained.
 
- - 参数1：传入寄存器字符串
+ - Parameter 1：Incoming register string
 
-可用范围："DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP"
+Available range："DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP"
 
 ```Python
 from LyScript32 import MyDebug
@@ -78,9 +78,9 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-如果您使用的是64位插件，则寄存器的支持范围将变为E系列加R系列。
+If you are using a 64 bit plug-in, the support range of registers will be wider.
 
-可用范围扩展： "DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP", "RAX", "RBX", "RCX", "RDX", "RSI", "SIL", "RDI", "DIL", "RBP", "BPL", "RSP", "SPL", "RIP", "R8", "R8D", "R8W", "R8B", "R9", "R9D", "R9W", "R9B", "R10", "R10D", "R10W", "R10B", "R11", "R11D", "R11W", "R11B", "R12", "R12D", "R12W", "R12B", "R13", "R13D", "R13W", "R13B", "R14", "R14D", "R14W", "R14B", "R15", "R15D", "R15W", "R15B"
+Available range extension： "DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP", "RAX", "RBX", "RCX", "RDX", "RSI", "SIL", "RDI", "DIL", "RBP", "BPL", "RSP", "SPL", "RIP", "R8", "R8D", "R8W", "R8B", "R9", "R9D", "R9W", "R9B", "R10", "R10D", "R10W", "R10B", "R11", "R11D", "R11W", "R11B", "R12", "R12D", "R12W", "R12B", "R13", "R13D", "R13W", "R13B", "R14", "R14D", "R14W", "R14B", "R15", "R15D", "R15W", "R15B"
 
 ```Python
 from LyScript64 import MyDebug
@@ -101,12 +101,12 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**set_register():** 该函数实现设置指定寄存器参数，同理64位将支持更多寄存器的参数修改。
+**set_register():** This function sets the parameters of the specified register. Similarly, 64 bit will support the parameter modification of more registers.
 
- - 参数1：传入寄存器字符串
- - 参数2：十进制数值
+ - Parameter 1：Incoming register string
+ - Parameter 2：Decimal value
 
-可用范围："DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP"
+Available range："DR0", "DR1", "DR2", "DR3", "DR6", "DR7", "EAX", "AX", "AH", "AL", "EBX", "BX", "BH", "BL", "ECX", "CX", "CH", "CL", "EDX", "DX", "DH", "DL", "EDI", "DI", "ESI", "SI", "EBP", "BP", "ESP", "SP", "EIP"
 
 ```Python
 from LyScript32 import MyDebug
@@ -125,11 +125,11 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_flag_register():** 用于获取某个标志位参数，返回值只有真或者假。
+**get_flag_register():** Used to obtain a flag bit parameter. The return value is only true or false.
 
- - 参数1：寄存器字符串
+ - Parameter 1：Register string
 
-可用寄存器范围："ZF", "OF", "CF", "PF", "SF", "TF", "AF", "DF", "IF" 
+Available register range："ZF", "OF", "CF", "PF", "SF", "TF", "AF", "DF", "IF" 
 
 ```Python
 from LyScript32 import MyDebug
@@ -145,12 +145,12 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**set_flag_register():** 用于设置某个标志位参数，返回值只有真或者假。
+**set_flag_register():** Used to set a flag bit parameter. The return value is only true or false.
  
- - 参数1：寄存器字符串
- - 参数2：[ 设置为真 True] / [设置为假 False]
+ - Parameter 1：Register string
+ - Parameter 2：[ Set to true True] / [Set to false False]
 
-可用寄存器范围："ZF", "OF", "CF", "PF", "SF", "TF", "AF", "DF", "IF" 
+Available register range："ZF", "OF", "CF", "PF", "SF", "TF", "AF", "DF", "IF" 
 
 ```Python
 from LyScript32 import MyDebug
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
 **set_debug():** 用于影响调试器，例如前进一次，后退一次，暂停调试，终止等。
 
- - 参数1: 传入需要执行的动作
+ - Parameter 1: 传入需要执行的动作
 
 可用动作范围：[暂停 Pause] [运行 Run] [步入 StepIn]  [步过 StepOut] [到结束 StepOver] [停止 Stop] [等待 Wait]
 
@@ -200,8 +200,8 @@ if __name__ == "__main__":
 
 **set_debug_count():** 该函数是`set_debug()`函数的延续，目的是执行自动步过次数。
 
- - 参数1：传入需要执行的动作
- - 参数2：执行重复次数
+ - Parameter 1：传入需要执行的动作
+ - Parameter 2：执行重复次数
 
 可用动作范围：[暂停 Pause] [运行 Run] [步入 StepIn]  [步过 StepOut] [到结束 StepOver] [停止 Stop] [等待 Wait]
 
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 
 **is_debugger() /is_running():** is_debugger可用于验证当前调试器是否处于调试状态，is_running则用于验证是否在运行。
 
-- 无参数传递
+- No parameter transfer
 
 ```Python
 if __name__ == "__main__":
@@ -239,7 +239,7 @@ from LyScript32 import MyDebug
 
 **set_breakpoint():** 设置断点与取消断点进行了分离，设置断点只需要传入十进制内存地址。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
  
 ```Python
 from LyScript32 import MyDebug
@@ -257,7 +257,7 @@ if __name__ == "__main__":
 
 **delete_breakpoint():** 该函数传入一个内存地址，可取消一个内存断点。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -278,7 +278,7 @@ if __name__ == "__main__":
 
 **check_breakpoint():** 用于检查下过的断点是否被命中，命中返回True否则返回False。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -299,7 +299,7 @@ if __name__ == "__main__":
 
 **get_all_breakpoint():** 用于获取当前调试程序中，所有下过的断点信息，包括是否开启，命中次数等。
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -314,8 +314,8 @@ if __name__ == "__main__":
 
 **set_hardware_breakpoint():** 用于设置一个硬件断点，硬件断点在32位系统中最多设置4个。
 
- - 参数1：内存地址（十进制）
- - 参数2：断点类型
+ - Parameter 1：内存地址（十进制）
+ - Parameter 2：断点类型
 
 断点类型可用范围：[类型 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
 
@@ -336,7 +336,7 @@ if __name__ == "__main__":
 
 **delete_hardware_breakpoint():** 用于删除一个硬件断点，只需要传入地址即可，无需传入类型。
 
- - 参数1：内存地址（十进制）
+ - Parameter 1：内存地址（十进制）
 
 断点类型可用范围：[类型 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
 
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
 **get_module_base():** 该函数可用于获取程序载入的指定一个模块的基地址。
 
- - 参数1：模块名字符串
+ - Parameter 1：模块名字符串
 
 ```Python
 from LyScript32 import MyDebug
@@ -402,7 +402,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_local_():** 获取当前EIP所在模块基地址，长度，以及内存属性，此功能无参数传递，获取的是当前EIP所指向模块的数据。
+**get_local_():** 获取当前EIP所在模块基地址，长度，以及内存属性，此功能No parameter transfer，获取的是当前EIP所指向模块的数据。
 
  - dbg.get_local_base()    获取模块基地址
  - dbg.get_local_size()    获取模块长度
@@ -429,8 +429,8 @@ if __name__ == "__main__":
 
 **get_module_from_function():** 获取指定模块中指定函数的内存地址，可用于验证当前程序在内存中指定函数的虚拟地址。
 
- - 参数1：模块名
- - 参数2：函数名
+ - Parameter 1：模块名
+ - Parameter 2：函数名
 
 成功返回地址，失败返回false
 
@@ -452,7 +452,7 @@ if __name__ == "__main__":
 
 **get_module_from_import():** 获取当前程序中指定模块的导入表信息，输出为列表嵌套字典。
 
- - 参数1：传入模块名称
+ - Parameter 1：传入模块名称
 
 ```Python
 from LyScript32 import MyDebug
@@ -474,7 +474,7 @@ if __name__ == "__main__":
 
 **get_module_from_export():** 该函数用于获取当前加载程序中的导出表信息。
 
- - 参数1：传入模块名
+ - Parameter 1：传入模块名
 
 ```Python
 from LyScript32 import MyDebug
@@ -493,7 +493,7 @@ if __name__ == "__main__":
 
 **get_section():** 该函数用于输出主程序中的节表信息。
 
- - 无参数传递
+ - No parameter transfer
 
  ```Python
  from LyScript32 import MyDebug
@@ -510,7 +510,7 @@ if __name__ == "__main__":
 
 **get_base_from_address():** 根据传入的内存地址得到该模块首地址。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -526,7 +526,7 @@ if __name__ == "__main__":
 
 **get_base_from_name():** 根据传入的模块名得到该模块所在内存首地址。
 
- - 参数1：传入模块名
+ - Parameter 1：传入模块名
 
 ```Python
 from LyScript32 import MyDebug
@@ -544,7 +544,7 @@ if __name__ == "__main__":
 
 **get_oep_from_name():** 根据传入的模块名，获取该模块实际装载OEP位置。
 
- - 参数1：传入模块名
+ - Parameter 1：传入模块名
 
 ```Python
 from LyScript32 import MyDebug
@@ -561,7 +561,7 @@ if __name__ == "__main__":
 
 **get_oep_from_address():** 根据传入内存地址，得到该地址模块的OEP位置。
 
- - 参数1：传入内存地址
+ - Parameter 1：传入内存地址
 
 ```Python
 from LyScript32 import MyDebug
@@ -582,7 +582,7 @@ if __name__ == "__main__":
 
 **read_memory_():** 读内存系列函数，包括 ReadByte,ReadWord,ReadDword 三种格式，在64位下才支持Qword
 
- - 参数1：需要读取的内存地址（十进制）
+ - Parameter 1：需要读取的内存地址（十进制）
 
 目前支持：
  - read_memory_byte() 读字节
@@ -618,8 +618,8 @@ if __name__ == "__main__":
 
 **write_memory_():** 写内存系列函数，WriteByte,WriteWord,WriteDWORD,WriteQword
 
- - 参数1：需要写入的内存
- - 参数2：需要写入的byte字节
+ - Parameter 1：需要写入的内存
+ - Parameter 2：需要写入的byte字节
 
 目前支持：
  - write_memory_byte() 写字节
@@ -647,7 +647,7 @@ if __name__ == "__main__":
 
 **scan_memory_one():** 实现了内存扫描，当扫描到第一个符合条件的特征时，自动输出。
 
- - 参数1：特征码字段
+ - Parameter 1：特征码字段
 
  这个函数需要注意，如果我们的x64dbg工具停在系统领空，则会默认搜索系统领空下的特征，如果像搜索程序里面的，需要先将EIP切过去在操作。
 ```Python
@@ -663,7 +663,7 @@ if __name__ == "__main__":
 
 **scan_memory_all():** 实现了扫描所有符合条件的特征字段，找到后返回一个列表。
 
- - 参数1：特征码字段
+ - Parameter 1：特征码字段
 
 ```Python
 from LyScript32 import MyDebug
@@ -714,7 +714,7 @@ if __name__ == "__main__":
 
 **get_local_page_size():** 用于获取当前EIP所指领空下，内存pagesize分页大小。
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -730,7 +730,7 @@ if __name__ == "__main__":
 
 **get_memory_section():** 该函数主要用于获取内存映像中，当前调试程序的内存节表数据。
 
- - 无参数传递
+ - No parameter transfer
  
 ```Python
 from LyScript32 import MyDebug
@@ -749,7 +749,7 @@ if __name__ == "__main__":
 
 **create_alloc()：** 函数`CreateRemoteAlloc()`可在远程开辟一段堆空间，成功返回内存首地址。
 
- - 参数1：开辟的堆长度（十进制）
+ - Parameter 1：开辟的堆长度（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -766,7 +766,7 @@ if __name__ == "__main__":
 
 **delete_alloc()：** 函数`delete_alloc()`用于注销一个远程堆空间。
 
- - 参数1：传入需要删除的堆空间内存地址。
+ - Parameter 1：传入需要删除的堆空间内存地址。
 
 ```Python
 from LyScript32 import MyDebug
@@ -786,7 +786,7 @@ if __name__ == "__main__":
 
 **push_stack():** 将一个十进制数压入堆栈中，默认在堆栈栈顶。
 
- - 参数1：十进制数据
+ - Parameter 1：十进制数据
 
 ```Python
 from LyScript32 import MyDebug
@@ -804,7 +804,7 @@ if __name__ == "__main__":
 
 **pop_stack():** pop函数用于从堆栈中推出一个元素，默认从栈顶弹出。
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -821,7 +821,7 @@ if __name__ == "__main__":
 
 **peek_stack():** peek则用于检查堆栈内的参数，可设置偏移值，不设置则默认检查第一个也就是栈顶。
 
- - 参数1：十进制偏移
+ - Parameter 1：十进制偏移
 
 ```Python
 from LyScript32 import MyDebug
@@ -846,7 +846,7 @@ if __name__ == "__main__":
 
 **get_thread_list():** 该函数可输出当前进程所有在运行的线程信息。
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -864,7 +864,7 @@ if __name__ == "__main__":
 
 **get_process_handle():** 用于获取当前进程句柄信息。
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -881,7 +881,7 @@ if __name__ == "__main__":
 
 **get_process_id():** 用于获取当前加载程序的PID
 
- - 无参数传递
+ - No parameter transfer
 
 ```Python
 from LyScript32 import MyDebug
@@ -922,8 +922,8 @@ if __name__ == "__main__":
 
 **get_disasm_code():** 该函数主要用于对特定内存地址进行反汇编，传入两个参数。
 
- - 参数1：需要反汇编的地址(十进制) 
- - 参数2：需要向下反汇编的长度
+ - Parameter 1：需要反汇编的地址(十进制) 
+ - Parameter 2：需要向下反汇编的长度
 
 ```Python
 from LyScript32 import MyDebug
@@ -964,7 +964,7 @@ if __name__ == "__main__":
 
 **get_disasm_operand_code():** 用于获取汇编指令中的操作数，例如`jmp 0x0401000`其操作数就是`0x0401000`。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -984,7 +984,7 @@ if __name__ == "__main__":
 
 **get_disasm_operand_size():** 用于得当前内存地址下汇编代码的机器码长度。
 
- - 参数1：传入内存地址（十进制）
+ - Parameter 1：传入内存地址（十进制）
 
 ```Python
 from LyScript32 import MyDebug
@@ -1005,8 +1005,8 @@ if __name__ == "__main__":
 
 **assemble_write_memory():** 实现了用户传入一段正确的汇编指令，程序自动将该指令转为机器码，并写入到指定位置。
 
- - 参数1：写出内存地址（十进制）
- - 参数2：写出汇编指令
+ - Parameter 1：写出内存地址（十进制）
+ - Parameter 2：写出汇编指令
 
 ```Python
 from LyScript32 import MyDebug
@@ -1026,7 +1026,7 @@ if __name__ == "__main__":
 
 **assemble_code_size():** 该函数实现了用户传入一个汇编指令，自动计算出该指令占多少个字节。
 
- - 参数1：汇编指令字符串
+ - Parameter 1：汇编指令字符串
 
 ```Python
 from LyScript32 import MyDebug
@@ -1047,8 +1047,8 @@ if __name__ == "__main__":
 
 **set_comment_notes():** 给指定位置代码增加一段注释，如下演示在eip位置增加注释。
 
- - 参数1：注释内存地址
- - 参数2：注释内容
+ - Parameter 1：注释内存地址
+ - Parameter 2：注释内容
 
 ```Python
 from LyScript32 import MyDebug
@@ -1066,7 +1066,7 @@ if __name__ == "__main__":
 
 **run_command_exec():** 执行内置命令，例如bp,dump等。
 
- - 参数1：命令语句
+ - Parameter 1：命令语句
 
 ```Python
 from LyScript32 import MyDebug
@@ -1083,7 +1083,7 @@ if __name__ == "__main__":
 
 **set_loger_output():** 日志的输出尤为重要，该模块提供了自定义日志输出功能，可将指定日志输出到x64dbg日志位置。
 
- - 参数1：日志内容
+ - Parameter 1：日志内容
 
 ```Python
 from LyScript32 import MyDebug
@@ -1383,5 +1383,3 @@ if __name__ == "__main__":
         time.sleep(0.3)
     dbg.close()
  ```
- 
- 
