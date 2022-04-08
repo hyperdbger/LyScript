@@ -335,7 +335,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**delete_hardware_breakpoint() 函数** 用于删除一个硬件断点，只需要传入地址即可，无需传入类型。
+**delete_hardware_breakpoint() 函数:** 用于删除一个硬件断点，只需要传入地址即可，无需传入类型。
 
  - 参数1：内存地址（十进制）
 
