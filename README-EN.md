@@ -362,9 +362,9 @@ if __name__ == "__main__":
 
 ### Module class
 
-**get_module_base():** 该函数可用于获取程序载入的指定一个模块的基地址。
+**get_module_base():** This function can be used to obtain the base address of a specified module loaded by the program.
 
- - Parameter 1：模块名字符串
+ - Parameter 1：Module name string
 
 ```Python
 from LyScript32 import MyDebug
@@ -379,9 +379,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_all_module():** 用于输出当前加载程序的所有模块信息，以字典的形式返回。
+**get_all_module():** It is used to output all module information of the current loader and return it in the form of dictionary.
 
- - 参数：无参数
+ - Parameter: no parameter
 
 ```Python
 from LyScript32 import MyDebug
@@ -402,11 +402,11 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_local_():** 获取当前EIP所在模块基地址，长度，以及内存属性，此功能No parameter transfer，获取的是当前EIP所指向模块的数据。
+**get_local_():** Get the base address, length and memory attributes of the module where the current EIP is located. This function no parameter transfer obtains the data of the module pointed to by the current EIP.
 
- - dbg.get_local_base()    获取模块基地址
- - dbg.get_local_size()    获取模块长度
- - dbg.get_local_protect() 获取模块保护属性
+ - dbg.get_local_base()    Get module base address
+ - dbg.get_local_size()    Get module length
+ - dbg.get_local_protect() Get module protection properties
 
 ```Python
 from LyScript32 import MyDebug
@@ -427,12 +427,12 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_module_from_function():** 获取指定模块中指定函数的内存地址，可用于验证当前程序在内存中指定函数的虚拟地址。
+**get_module_from_function():** Gets the memory address of the specified function in the specified module, which can be used to verify the virtual address of the specified function in the memory of the current program.
 
- - Parameter 1：模块名
- - Parameter 2：函数名
+ - Parameter 1：Module name
+ - Parameter 2：Function name
 
-成功返回地址，失败返回false
+The address is returned successfully, and false is returned in case of failure
 
 ```Python
 from LyScript32 import MyDebug
@@ -450,9 +450,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_module_from_import():** 获取当前程序中指定模块的导入表信息，输出为列表嵌套字典。
+**get_module_from_import():** Obtain the import table information of the specified module in the current program and output it as a list nested dictionary.
 
- - Parameter 1：传入模块名称
+ - Parameter 1：Incoming module name
 
 ```Python
 from LyScript32 import MyDebug
@@ -472,9 +472,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_module_from_export():** 该函数用于获取当前加载程序中的导出表信息。
+**get_module_from_export():** This function is used to obtain the export table information in the current loader.
 
- - Parameter 1：传入模块名
+ - Parameter 1：Incoming module name
 
 ```Python
 from LyScript32 import MyDebug
@@ -491,7 +491,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_section():** 该函数用于输出主程序中的节表信息。
+**get_section():** This function is used to output the section table information in the main program.
 
  - No parameter transfer
 
@@ -508,9 +508,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_base_from_address():** 根据传入的内存地址得到该模块首地址。
+**get_base_from_address():** Get the first address of the module according to the incoming memory address.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -524,9 +524,9 @@ if __name__ == "__main__":
     print("模块首地址: {}".format(hex(ref)))
 ```
 
-**get_base_from_name():** 根据传入的模块名得到该模块所在内存首地址。
+**get_base_from_name():** Get the first memory address of the module according to the passed in module name.
 
- - Parameter 1：传入模块名
+ - Parameter 1：Incoming module name
 
 ```Python
 from LyScript32 import MyDebug
@@ -542,9 +542,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_oep_from_name():** 根据传入的模块名，获取该模块实际装载OEP位置。
+**get_oep_from_name():** Obtain the actual loading OEP location of the module according to the incoming module name.
 
- - Parameter 1：传入模块名
+ - Parameter 1：Incoming module name
 
 ```Python
 from LyScript32 import MyDebug
@@ -559,9 +559,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_oep_from_address():** 根据传入内存地址，得到该地址模块的OEP位置。
+**get_oep_from_address():** According to the incoming memory address, the OEP position of the address module is obtained.
 
- - Parameter 1：传入内存地址
+ - Parameter 1：Incoming memory address
 
 ```Python
 from LyScript32 import MyDebug
@@ -580,16 +580,16 @@ if __name__ == "__main__":
 
 ### Memory class
 
-**read_memory_():** 读内存系列函数，包括 ReadByte,ReadWord,ReadDword 三种格式，在64位下才支持Qword
+**read_memory_():** Read memory series functions, including readbyte, readword and readdword. Qword is only supported under 64 bits
 
- - Parameter 1：需要读取的内存地址（十进制）
+ - Parameter 1：Memory address to be read (decimal)
 
-目前支持：
- - read_memory_byte() 读字节
- - read_memory_word() 读word
- - read_memory_dword() 读dword
- - read_memory_qword() 读qword （仅支持64位）
- - read_memory_ptr() 读指针
+Current support：
+ - read_memory_byte() Read byte
+ - read_memory_word() Read word
+ - read_memory_dword() Read dword
+ - read_memory_qword() Read qword （Only 64 bit is supported）
+ - read_memory_ptr() Read pointer
 
 ```Python
 from LyScript32 import MyDebug
@@ -616,17 +616,17 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**write_memory_():** 写内存系列函数，WriteByte,WriteWord,WriteDWORD,WriteQword
+**write_memory_():** Write memory series function，WriteByte,WriteWord,WriteDWORD,WriteQword
 
- - Parameter 1：需要写入的内存
- - Parameter 2：需要写入的byte字节
+ - Parameter 1：Memory to write
+ - Parameter 2：Byte to be written
 
-目前支持：
- - write_memory_byte() 写字节
- - write_memory_word() 写word
- - write_memory_dword() 写dword
- - write_memory_qword() 写qword （仅支持64位）
- - write_memory_ptr() 写指针
+Current support：
+ - write_memory_byte() Write byte
+ - write_memory_word() Write word
+ - write_memory_dword() Write dword
+ - write_memory_qword() Write qword （Only 64 bit is supported）
+ - write_memory_ptr() Write pointer
 
 ```Python
 from LyScript32 import MyDebug
@@ -645,11 +645,11 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**scan_memory_one():** 实现了内存扫描，当扫描到第一个符合条件的特征时，自动输出。
+**scan_memory_one():** Memory scanning is realized. When the first qualified feature is scanned, it will be output automatically.
 
- - Parameter 1：特征码字段
+ - Parameter 1：Signature field
 
- 这个函数需要注意，如果我们的x64dbg工具停在系统领空，则会默认搜索系统领空下的特征，如果像搜索程序里面的，需要先将EIP切过去在操作。
+ This function should be noted that if our x64dbg tool stops in the system airspace, it will search the features under the system airspace by default. If it is like that in the search program, you need to cut the EIP first.
 ```Python
 from LyScript32 import MyDebug
 
@@ -661,9 +661,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**scan_memory_all():** 实现了扫描所有符合条件的特征字段，找到后返回一个列表。
+**scan_memory_all():** It can scan all qualified characteristic fields and return a list after finding them.
 
- - Parameter 1：特征码字段
+ - Parameter 1：Signature field
 
 ```Python
 from LyScript32 import MyDebug
@@ -680,7 +680,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_local_protect():** 获取内存属性传值，该函数进行更新，取消了只能得到EIP所指的位置的内存属性，用户可随意检测。
+**get_local_protect():** Get the value of the memory attribute, update the function, cancel the memory attribute that can only get the location indicated by the EIP, and the user can detect it at will.
 ```Python
 from LyScript32 import MyDebug
 
@@ -695,7 +695,7 @@ if __name__ == "__main__":
     print(ref)
 ```
 
-**set_local_protect():** 新增设置内存属性函数，传入eip内存地址，设置属性32，以及设置内存长度1024即可。
+**set_local_protect():** Add the function of setting memory attribute, pass in EIP memory address, set attribute 32 and set memory length 1024.
 ```Python
 from LyScript32 import MyDebug
 
@@ -712,7 +712,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_local_page_size():** 用于获取当前EIP所指领空下，内存pagesize分页大小。
+**get_local_page_size():** Used to obtain the PageSize of memory under the airspace indicated by the current EIP.
 
  - No parameter transfer
 
@@ -728,7 +728,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_memory_section():** 该函数主要用于获取内存映像中，当前调试程序的内存节表数据。
+**get_memory_section():** This function is mainly used to get the memory table data of the current debugger in the memory image.
 
  - No parameter transfer
  
@@ -747,9 +747,9 @@ if __name__ == "__main__":
 
 ### Stack class
 
-**create_alloc()：** 函数`CreateRemoteAlloc()`可在远程开辟一段堆空间，成功返回内存首地址。
+**create_alloc()：** The function `createremotealloc()` can open up a heap space remotely and successfully return the first memory address.
 
- - Parameter 1：开辟的堆长度（十进制）
+ - Parameter 1：Heap length (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -764,9 +764,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**delete_alloc()：** 函数`delete_alloc()`用于注销一个远程堆空间。
+**delete_alloc()：** Functions `delete_ Alloc()` used to unregister a remote heap space.
 
- - Parameter 1：传入需要删除的堆空间内存地址。
+ - Parameter 1：Pass in the memory address of the heap space to be deleted.
 
 ```Python
 from LyScript32 import MyDebug
@@ -784,9 +784,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**push_stack():** 将一个十进制数压入堆栈中，默认在堆栈栈顶。
+**push_stack():** Push a decimal number into the stack, which is at the top of the stack by default.
 
- - Parameter 1：十进制数据
+ - Parameter 1：Decimal data
 
 ```Python
 from LyScript32 import MyDebug
@@ -802,7 +802,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**pop_stack():** pop函数用于从堆栈中推出一个元素，默认从栈顶弹出。
+**pop_stack():** Pop function is used to push an element from the stack. By default, it pops up from the top of the stack.
 
  - No parameter transfer
 
@@ -819,9 +819,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**peek_stack():** peek则用于检查堆栈内的参数，可设置偏移值，不设置则默认检查第一个也就是栈顶。
+**peek_stack():** Peek is used to check the parameters in the stack. You can set the offset value. If it is not set, the first one, that is, the top of the stack, will be checked by default.
 
- - Parameter 1：十进制偏移
+ - Parameter 1：Decimal offset
 
 ```Python
 from LyScript32 import MyDebug
