@@ -172,11 +172,11 @@ if __name__ == "__main__":
 
 ### Debugging class
 
-**set_debug():** 用于影响调试器，例如前进一次，后退一次，暂停调试，终止等。
+**set_debug():** Used to affect the debugger, such as forward once, backward once, pause debugging, terminate, etc.
 
- - Parameter 1: 传入需要执行的动作
+ - Parameter 1: Pass in the action to be performed
 
-可用动作范围：[暂停 Pause] [运行 Run] [步入 StepIn]  [步过 StepOut] [到结束 StepOver] [停止 Stop] [等待 Wait]
+Available action range：[pause] [run] [step in] [step out] [step over] [stop] [wait]
 
 ```Python
 from LyScript32 import MyDebug
@@ -198,12 +198,12 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**set_debug_count():** 该函数是`set_debug()`函数的延续，目的是执行自动步过次数。
+**set_debug_count():** This function is ` set_ Debug() ` the continuation of the function. The purpose is to execute the number of automatic steps.
 
- - Parameter 1：传入需要执行的动作
- - Parameter 2：执行重复次数
+ - Parameter 1：Pass in the action to be performed
+ - Parameter 2：Number of execution repetitions
 
-可用动作范围：[暂停 Pause] [运行 Run] [步入 StepIn]  [步过 StepOut] [到结束 StepOver] [停止 Stop] [等待 Wait]
+Available action range：[Pause] [Run] [StepIn]  [StepOut] [StepOver] [Stop] [Wait]
 
 ```Python
 from LyScript32 import MyDebug
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**is_debugger() /is_running():** is_debugger可用于验证当前调试器是否处于调试状态，is_running则用于验证是否在运行。
+**is_debugger() /is_running():** `is_debugger()` can be used to verify whether the debugger is in debug state, `is_running()` is used to verify whether it is running.
 
 - No parameter transfer
 
@@ -237,9 +237,9 @@ from LyScript32 import MyDebug
     dbg.close()
 ```
 
-**set_breakpoint():** 设置断点与取消断点进行了分离，设置断点只需要传入十进制内存地址。
+**set_breakpoint():** Setting breakpoint is separated from canceling breakpoint. Setting breakpoint only needs to pass in decimal memory address.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
  
 ```Python
 from LyScript32 import MyDebug
@@ -255,9 +255,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**delete_breakpoint():** 该函数传入一个内存地址，可取消一个内存断点。
+**delete_breakpoint():** This function passes in a memory address to cancel a memory breakpoint.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -276,9 +276,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**check_breakpoint():** 用于检查下过的断点是否被命中，命中返回True否则返回False。
+**check_breakpoint():** Used to check whether the next breakpoint has been hit. The hit returns true. Otherwise, it returns false.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_all_breakpoint():** 用于获取当前调试程序中，所有下过的断点信息，包括是否开启，命中次数等。
+**get_all_breakpoint():** It is used to get all the breakpoint information in the debugger, including whether to open, hit number, etc.
 
  - No parameter transfer
 
@@ -312,12 +312,12 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**set_hardware_breakpoint():** 用于设置一个硬件断点，硬件断点在32位系统中最多设置4个。
+**set_hardware_breakpoint():** It is used to set a hardware breakpoint. Up to 4 hardware breakpoints can be set in a 32-bit system.
 
- - Parameter 1：内存地址（十进制）
- - Parameter 2：断点类型
+ - Parameter 1：Memory address (decimal)
+ - Parameter 2：Breakpoint Type
 
-断点类型可用范围：[类型 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
+Breakpoint type available range：[Type 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
 
 ```Python
 from LyScript32 import MyDebug
@@ -334,11 +334,11 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**delete_hardware_breakpoint():** 用于删除一个硬件断点，只需要传入地址即可，无需传入类型。
+**delete_hardware_breakpoint():** It is used to delete a hardware breakpoint. You only need to pass in the address without passing in the type.
 
- - Parameter 1：内存地址（十进制）
+ - Parameter 1：Memory address (decimal)
 
-断点类型可用范围：[类型 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
+Breakpoint type available range：[type 0 = HardwareAccess / 1 = HardwareWrite / 2 = HardwareExecute]
 
 ```Python
 from LyScript32 import MyDebug
@@ -1383,3 +1383,5 @@ if __name__ == "__main__":
         time.sleep(0.3)
     dbg.close()
  ```
+ 
+ 
