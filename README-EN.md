@@ -844,7 +844,7 @@ if __name__ == "__main__":
 
 ### Process thread class
 
-**get_thread_list():** 该函数可输出当前进程所有在运行的线程信息。
+**get_thread_list():** This function can output the information of all running threads of the current process.
 
  - No parameter transfer
 
@@ -862,7 +862,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_process_handle():** 用于获取当前进程句柄信息。
+**get_process_handle():** Used to get the current process handle information.
 
  - No parameter transfer
 
@@ -879,7 +879,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_process_id():** 用于获取当前加载程序的PID
+**get_process_id():** PID used to get the current loader
 
  - No parameter transfer
 
@@ -896,10 +896,10 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_teb_address() / get_peb_address():** 用于获取当前进程环境块，和线程环境快。
+**get_teb_address() / get_peb_address():** It is used to obtain the current process environment block and the fast thread environment.
 
- - get_teb_address()  传入参数是线程ID
- - get_peb_address() 传入参数是进程ID
+ - get_teb_address()  The passed in parameter is the thread ID
+ - get_peb_address()  The parameter passed in is the process ID
 
 ```Python
 from LyScript32 import MyDebug
@@ -920,10 +920,10 @@ if __name__ == "__main__":
 
 ### Reverse compilation class
 
-**get_disasm_code():** 该函数主要用于对特定内存地址进行反汇编，传入两个参数。
+**get_disasm_code():** This function is mainly used to disassemble a specific memory address and pass in two parameters.
 
- - Parameter 1：需要反汇编的地址(十进制) 
- - Parameter 2：需要向下反汇编的长度
+ - Parameter 1：Address to disassemble (decimal)
+ - Parameter 2：The length that needs to be disassembled down
 
 ```Python
 from LyScript32 import MyDebug
@@ -945,7 +945,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_disasm_one_code():** 在用户指定的位置读入一条汇编指令，用户可根据需要对其进行判断。
+**get_disasm_one_code():** Read an assembly instruction in the position specified by the user, and the user can judge it as needed.
 ```Python
 from LyScript32 import MyDebug
 
@@ -962,9 +962,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_disasm_operand_code():** 用于获取汇编指令中的操作数，例如`jmp 0x0401000`其操作数就是`0x0401000`。
+**get_disasm_operand_code():** It is used to obtain the operand in the assembly instruction. For example, `JMP 0x0401000`, the operand is`0x0401000`.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -982,9 +982,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**get_disasm_operand_size():** 用于得当前内存地址下汇编代码的机器码长度。
+**get_disasm_operand_size():** Used to get the machine code length of the assembly code under the current memory address.
 
- - Parameter 1：传入内存地址（十进制）
+ - Parameter 1：Incoming memory address (decimal)
 
 ```Python
 from LyScript32 import MyDebug
@@ -1003,10 +1003,10 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**assemble_write_memory():** 实现了用户传入一段正确的汇编指令，程序自动将该指令转为机器码，并写入到指定位置。
+**assemble_write_memory():** It realizes that the user passes in a correct assembly instruction, and the program automatically converts the instruction into machine code and writes it to the specified location.
 
- - Parameter 1：写出内存地址（十进制）
- - Parameter 2：写出汇编指令
+ - Parameter 1：Write out memory address (decimal)
+ - Parameter 2：Write assembly instructions
 
 ```Python
 from LyScript32 import MyDebug
@@ -1024,9 +1024,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**assemble_code_size():** 该函数实现了用户传入一个汇编指令，自动计算出该指令占多少个字节。
+**assemble_code_size():** This function enables the user to input an assembly instruction and automatically calculate how many bytes the instruction occupies.
 
- - Parameter 1：汇编指令字符串
+ - Parameter 1：like OPCODE
 
 ```Python
 from LyScript32 import MyDebug
@@ -1045,10 +1045,10 @@ if __name__ == "__main__":
 
 ### Other general classes
 
-**set_comment_notes():** 给指定位置代码增加一段注释，如下演示在eip位置增加注释。
+**set_comment_notes():** Add a comment to the specified location code. The following is an example of adding a comment to the EIP location.
 
- - Parameter 1：注释内存地址
- - Parameter 2：注释内容
+ - Parameter 1：Comment memory address
+ - Parameter 2：Note Content
 
 ```Python
 from LyScript32 import MyDebug
@@ -1064,9 +1064,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**run_command_exec():** 执行内置命令，例如bp,dump等。
+**run_command_exec():** Execute built-in commands, such as BP, dump, etc.
 
- - Parameter 1：命令语句
+ - Parameter 1：Command statement
 
 ```Python
 from LyScript32 import MyDebug
@@ -1081,9 +1081,9 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**set_loger_output():** 日志的输出尤为重要，该模块提供了自定义日志输出功能，可将指定日志输出到x64dbg日志位置。
+**set_loger_output():** The output of log is particularly important. This module provides a custom log output function, which can output the specified log to x64dbg log location.
 
- - Parameter 1：日志内容
+ - Parameter 1：Log content
 
 ```Python
 from LyScript32 import MyDebug
@@ -1102,7 +1102,7 @@ if __name__ == "__main__":
 
 ### General case
 
-**PEFile载入内存格式:** 案例演示了，如何将一个可执行文件中的内存数据通过PEfile模块打开。
+**PEFileLoad memory format:** The case demonstrates how to open the memory data in an executable file through the pefile module.
 ```Python
 from LyScript32 import MyDebug
 import pefile
@@ -1128,7 +1128,7 @@ if __name__ == "__main__":
     print(timedate)
 ```
 
-**全模块特征匹配:** 针对所有模块中的特征码模糊匹配，找到会返回内存地址。
+**Full module feature matching:** for the fuzzy matching of feature codes in all modules, the memory address will be returned if found.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1148,7 +1148,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**运用Python搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
+**Search assembly features:** use Python implementation method to scan the memory range through specific methods. If the instruction set sequence we need appears, the specific memory address of the instruction will be output.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1184,7 +1184,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**得到汇编指令机器码:** 该功能主要实现，得到用户传入汇编指令所对应的机器码，这段代码你可以这样来实现。
+**Get the machine code of assembly instruction:** this function is mainly realized to get the machine code corresponding to the assembly instruction passed in by the user. This code can be realized in this way.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1210,7 +1210,7 @@ if __name__ == "__main__":
 
     dbg.delete_alloc(addr)
 ```
-封装上方代码，你就可以实现一个汇编指令获取工具了，如下`get_opcode_from_assemble()`函数。
+Encapsulate the above code and you can implement an assembly instruction acquisition tool, as follows `get_ opcode_ from_ Assembly()` function.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1240,7 +1240,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**如何劫持EIP:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存，演示案例。
+**How to hijack EIP:** here we demonstrate a case. You can implement a `write_opcode_from_assemble()` the function writes out the instruction set in the list to memory in batches to demonstrate the case.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1265,7 +1265,7 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-如何执行函数呢？很简单，看以下代码是如何实现的，相信你能看懂，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
+How to execute the function? See how the following code is implemented. After running, you will see an error pop-up window, indicating that the program execution flow has been turned.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1299,10 +1299,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**内存字节变更后回写:** 封装字节函数`write_opcode_list()`传入内存地址，对该地址中的字节更改后再回写到原来的位置。
-
- - 加密算法在内存中会通过S盒展开解密，有时需要特殊需求，捕捉解密后的S-box写入内存，或对矩阵进行特殊处理后替换，这样写即可实现。
-
+**Write back after memory byte change:** encapsulated byte function `write_opcode_List()` pass in the memory address, change the bytes in the address, and then write back to the original location.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1335,7 +1332,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**指令集探针快速检索:** 快速检索当前程序中所有模块中是否存在特定的指令集片段，存在则返回内存地址。
+**Instruction set probe fast retrieval:** quickly retrieve whether there are specific instruction set fragments in all modules in the current program, and return the memory address if there are.
 ```Python
 from LyScript32 import MyDebug
 
@@ -1382,6 +1379,4 @@ if __name__ == "__main__":
 
         time.sleep(0.3)
     dbg.close()
- ```
- 
- 
+```
