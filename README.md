@@ -223,8 +223,9 @@ if __name__ == "__main__":
 - 无参数传递
 
 ```Python
-if __name__ == "__main__":
 from LyScript32 import MyDebug
+
+if __name__ == "__main__":
     dbg = MyDebug()
     connect_flag = dbg.connect()
 
