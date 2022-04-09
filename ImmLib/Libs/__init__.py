@@ -1,1 +1,1 @@
-all = ["immutils"] #for now
+all = ["immutils"]
