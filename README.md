@@ -18,7 +18,10 @@
 </div>
 <br>
 
+python包请安装与插件一致的版本，在cmd命令行下执行pip 命令即可安装
+
  - 安装Python包：`pip install LyScript32` 或者 `pip install LyScript64`
+
  - 32位插件下载：https://cdn.lyshark.com/software/LyScript32.zip
  - 64位插件下载：https://cdn.lyshark.com/software/LyScript64.zip
 
