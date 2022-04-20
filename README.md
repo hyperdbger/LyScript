@@ -18,9 +18,11 @@
 </div>
 <br>
 
-python包请安装与插件一致的版本，在cmd命令行下执行pip 命令即可安装
+python包请安装与插件一致的版本，在cmd命令行下执行pip 命令即可安装。
 
  - 安装Python包：`pip install LyScript32` 或者 `pip install LyScript64`
+
+其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定目录下。
 
  - 32位插件下载：https://cdn.lyshark.com/software/LyScript32.zip
  - 64位插件下载：https://cdn.lyshark.com/software/LyScript64.zip
