@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# 代码完全开发，您可以自己增强功能，并提交给我。
+
 import socket,struct,time
 from ctypes import *
 class MyStruct(Structure):
