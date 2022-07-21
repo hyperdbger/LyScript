@@ -1391,4 +1391,20 @@ if __name__ == "__main__":
     dbg.close()
  ```
  
+ **使用内置脚本得到返回值:** 使用内置脚本`run_command_exec()`函数时，用户只能得到一个状态值，如果想要得到内置命令的返回值则你可以这样写。
+ ```Python
+ from LyScript32 import MyDebug
  
+ dbg = MyDebug()
+ conn = dbg.connect()
+ 
+ # 首先定义一个脚本变量
+ ref = dbg.run_command_exec("$addr=1024")
+ 
+ # 将脚本返回值放到eax寄存器，或者开辟一个堆放到堆里
+ dbg.run_command_exec("eax=$addr")
+ 
+ # 最后拿到寄存器的值
+ hex(dbg.get_register("eax"))
+ ```
+
