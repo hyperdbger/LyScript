@@ -1391,7 +1391,7 @@ if __name__ == "__main__":
     dbg.close()
  ```
  
- **使用内置脚本得到返回值:** 使用内置脚本`run_command_exec()`函数时，用户只能得到一个状态值，如果想要得到内置命令的返回值则你可以这样写。
+ **使用内置脚本得到返回值:** 使用内置`run_command_exec()`函数时，用户只能得到内置脚本执行后的状态值，如果想要得到内置命令的返回值则你可以这样写。
  ```Python
  from LyScript32 import MyDebug
  
@@ -1407,4 +1407,42 @@ if __name__ == "__main__":
  # 最后拿到寄存器的值
  hex(dbg.get_register("eax"))
  ```
+通过中转的方式，可以很好的得到内置脚本的返回值，如下我将其封装成了一个独立的方法。
+```Python
+from LyScript32 import MyDebug
 
+# 得到脚本返回值
+def GetScriptValue(dbg,script):
+    try:
+        ref = dbg.run_command_exec("push eax")
+        if ref != True:
+            return None
+        ref = dbg.run_command_exec(f"eax={script}")
+        if ref != True:
+            return None
+        reg = dbg.get_register("eax")
+        ref = dbg.run_command_exec("pop eax")
+        if ref != True:
+            return None
+        return reg
+    except Exception:
+        return None
+    return None
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    ref = GetScriptValue(dbg,"teb()")
+    print(hex(ref))
+
+    ref = GetScriptValue(dbg,"peb()")
+    print(hex(ref))
+
+    # 得到当前EIP所指向位置模块基地址
+    eax = dbg.get_register("eax")
+    kbase = GetScriptValue(dbg,f"mod.base({eax})")
+    print("模块基地址: {}".format(hex(kbase)))
+
+    dbg.close()
+```
