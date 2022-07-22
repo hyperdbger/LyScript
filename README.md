@@ -1247,7 +1247,6 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-<br>
 
 **如何劫持EIP:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存，演示案例。
 ```Python
