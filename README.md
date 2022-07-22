@@ -68,9 +68,8 @@ if __name__ == "__main__":
   - 进程线程类
   - 反汇编类
   - 其他通用类
-  - 通用案例总结
   - 扩展Script模块 (LyScriptTools)
-
+  - 通用案例总结
 
 <br><br>
 
@@ -1119,6 +1118,256 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+<br>
+
+### 扩展Script模块 (LyScriptTools)
+
+LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Script脚本命令的类版封装，使得用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现的，如下所有的命令封装都是围绕这个API函数进行的，原理很简单没啥可讲的了。
+
+该插件需要在安装有`LyScript32/64`包之上再安装一个`LyScriptTools32/64`扩展包，该包已经提交到pypi官方仓库。
+ - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
+
+<br>
+<b>如下x64dbg通用函数整理自（Ibinary）：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">https://www.cnblogs.com/iBinary/</a>
+
+<br>
+
+插件目前分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是一些杂类。
+
+<b>from LyScriptTools32 import LyScriptModule</b>
+
+mod.party(addr) ---> 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块
+mod.base(addr)  --->  获取模块基址
+mod.size(addr)  --->  返回模块大小
+mod.hash(addr)  --->  返回模块hash
+mod.entry(addr) --->  返回模块入口
+mod.system(addr)--->  如果addr是系统模块则为true否则则是false
+mod.user(addr)  --->  如果是用户模块则返回true 否则为false
+mod.main()      --->  返回主模块基地址
+mod.rva(addr)   --->  如果addr不在模块则返回0,否则返回 addr所位于模块的 RVA偏移
+mod.offset(addr)--->  获取地址所对应的文件偏移量,如果不在模块则返回0
+mod.isexport(addr) ---> 判断该地址是否是从模块导出的函数,true是 false则不是
+
+<b>from LyScriptTools32 import LyScriptMemory</b>
+
+mem.valid(addr) 判断addr是否有效,有效则返回True
+mem.base(addr)  或者当前addr的基址
+mem.size(addr)  获取当前addr内存的大小
+mem.iscode(addr) 判断当前 addr是否是可执行页面,成功返回TRUE
+mem.decodepointer(ptr) 解密指针,相当于调用了API. DecodePointer ptr
+ReadByte(addr / reg); 从addr或者寄存器中读取一个字节内存并且返回
+Byte(addr) byte(addr)  同上
+ReadWord(addr)  Word(addr) word(addr) 同上 读取两个字节
+ReadDDword(addr) Dword(addr) dword(addr) 同上 读取四个字节
+ReadQword(addr) Qword(addr) qword(addr) 同上 读取8个字节,但是只能是64位程序方可使用
+ReadPtr(addr) 从地址中读取指针(4/8字节)并返回读取的指针值
+ReadPointer(addr) ptr(addr) Pointer(addr) pointer(addr) 都同上
+ptr(mod.main()) --> 00905A4D
+byte(mod.main()) --> 0x0000004D
+
+<b>from LyScriptTools32 import LyScriptDisassemble</b>
+
+dis.len(addr)      获取addr处的指令长度。
+dis.iscond(addr)   判断当前addr位置是否是条件指令(比如jxx) 返回值: 是的话True 否则False
+dis.isbranch(addr) 判断当前地址是否是分支指令   返回值: 同上
+dis.isret(addr)    判断是否是ret指令          返回值: 同上  
+dis.iscall(addr)   判断是否是call指令         返回值: 同上  
+dis.ismem(addr)    判断是否是内存操作数        返回值: 同上
+dis.isnop(addr)    判断是否是nop             返回值: 同上
+dis.isunusual(addr)判断当前地址是否指示为异常地址 返回值: 同上
+dis.branchdest(addr)：将指令的分支目标位于（如果按 Enter 键，它将遵循什么）。addr
+dis.branchexec(addr)：如果 分支 at 要执行，则为 true。addr
+dis.imm(addr)       获取当前指令位置的立即数(这一行指令中出现的立即数)
+dis.brtrue(addr)：指令在 的分支目标。addr
+dis.brfalse(addr)：下一条指令的地址（如果指令 at 是条件分支）。addr
+dis.next(addr)：    获取addr的下一条地址
+dis.prev(addr)：    获取addr上一条低地址
+dis.iscallsystem(addr) 判断当前指令是否是系统模块指令
+dis.mnemonic(addr)返回addr的助记符号,可以当作参数给 字符串函数使用 straddrstr.streq(dis.mnemonic(cip), "cpuid")
+
+<b>from LyScriptTools32 import LyScriptOther</b>
+
+arg.get(index); 获取当前函数堆栈中的第几个参数,假设返回地址在堆栈上,并且我们在函数内部.
+arg.set(index,value);设置的索引位置的值为
+ex.firstchance()：最后一个异常是否为第一次机会异常。
+ex.addr()：最后一个异常地址。例如，导致异常的指令的地址。
+ex.code()：最后一个异常代码。
+ex.flags()：最后一个异常标志。
+ex.infocount()：上次异常信息计数（参数数）。
+ex.info(index)：最后一个异常信息，如果索引超出范围，则为零。
+
+如上是一些常用的函数封装，他们的调用方式如下面所示。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import LyScriptModule
+from LyScriptTools32 import LyScriptMemory
+from LyScriptTools32 import LyScriptDisassemble
+from LyScriptTools32 import LyScriptOther
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 模块类
+    mod = LyScriptModule()
+
+    party = mod.base(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.party(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.size(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.hash(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.entry(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.system(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.user(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.main(dbg)
+    print("party: {}".format(hex(party)))
+
+    party = mod.rva(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.offset(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    party = mod.isexport(dbg,"0x4c55ac")
+    print("party: {}".format(hex(party)))
+
+    # 反汇编类
+    dis = LyScriptDisassemble()
+
+    ret = dis.len(dbg,"0x401000")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.iscond(dbg,"0x401000")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.isbranch(dbg,"0x401000")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.isret(dbg,"0x401000")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.iscall(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.ismem(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.isnop(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.isunusual(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.branchdest(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.branchexec(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.imm(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.brtrue(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.brfalse(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.next(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.prev(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    ret = dis.iscallsystem(dbg,"0x4c55d9")
+    print("dis :{}".format(hex(ret)))
+
+    # 内存类
+    mem = LyScriptMemory()
+
+    ref = mem.teb(dbg)
+    print("mem : {}".format(ref))
+
+    ref = mem.peb(dbg)
+    print("mem : {}".format(ref))
+
+    ref = mem.tid(dbg)
+    print("mem : {}".format(ref))
+
+    ref = mem.kusd(dbg)
+    print("mem : {}".format(ref))
+
+    ref = mem.valid(dbg,"0x401000")
+    print("mem : {}".format(ref))
+
+    ref = mem.base(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.size(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.iscode(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.decodepointer(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.read_byte(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.byte(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.read_word(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.read_dword(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.read_ptr(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    ref = mem.ptr(dbg,"0x401000")
+    print("mem : {}".format(hex(ref)))
+
+    # 异常处理
+    ot = LyScriptOther()
+
+    ots = ot.firstchance(dbg)
+    print("ot = > {}".format(ots))
+
+    ots = ot.addr(dbg)
+    print("ot = > {}".format(ots))
+
+    ots = ot.code(dbg)
+    print("ot = > {}".format(ots))
+
+    ots = ot.flags(dbg)
+    print("ot = > {}".format(ots))
+
+    ots = ot.infocount(dbg)
+    print("ot = > {}".format(ots))
+
+    ots = ot.info(dbg,"0x401000")
+    print("ot = > {}".format(ots))
+    dbg.close()
+```
+
+当然如果你觉得上面这些通用函数不够用，或者没有补充全面，你完全可以调用任意类内的`ot.GetScriptValue()`函数自己去封装实现。
+
 <br><br>
 
 ### 通用案例总结
