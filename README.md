@@ -1454,6 +1454,7 @@ import win32gui, win32con
 import win32clipboard
 import re
 import time
+from LyScript32 import MyDebug
 
 class cWindow:
     def __init__(self):
@@ -1539,11 +1540,40 @@ def DeatchFile():
     cWindows.SetAsForegroundWindow()
     cWindows.deatch()
 
+# 得到脚本返回值
+def GetScriptValue(dbg,script):
+    try:
+        ref = dbg.run_command_exec("push eax")
+        if ref != True:
+            return None
+        ref = dbg.run_command_exec(f"eax={script}")
+        if ref != True:
+            return None
+        reg = dbg.get_register("eax")
+        ref = dbg.run_command_exec("pop eax")
+        if ref != True:
+            return None
+        return reg
+    except Exception:
+        return None
+    return None
+
 if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
 
     # 批量打开一个列表
-    for item in ["C:\Program Files (x86)\Kingsoft\kwifi\dbghelp.dll","C:\Program Files (x86)\Kingsoft\kwifi\keasyipcn.dll"]:
+    for item in ["D:\Win32Project.exe","D:\Windows Tools\C32ASM\c32asm.exe"]:
         OpenFile(item)
+        time.sleep(3)
+
+        for i in range(1,100):
+            dbg.set_debug("StepIn")
+            time.sleep(0.2)
+
+        eip = dbg.get_register("eip")
+        print("eip = > {}".format(hex(eip)))
+
         time.sleep(3)
         DeatchFile()
 ```
