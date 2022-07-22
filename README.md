@@ -1433,17 +1433,10 @@ if __name__ == "__main__":
     dbg = MyDebug()
     dbg.connect()
 
-    ref = GetScriptValue(dbg,"teb()")
+    eax = "401000"
+    ref = GetScriptValue(dbg,"mod.base({})".format(eax))
     print(hex(ref))
-
-    ref = GetScriptValue(dbg,"peb()")
-    print(hex(ref))
-
-    # 得到当前EIP所指向位置模块基地址
-    eax = dbg.get_register("eax")
-    kbase = GetScriptValue(dbg,f"mod.base({eax})")
-    print("模块基地址: {}".format(hex(kbase)))
-
+    
     dbg.close()
 ```
 
