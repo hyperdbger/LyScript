@@ -1128,8 +1128,7 @@ LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Scri
  - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
 <br>
-<b>如下x64dbg通用函数整理自（Ibinary）：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">https://www.cnblogs.com/iBinary/</a>
-
+<b>通用函数功能参考自(IBinary)：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">https://www.cnblogs.com/iBinary/</a>
 <br>
 
 插件目前分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是一些杂类。
