@@ -1182,7 +1182,6 @@ LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Scri
  - dis.next(addr)：    获取addr的下一条地址
  - dis.prev(addr)：    获取addr上一条低地址
  - dis.iscallsystem(addr) 判断当前指令是否是系统模块指令
- - dis.mnemonic(addr)返回addr的助记符号,可以当作参数给 字符串函数使用 straddrstr.streq(dis.mnemonic(cip), "cpuid")
 
 <b>from LyScriptTools32 import LyScriptOther</b>
 
