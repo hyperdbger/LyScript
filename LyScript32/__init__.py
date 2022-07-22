@@ -3,6 +3,7 @@
 
 import socket,struct,time
 from ctypes import *
+
 class MyStruct(Structure):
     _pack_ = 1
     _fields_ = [
@@ -19,20 +20,25 @@ class MyStruct(Structure):
         ("Count", c_int),
         ("Flag", c_int),
     ]
+    
     def pack(self):
         buffer = struct.pack("< 256s 256s 256s 256s 256s i i i i i i i",self.Command_String_A,self.Command_String_B,self.Command_String_C,self.Command_String_D,self.Command_String_E,
                              self.Command_int_A,self.Command_int_B,self.Command_int_C,self.Command_int_D,self.Command_int_E,
                              self.Count,self.Flag)
         return buffer
+    
     def unpack(self,buffer):
         (self.Command_String_A,self.Command_String_B,self.Command_String_C,self.Command_String_D,self.Command_String_E,
          self.Command_int_A,self.Command_int_B,self.Command_int_C,self.Command_int_D,self.Command_int_E,
          self.Count,self.Flag) = struct.unpack("< 256s 256s 256s 256s 256s i i i i i i i",buffer)
+        
 class MyDebug(object):
+    
     def __init__(self,address="127.0.0.1",port=6589):
         self.address = address
         self.port = port
         self.sock = None
+        
     def connect(self):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -41,6 +47,7 @@ class MyDebug(object):
             return 1
         except Exception:
             return 0
+        
     def is_connect(self):
         try:
             send_struct = MyStruct()
@@ -54,6 +61,7 @@ class MyDebug(object):
                 return False
         except Exception:
             return False
+        
     def close(self):
         try:
             send_struct = MyStruct()
@@ -63,6 +71,7 @@ class MyDebug(object):
             return True
         except Exception:
             return False
+        
     def send_recv_struct(self,send_struct):
         try:
             recv_struct = MyStruct()
@@ -75,6 +84,7 @@ class MyDebug(object):
             return recv_struct
         except Exception:
             return None
+        
     def get_register(self,register):
         try:
             ptr = MyStruct()
@@ -85,6 +95,7 @@ class MyDebug(object):
             return recv_struct.Command_int_A
         except Exception:
             return False
+        
     def set_register(self,register,value):
         try:
             ptr = MyStruct()
@@ -100,6 +111,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def set_debug(self,action):
         try:
             ptr = MyStruct()
@@ -113,6 +125,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def set_debug_count(self,action,count):
         try:
             ptr = MyStruct()
@@ -128,6 +141,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def is_debugger(self):
         try:
             ptr = MyStruct()
@@ -140,6 +154,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def is_running(self):
         try:
             ptr = MyStruct()
@@ -152,6 +167,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def get_flag_register(self,register):
         try:
             ptr = MyStruct()
@@ -165,6 +181,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def set_flag_register(self,register,value):
         try:
             ptr = MyStruct()
@@ -182,6 +199,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def set_breakpoint(self,address):
         try:
             ptr = MyStruct()
@@ -195,6 +213,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def delete_breakpoint(self,address):
         try:
             ptr = MyStruct()
@@ -208,6 +227,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def check_breakpoint(self,address):
         try:
             ptr = MyStruct()
@@ -221,6 +241,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def get_all_breakpoint(self):
         try:
             ret_list = []
@@ -245,6 +266,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def set_hardware_breakpoint(self,address,type = 0):
         try:
             ptr = MyStruct()
@@ -259,6 +281,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def delete_hardware_breakpoint(self,address):
         try:
             ptr = MyStruct()
@@ -273,6 +296,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def get_disasm_code(self,address,count):
         try:
             ret_list = []
@@ -299,6 +323,7 @@ class MyDebug(object):
                 return False
         except Exception:
             return False
+        
     def get_disasm_one_code(self,address):
         try:
             ptr = MyStruct()
@@ -312,6 +337,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def get_disasm_operand_code(self,address):
         try:
             ptr = MyStruct()
@@ -326,6 +352,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def get_disasm_operand_size(self,address):
         try:
             ptr = MyStruct()
@@ -339,6 +366,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def assemble_write_memory(self,address,asm):
         try:
             ptr = MyStruct()
@@ -354,6 +382,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def assemble_code_size(self,asm):
         try:
             ptr = MyStruct()
@@ -368,6 +397,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def scan_memory_one(self,pattern):
         try:
             ptr = MyStruct()
@@ -383,6 +413,7 @@ class MyDebug(object):
             return False
         except Exception:
             return False
+        
     def scan_memory_all(self,pattern):
         return_list = []
         try:
@@ -404,6 +435,7 @@ class MyDebug(object):
                 return False
         except Exception:
             return False
+        
     def read_memory_byte(self,address):
         try:
             ptr = MyStruct()
@@ -418,6 +450,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def read_memory_word(self,address):
         try:
             ptr = MyStruct()
@@ -432,6 +465,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def read_memory_dword(self,address):
         try:
             ptr = MyStruct()
@@ -447,6 +481,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def read_memory_ptr(self,address):
         try:
             ptr = MyStruct()
@@ -462,6 +497,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def write_memory_byte(self,address,value):
         try:
             ptr = MyStruct()
@@ -476,6 +512,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def write_memory_word(self,address,value):
         try:
             ptr = MyStruct()
@@ -490,6 +527,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def write_memory_dword(self,address,value):
         try:
             ptr = MyStruct()
@@ -504,6 +542,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def write_memory_ptr(self,address,value):
         try:
             ptr = MyStruct()
@@ -518,6 +557,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def create_alloc(self,size):
         try:
             ptr = MyStruct()
@@ -532,6 +572,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def delete_alloc(self,address):
         try:
             ptr = MyStruct()
@@ -545,6 +586,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_local_base(self):
         try:
             ptr = MyStruct()
@@ -558,6 +600,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+    
     def get_local_protect(self,address):
         try:
             ptr = MyStruct()
@@ -572,6 +615,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def set_local_protect(self,address,type,size):
         try:
             ptr = MyStruct()
@@ -587,6 +631,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_local_size(self):
         try:
             ptr = MyStruct()
@@ -600,6 +645,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_local_page_size(self):
         try:
             ptr = MyStruct()
@@ -613,6 +659,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_memory_section(self):
         all_list = []
         try:
@@ -638,6 +685,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_module_base(self,module_name):
         try:
             ptr = MyStruct()
@@ -651,6 +699,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_module_from_function(self,module,function):
         try:
             ptr = MyStruct()
@@ -665,6 +714,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_all_module(self):
         all_module = []
         try:
@@ -691,6 +741,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_module_from_import(self,module_name):
         all_module = []
         try:
@@ -717,6 +768,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_module_from_export(self,module_name):
         all_module = []
         try:
@@ -743,6 +795,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_section(self):
         all_section = []
         try:
@@ -768,6 +821,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_base_from_address(self,address):
         try:
             ptr = MyStruct()
@@ -781,6 +835,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_base_from_name(self,name):
         try:
             ptr = MyStruct()
@@ -794,6 +849,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_oep_from_address(self,address):
         try:
             ptr = MyStruct()
@@ -807,6 +863,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_oep_from_name(self,name):
         try:
             ptr = MyStruct()
@@ -820,6 +877,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def push_stack(self,value):
         try:
             ptr = MyStruct()
@@ -833,6 +891,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def pop_stack(self):
         try:
             ptr = MyStruct()
@@ -845,6 +904,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def peek_stack(self,index = 0):
         try:
             ptr = MyStruct()
@@ -858,6 +918,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_thread_list(self):
         all_thread = []
         try:
@@ -883,6 +944,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_process_handle(self):
         try:
             ptr = MyStruct()
@@ -895,6 +957,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_process_id(self):
         try:
             ptr = MyStruct()
@@ -907,6 +970,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_teb_address(self,thread_id):
         try:
             ptr = MyStruct()
@@ -920,6 +984,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def get_peb_address(self,process_id):
         try:
             ptr = MyStruct()
@@ -933,6 +998,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def set_comment_notes(self,address,note):
         try:
             ptr = MyStruct()
@@ -947,6 +1013,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def set_loger_output(self,log):
         try:
             ptr = MyStruct()
@@ -960,6 +1027,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+    
     def run_command_exec(self,cmd):
         try:
             ptr = MyStruct()
