@@ -1357,7 +1357,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**如何劫持EIP:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存，演示案例。
+**实现劫持EIP指针:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存。
 ```Python
 from LyScript32 import MyDebug
 
@@ -1718,6 +1718,38 @@ if __name__ == "__main__":
             print("属性: 空属性")
         else:
             print("属性: 读/写/控制")
+
+    dbg.close()
+    pass
+```
+
+**封装获取反汇编代码:** 反汇编时可以使用`get_disasm_code()`函数，但如果想要自己实现可以这样写。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    # 获取当前EIP地址
+    eip = dbg.get_register("eip")
+    print("eip = {}".format(hex(eip)))
+
+    # 向下反汇编字节数
+    count = eip + 15
+    while True:
+        # 每次得到一条反汇编指令
+        dissasm = dbg.get_disasm_one_code(eip)
+
+        print("0x{:08x} | {}".format(eip, dissasm))
+
+        # 判断是否满足退出条件
+        if eip >= count:
+            break
+        else:
+            # 得到本条反汇编代码的长度
+            dis_size = dbg.assemble_code_size(dissasm)
+            eip = eip + dis_size
 
     dbg.close()
     pass
