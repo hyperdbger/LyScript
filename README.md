@@ -1836,3 +1836,96 @@ if __name__ == "__main__":
     dbg.close()
     pass
 ```
+
+**封装汇编指令提取器:** 当用户传入指定汇编指令的时候，自动的将其转换成对应的机器码，代码很简单，首先`dbg.create_alloc(1024)`在进程内存中开辟堆空间，用于存放我们的机器码，然后调用`dbg.assemble_write_memory(alloc_address,"sub esp,10")`将一条汇编指令变成机器码写到对端内存，然后再`op = dbg.read_memory_byte(alloc_address + index)`依次将其读取出来即可。
+
+```Python
+from LyScript32 import MyDebug
+
+# 传入汇编指令,获取该指令的机器码
+def get_assembly_machine_code(dbg,asm):
+    pass
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    machine_code_list = []
+
+    # 开辟堆空间
+    alloc_address = dbg.create_alloc(1024)
+    print("分配堆: {}".format(hex(alloc_address)))
+
+    # 得到汇编机器码
+    machine_code = dbg.assemble_write_memory(alloc_address,"sub esp,10")
+    if machine_code == False:
+        dbg.delete_alloc(alloc_address)
+
+    # 得到汇编指令长度
+    machine_code_size = dbg.assemble_code_size("sub esp,10")
+    if machine_code == False:
+        dbg.delete_alloc(alloc_address)
+
+    # 读取机器码
+    for index in range(0,machine_code_size):
+        op = dbg.read_memory_byte(alloc_address + index)
+        machine_code_list.append(op)
+
+    # 释放堆空间
+    dbg.delete_alloc(alloc_address)
+
+    # 输出机器码
+    print(machine_code_list)
+    dbg.close()
+```
+我们继续封装如上方法，封装成一个可以直接使用的`get_assembly_machine_code`函数。
+```Python
+from LyScript32 import MyDebug
+
+# 传入汇编指令,获取该指令的机器码
+def get_assembly_machine_code(dbg,asm):
+    machine_code_list = []
+
+    # 开辟堆空间
+    alloc_address = dbg.create_alloc(1024)
+    print("分配堆: {}".format(hex(alloc_address)))
+
+    # 得到汇编机器码
+    machine_code = dbg.assemble_write_memory(alloc_address,asm)
+    if machine_code == False:
+        dbg.delete_alloc(alloc_address)
+
+    # 得到汇编指令长度
+    machine_code_size = dbg.assemble_code_size(asm)
+    if machine_code == False:
+        dbg.delete_alloc(alloc_address)
+
+    # 读取机器码
+    for index in range(0,machine_code_size):
+        op = dbg.read_memory_byte(alloc_address + index)
+        machine_code_list.append(op)
+
+    # 释放堆空间
+    dbg.delete_alloc(alloc_address)
+    return machine_code_list
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 转换第一对
+    opcode = get_assembly_machine_code(dbg,"mov eax,1")
+    for index in opcode:
+        print("0x{:02X} ".format(index),end="")
+    print()
+
+    # 转换第二对
+    opcode = get_assembly_machine_code(dbg,"sub esp,10")
+    for index in opcode:
+        print("0x{:02X} ".format(index),end="")
+    print()
+
+    dbg.close()
+```
