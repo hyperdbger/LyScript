@@ -1966,16 +1966,17 @@ if __name__ == "__main__":
     connect_flag = dbg.connect()
     print("连接状态: {}".format(connect_flag))
 
-    # 转换成列表
-    opcode = get_assembly_machine_code(dbg,"push eax")
-    print("得到机器码列表: ",opcode)
+    for item in ["push eax","mov eax,1","jmp eax","pop eax"]:
+        # 转换成列表
+        opcode = get_assembly_machine_code(dbg,item)
+        #print("得到机器码列表: ",opcode)
 
-    # 列表转换成字符串
-    scan_string = " ".join([str(_) for _ in opcode])
-    print("搜索机器码字符串: ", scan_string)
+        # 列表转换成字符串
+        scan_string = " ".join([str(_) for _ in opcode])
+        #print("搜索机器码字符串: ", scan_string)
 
-    address = dbg.scan_memory_one(scan_string)
-    print("第一个符合条件的内存块: {}".format(hex(address)))
+        address = dbg.scan_memory_one(scan_string)
+        print("第一个符合条件的内存块: {}".format(hex(address)))
 
     dbg.close()
 ```
