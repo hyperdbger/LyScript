@@ -1680,3 +1680,45 @@ if __name__ == "__main__":
         time.sleep(3)
         DeatchFile()
 ```
+
+**获取节表内存属性:** 默认情况下插件可以得到当前节表，但无法直接取到节表内存属性，如果需要得到某个节的内存属性，可以这样写。
+
+节表属性是一个数字，数字含义如下:
+ - ER 执行/读取 32
+ - E 执行 30
+ - R 读取 2
+ - W 写入 2
+ - C 未知 4
+ - N 空属性 1
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    section = dbg.get_section()
+    for i in section:
+        section_address = hex(i.get("addr"))
+        section_name = i.get("name")
+        section_size = i.get("size")
+        section_type = dbg.get_local_protect(i.get("addr"))
+        print(f"地址: {section_address} -> 名字: {section_name} -> 大小: {section_size}bytes -> ",end="")
+
+        if(section_type == 32):
+            print("属性: 执行/读取")
+        elif(section_type == 30):
+            print("属性: 执行")
+        elif(section_type == 2):
+            print("属性: 只读")
+        elif(section_type == 4):
+            print("属性: 读写")
+        elif(section_type == 1):
+            print("属性: 空属性")
+        else:
+            print("属性: 读/写/控制")
+
+    dbg.close()
+    pass
+```
