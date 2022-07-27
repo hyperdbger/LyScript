@@ -1206,8 +1206,11 @@ if __name__ == "__main__":
     party = mod.base(dbg,"0x4c55ac")
     print("party: {}".format(hex(party)))
 
-    party = mod.party(dbg,"0x4c55ac")
-    print("party: {}".format(hex(party)))
+    # 读取参数是应注意转为十六进制
+    eip = dbg.get_register("eip")
+    ret = mod.base(dbg, "{}".format(hex(eip)))
+    print("基地址: {}".format(hex(ret)))
+    
     dbg.close()
 ```
 
