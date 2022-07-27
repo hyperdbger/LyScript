@@ -1111,7 +1111,7 @@ if __name__ == "__main__":
 ```
 <br>
 
-### 扩展Script模块 (LyScriptTools)
+### 扩展Script模块
 
 LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Script脚本命令的类版封装，使得用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现的，如下所有的命令封装都是围绕这个API函数进行的。
 
