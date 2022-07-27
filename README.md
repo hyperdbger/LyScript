@@ -26,7 +26,6 @@
 python包请安装与插件一致的版本，在cmd命令行下执行pip 命令即可安装。
 
  - 安装标准包：`pip install LyScript32` 或者 `pip install LyScript64`
- - 安装扩展包：`pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
 其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定目录下。
 
