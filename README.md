@@ -1222,7 +1222,7 @@ if __name__ == "__main__":
 
 LyScript 模块中的通用案例，用于演示插件内置方法如何组合使用，用户可以自行研究学习API函数是如何灵活的调用的，并自己编写一些有用的案例。
 
-**PEFile载入内存格式:** 案例演示了，如何将一个可执行文件中的内存数据通过PEfile模块打开。
+**PEFile载入内存格式:** 案例演示，如何将一个可执行文件中的内存数据通过PEfile模块打开。
 ```Python
 from LyScript32 import MyDebug
 import pefile
@@ -1247,6 +1247,38 @@ if __name__ == "__main__":
     timedate = oPE.OPTIONAL_HEADER.dump_dict()
     print(timedate)
 ```
+如下通过`LyScirpt`模块配合`PEFile`模块解析内存镜像中的`section`节表属性。
+```Python
+from LyScript32 import MyDebug
+import pefile
+
+if __name__ == "__main__":
+    # 初始化
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 得到text节基地址
+    local_base = dbg.get_local_base()
+
+    # 根据text节得到程序首地址
+    base = dbg.get_base_from_address(local_base)
+
+    byte_array = bytearray()
+    for index in range(0,8192):
+        read_byte = dbg.read_memory_byte(base + index)
+        byte_array.append(read_byte)
+
+    oPE = pefile.PE(data = byte_array)
+
+    for section in oPE.sections:
+        print("%10s %10x %10x %10x" %(section.Name.decode("utf-8"), section.VirtualAddress, section.Misc_VirtualSize, section.SizeOfRawData))
+    dbg.close()
+```
+
+
+
+
+
 
 **全模块特征匹配:** 针对所有模块中的特征码模糊匹配，找到会返回内存地址。
 ```Python
