@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-from LyScript64 import MyDebug
+from LyScript32 import MyDebug
 
 
 # 模块类
