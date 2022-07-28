@@ -2043,6 +2043,44 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**获取上一条汇编指令:** 上一条指令的获取难点就在于，我们无法确定当前指令的上一条指令到底有多长，所以只能用笨办法，逐行扫描对比汇编指令，如果找到则取出其上一条指令即可。
+```Python
+from LyScript32 import MyDebug
+
+# 获取当前EIP指令的上一条指令
+def get_disasm_prev(dbg,eip):
+    prev_dasm = None
+    # 得到当前汇编指令
+    local_disasm = dbg.get_disasm_one_code(eip)
+
+    # 只能向上扫描10行
+    eip = eip - 10
+    disasm = dbg.get_disasm_code(eip,10)
+
+    # 循环扫描汇编代码
+    for index in range(0,len(disasm)):
+        # 如果找到了,就取出他的上一个汇编代码
+        if disasm[index].get("opcode") == local_disasm:
+            prev_dasm = disasm[index-1].get("opcode")
+            break
+
+    return prev_dasm
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    eip = dbg.get_register("eip")
+
+    next = get_disasm_prev(dbg,eip)
+    print("上一条指令: {}".format(next))
+
+    dbg.close()
+```
+
+
+
+
 
 
 
