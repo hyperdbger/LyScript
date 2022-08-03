@@ -1573,6 +1573,32 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+如果把这个过程反过来，就是将特定位置的汇编代码保存到本地。
+```Python
+from LyScript32 import MyDebug
+
+# 将特定内存保存到文本中
+def write_shellcode(dbg,address,size,path):
+    with open(path,"a+",encoding="utf-8") as fp:
+        for index in range(0, size - 1):
+            # 读取机器码
+            read_code = dbg.read_memory_byte(address + index)
+
+            if (index+1) % 16 == 0:
+                print("\\x" + str(read_code))
+                fp.write("\\x" + str(read_code) + "\n")
+            else:
+                print("\\x" + str(read_code),end="")
+                fp.write("\\x" + str(read_code))
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    eip = dbg.get_register("eip")
+    write_shellcode(dbg,eip,128,"d://lyshark.txt")
+    dbg.close()
+```
 
 **指令集探针快速检索:** 快速检索当前程序中所有模块中是否存在特定的指令集片段，存在则返回内存地址。
 ```Python
