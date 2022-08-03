@@ -1218,7 +1218,7 @@ if __name__ == "__main__":
 
 LyScript 模块中的通用案例，用于演示插件内置方法如何组合使用，用户可以自行研究学习API函数是如何灵活的调用的，并自己编写一些有用的案例。
 
-**PEFile载入内存格式:** 案例演示，如何将一个可执行文件中的内存数据通过PEfile模块打开。
+**PEFile 载入内存格式:** 案例演示，如何将一个可执行文件中的内存数据通过PEfile模块打开。
 ```Python
 from LyScript32 import MyDebug
 import pefile
@@ -1271,7 +1271,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**验证程序保护方式:** 验证保护方式需要通过`dbg.get_all_module()`遍历加载过的模块，并依次读入`DllCharacteristics`与操作数进行与运算得到保护方式。
+**验证PE程序启用的保护方式:** 验证保护方式需要通过`dbg.get_all_module()`遍历加载过的模块，并依次读入`DllCharacteristics`与操作数进行与运算得到保护方式。
 ```Python
 from LyScript32 import MyDebug
 import pefile
