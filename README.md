@@ -2403,7 +2403,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**内存特征码匹配:** 通过二次封装``实现扫描内存特征码功能，如果存在则返回True否则返回False。
+**内存特征码匹配:** 通过二次封装`get_memory_hex_ascii()`实现扫描内存特征码功能，如果存在则返回True否则返回False。
 ```Python
 from LyScript32 import MyDebug
 import os,sys
