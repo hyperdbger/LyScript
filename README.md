@@ -1117,7 +1117,7 @@ LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Scri
 
 <br>
 
-<b>通用函数功能参考自(IBinary)：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">https://www.cnblogs.com/iBinary/</a>
+<b>通用函数功能参考自：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a>
 
 <br>
 
