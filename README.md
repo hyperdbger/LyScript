@@ -2254,6 +2254,90 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**内存与磁盘机器码比较:** 通过调用`read_memory_byte()`函数，或者`open()`打开文件，等就可以得到程序磁盘与内存中特定位置的机器码参数，然后通过对每一个列表中的字节进行比较，就可得到特定位置下磁盘与内存中的数据是否一致的判断。
+```Python
+#coding: utf-8
+import binascii,os,sys
+from LyScript32 import MyDebug
+
+# 得到程序的内存镜像中的机器码
+def get_memory_hex_ascii(address,offset,len):
+    count = 0
+    ref_memory_list = []
+    for index in range(offset,len):
+        # 读出数据
+        char = dbg.read_memory_byte(address + index)
+        count = count + 1
+
+        if count % 16 == 0:
+            if (char) < 16:
+                print("0" + hex((char))[2:])
+                ref_memory_list.append("0" + hex((char))[2:])
+            else:
+                print(hex((char))[2:])
+                ref_memory_list.append(hex((char))[2:])
+        else:
+            if (char) < 16:
+                print("0" + hex((char))[2:] + " ",end="")
+                ref_memory_list.append("0" + hex((char))[2:])
+            else:
+                print(hex((char))[2:] + " ",end="")
+                ref_memory_list.append(hex((char))[2:])
+    return ref_memory_list
+
+# 读取程序中的磁盘镜像中的机器码
+def get_file_hex_ascii(path,offset,len):
+    count = 0
+    ref_file_list = []
+
+    with open(path, "rb") as fp:
+        # file_size = os.path.getsize(path)
+        fp.seek(offset)
+
+        for item in range(offset,offset + len):
+            char = fp.read(1)
+            count = count + 1
+            if count % 16 == 0:
+                if ord(char) < 16:
+                    print("0" + hex(ord(char))[2:])
+                    ref_file_list.append("0" + hex(ord(char))[2:])
+                else:
+                    print(hex(ord(char))[2:])
+                    ref_file_list.append(hex(ord(char))[2:])
+            else:
+                if ord(char) < 16:
+                    print("0" + hex(ord(char))[2:] + " ", end="")
+                    ref_file_list.append("0" + hex(ord(char))[2:])
+                else:
+                    print(hex(ord(char))[2:] + " ", end="")
+                    ref_file_list.append(hex(ord(char))[2:])
+    return ref_file_list
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    module_base = dbg.get_base_from_address(dbg.get_local_base())
+    print("模块基地址: {}".format(hex(module_base)))
+
+    # 得到内存机器码
+    memory_hex_byte = get_memory_hex_ascii(module_base,0,1024)
+
+    # 得到磁盘机器码
+    file_hex_byte = get_file_hex_ascii("d://Win32Project1.exe",0,1024)
+
+    # 输出机器码
+    for index in range(0,len(memory_hex_byte)):
+        # 比较磁盘与内存是否存在差异
+        if memory_hex_byte[index] != file_hex_byte[index]:
+            # 存在差异则输出
+            print("\n相对位置: [{}] --> 磁盘字节: 0x{} --> 内存字节: 0x{}".
+                  format(index,memory_hex_byte[index],file_hex_byte[index]))
+    dbg.close()
+```
+
 **堆栈地址有符号无符号转换:** peek_stack命令传入的是堆栈下标位置默认从0开始，并输出一个`十进制有符号`长整数，首先实现有符号与无符号数之间的转换操作，为后续堆栈扫描做准备。
 ```Python
 from LyScript32 import MyDebug
