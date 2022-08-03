@@ -1529,7 +1529,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**将ShellCode从文本中注入:** 从文本中读取ShellCode代码，并将该代码注入到目标进程的堆中。
+**将ShellCode从文本中注入到内存:** 从文本中读取`ShellCode`代码，将该代码注入到目标进程的堆中，并把当前内存属性设置为可执行。
 ```Python
 from LyScript32 import MyDebug
 
