@@ -26,7 +26,7 @@ python包请安装与插件一致的版本，在cmd命令行下执行pip 命令�
 
 其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定目录下。
 
- - 插件下载：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32位插件)</a> | <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64位插件)</a>
+ - 插件下载：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32位插件)</a> 或者 <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64位插件)</a>
 
 插件下载好以后，请将该插件复制到x64dbg目录下的plugins目录下，程序运行后会自动加载插件文件。
 
