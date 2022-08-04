@@ -1255,6 +1255,74 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**根据模块地址或名称得到基地址:** 根据模块名或者模块地址互相获取指定模块的入口地址，基地址，名称等。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import Module
+
+if __name__ == "__main__":
+    # 初始化
+    dbg = MyDebug()
+
+    # 连接到调试器
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 类定义,并传入调试器对象
+    module = Module(dbg)
+
+    # 验证是否导入了user32.dll
+    is_import = module.check_module_imported("user32.dll")
+    print("是否导入: {}".format(is_import))
+
+    # 根据基地址得到模块名
+    module_name = module.get_name_from_module("1985413120")
+    print("根据基地址得到模块名: {}".format(module_name))
+
+    # 根据模块名得到基地址
+    module_base = module.get_base_from_module("kernelbase.dll")
+    print("根据模块名得到基地址: {}".format(hex(module_base)))
+
+    # 根据模块名得到OEP基地址
+    module_oep = module.get_oep_from_module("win32project1.exe")
+    print("OEP: {}".format(hex(module_oep)))
+
+    dbg.close()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
