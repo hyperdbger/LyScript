@@ -1242,6 +1242,15 @@ if __name__ == "__main__":
 | get_oep_from_address(address) | 传入模块地址得到OEP位置 |
 | get_module_from_import(module_name)| 得到指定模块的导入表 |
 | get_import_inside_function(module_name,function_name) | 检查指定模块内是否存在特定导入函数 |
+| get_import_iatva(module_name,function_name) | 根据导入函数名得到函数iat_va地址 |
+| get_import_iatrva(module_name,function_name) | 根据导入函数名得到函数iat_rva地址 |
+| get_module_from_export(module_name) | 传入模块名,获取模块导出表 |
+| get_module_export_va(module_name,function_name) | 传入模块名以及导出函数名,得到va地址 |
+| get_module_export_rva(module_name,function_name) | 传入模块名以及导出函数,得到rva地址 |
+| get_local_section() | 得到程序节表信息 |
+| get_local_address_from_section(section_name) | 根据节名称得到地址 |
+| get_local_size_from_section(section_name) | 根据节名称得到节大小 |
+| get_local_section_from_address(address)| 根据地址得到节名称 |
 
 
 此处只提供一个演示案例，获取当前被调试进程详细参数，包括路径，名称，入口地址，基地址，长度等。
