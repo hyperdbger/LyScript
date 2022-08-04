@@ -1251,26 +1251,7 @@ if __name__ == "__main__":
     # 得到入口地址
     local_oep = module.get_local_program_entry()
     print("入口地址: {}".format(hex(local_oep)))
-
-    dbg.close()
-```
-
-**根据模块地址或名称得到基地址:** 根据模块名或者模块地址互相获取指定模块的入口地址，基地址，名称等。
-```Python
-from LyScript32 import MyDebug
-from LyScriptTools32 import Module
-
-if __name__ == "__main__":
-    # 初始化
-    dbg = MyDebug()
-
-    # 连接到调试器
-    connect_flag = dbg.connect()
-    print("连接状态: {}".format(connect_flag))
-
-    # 类定义,并传入调试器对象
-    module = Module(dbg)
-
+    
     # 验证是否导入了user32.dll
     is_import = module.check_module_imported("user32.dll")
     print("是否导入: {}".format(is_import))
@@ -1289,6 +1270,10 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+模块类所支持的功能如下:
+
+
 
 
 
