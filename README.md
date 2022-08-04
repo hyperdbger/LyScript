@@ -1125,17 +1125,19 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
 <b>from LyScriptTools32 import LyScriptModule</b>
 
- - mod.party(addr) ---> 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块
- - mod.base(addr)  --->  获取模块基址
- - mod.size(addr)  --->  返回模块大小
- - mod.hash(addr)  --->  返回模块hash
- - mod.entry(addr) --->  返回模块入口
- - mod.system(addr)--->  如果addr是系统模块则为true否则则是false
- - mod.user(addr)  --->  如果是用户模块则返回true 否则为false
- - mod.main()      --->  返回主模块基地址
- - mod.rva(addr)   --->  如果addr不在模块则返回0,否则返回 addr所位于模块的 RVA偏移
- - mod.offset(addr)--->  获取地址所对应的文件偏移量,如果不在模块则返回0
- - mod.isexport(addr) ---> 判断该地址是否是从模块导出的函数,true是 false则不是
+|  类内函数名   | 函数作用  |
+|  ----  | ----  |
+| mod.party(addr) | 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块 |
+| mod.base(addr) | 获取模块基址 |
+| mod.size(addr) | 返回模块大小 |
+| mod.hash(addr) | 返回模块hash |
+| mod.entry(addr) | 返回模块入口 |
+| mod.system(addr) | 如果addr是系统模块则为true否则则是false |
+| mod.user(addr) | 如果是用户模块则返回true 否则为false |
+| mod.main() | 返回主模块基地址 |
+| mod.rva(addr) | 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移 |
+| mod.offset(addr) | 获取地址所对应的文件偏移量,如果不在模块则返回0 |
+| mod.isexport(addr) | 判断该地址是否是从模块导出的函数 |
 
 <b>from LyScriptTools32 import LyScriptMemory</b>
 
@@ -1216,7 +1218,7 @@ if __name__ == "__main__":
 
 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用。
 
-<b>Module类：</b> 该类内包含了如下方法可供使用
+<b>from LyScriptTools32 import Module</b>
 
 |  Module类内函数名   | 函数作用  |
 |  ----  | ----  |
