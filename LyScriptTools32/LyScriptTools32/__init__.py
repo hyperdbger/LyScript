@@ -669,6 +669,7 @@ class LyScriptOther(object):
 
 # --------------------------------------------------------------------------------------------
 # 模块类封装
+# --------------------------------------------------------------------------------------------
 class Module(object):
     def __init__(self,ptr):
         self.dbg = ptr
@@ -747,6 +748,145 @@ class Module(object):
             for index in range(0,len(module)):
                 if str(module[index].get("base")) == address:
                     return module[index].get("name")
+            return False
+        except Exception:
+            return False
+
+    # 根据模块名得到基地址
+    def get_base_from_module(self,module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0,len(module)):
+                if module[index].get("name") == module_name:
+                    return module[index].get("base")
+            return False
+        except Exception:
+            return False
+
+    # 根据模块名得到模块OEP入口
+    def get_oep_from_module(self,module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0,len(module)):
+                if module[index].get("name") == module_name:
+                    return module[index].get("entry")
+            return False
+        except Exception:
+            return False
+
+    # 得到所有模块信息
+    def get_all_module_information(self):
+        try:
+            ref = self.dbg.get_all_module()
+            if ref !=False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到特定模块基地址
+    def get_module_base(self,module_name):
+        try:
+            ref = self.dbg.get_module_base(module_name)
+            if ref !=False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到当前OEP位置处模块基地址
+    def get_local_base(self):
+        try:
+            ref = self.dbg.get_local_base()
+            if ref !=False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取当前OEP位置长度
+    def get_local_size(self):
+        try:
+            ref = self.dbg.get_local_size()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取当前OEP位置保护属性
+    def get_local_protect(self):
+        try:
+            ref = self.dbg.get_local_protect()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取指定模块中指定函数内存地址
+    def get_module_from_function(self,module,function):
+        try:
+            ref = self.dbg.get_module_from_function(module,function)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据传入地址得到模块首地址,开头4D 5A
+    def get_base_from_address(self,address):
+        try:
+            ref = self.dbg.get_base_from_address(int(address))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到当前.text节基地址
+    def get_base_address(self):
+        try:
+            module_base = self.dbg.get_local_base()
+            ref = self.dbg.get_base_from_address(int(module_base))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据名字得到模块基地址
+    def get_base_from_name(self,module_name):
+        try:
+            ref = self.dbg.get_base_from_address(module_name)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名得到OEP位置
+    def get_oep_from_name(self,module_name):
+        try:
+            ref = self.dbg.get_oep_from_name(module_name)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块地址得到OEP位置
+    def get_oep_from_address(self,address):
+        try:
+            ref = self.dbg.get_oep_from_address(int(address))
+            if ref != False:
+                return ref
             return False
         except Exception:
             return False
