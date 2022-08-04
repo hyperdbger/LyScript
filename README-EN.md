@@ -21,8 +21,7 @@ An x64dbg automation control plug-in, which controls x64dbg through python, real
 <br>
 
  - Install Python package：`pip install LyScript32` or `pip install LyScript64`
- - 32bit Plug in download：https://cdn.lyshark.com/software/LyScript32.zip
- - 64bit Plug in download：https://cdn.lyshark.com/software/LyScript64.zip
+ - PluginDownload：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32bit)</a> or <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64bit)</a>
 
 After downloading the plug-in, please copy the plug-in to the plugins directory under the x64dbg directory, and the plug-in file will be loaded automatically after the program runs.
 
