@@ -1178,16 +1178,18 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
 <b>from LyScriptTools32 import LyScriptOther</b>
 
- - arg.get(index); 获取当前函数堆栈中的第几个参数,假设返回地址在堆栈上,并且我们在函数内部.
- - arg.set(index,value);设置的索引位置的值为
- - ex.firstchance()：最后一个异常是否为第一次机会异常。
- - ex.addr()：最后一个异常地址。例如，导致异常的指令的地址。
- - ex.code()：最后一个异常代码。
- - ex.flags()：最后一个异常标志。
- - ex.infocount()：上次异常信息计数（参数数）。
- - ex.info(index)：最后一个异常信息，如果索引超出范围，则为零。
+|  类内函数名   | 函数作用  |
+|  ----  | ----  |
+| arg.get(index) | 获取当前函数堆栈中的第index个参数 |
+| arg.set(index,value) | 设置的索引位置的值 |
+| ex.firstchance() | 最后一个异常是否为第一次机会异常 |
+| ex.addr() | 最后一个异常地址 |
+| ex.code() | 最后一个异常代码 |
+| ex.flags() | 最后一个异常标志 |
+| ex.infocount() | 上次异常信息计数 |
+| ex.info(index) | 最后一个异常信息 |
 
-如上是一些常用的函数封装，他们的调用方式如下面所示。
+如上是一些常用的脚本命令的封装，他们的调用方式如下面代码中所示。
 ```Python
 from LyScript32 import MyDebug
 from LyScriptTools32 import LyScriptModule
