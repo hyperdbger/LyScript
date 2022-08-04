@@ -21,8 +21,7 @@
 <br>
 
  - установить пакет Python ：`pip install LyScript32` или  `pip install LyScript64`
- - 32битный модуль загрузки ：https://cdn.lyshark.com/software/LyScript32.zip
- - 64битный модуль загрузки ：https://cdn.lyshark.com/software/LyScript64.zip
+ - модуль загрузки：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32bit)</a> or <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64bit)</a>
 
 после загрузки модуля, пожалуйста, скопируйте этот модуль в каталог plugins x64dbg, который будет загружен автоматически после запуска программы. 
 
@@ -54,3 +53,5 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+русский язык не подходит 
