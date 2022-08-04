@@ -1119,7 +1119,7 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
 纯脚本模块全部功能实现都是调用的x64dbg命令行，此种方式效率最低执行慢且当前只能回传一条整数类型的参数，建议尽量少使用此类模块实现功能。
 
-通用函数功能参考自：<a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a>
+函数功能说明来源于：<a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a> 博客
 
 插件目前分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是一些杂类。
 
