@@ -1216,7 +1216,18 @@ if __name__ == "__main__":
 
 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用。
 
-**获取被调试进程信息:** 得到当前被调试进程详细参数，包括路径，名称，入口地址，基地址，长度等。
+<b>Module类</b>
+
+
+
+
+
+
+
+
+
+
+此处只提供一个演示案例，获取当前被调试进程详细参数，包括路径，名称，入口地址，基地址，长度等。
 ```Python
 from LyScript32 import MyDebug
 from LyScriptTools32 import Module
@@ -1239,39 +1250,17 @@ if __name__ == "__main__":
     # 得到进程名字
     local_name = module.get_local_program_name()
     print("调试名称: {}".format(local_name))
-
-    # 得到长度
-    local_size = module.get_local_program_size()
-    print("程序长度: {}".format(local_size))
-
-    # 得到基地址
-    local_base = module.get_local_program_base()
-    print("基地址: {}".format(hex(local_base)))
-
-    # 得到入口地址
-    local_oep = module.get_local_program_entry()
-    print("入口地址: {}".format(hex(local_oep)))
-    
+  
     # 验证是否导入了user32.dll
     is_import = module.check_module_imported("user32.dll")
     print("是否导入: {}".format(is_import))
-
-    # 根据基地址得到模块名
-    module_name = module.get_name_from_module("1985413120")
-    print("根据基地址得到模块名: {}".format(module_name))
 
     # 根据模块名得到基地址
     module_base = module.get_base_from_module("kernelbase.dll")
     print("根据模块名得到基地址: {}".format(hex(module_base)))
 
-    # 根据模块名得到OEP基地址
-    module_oep = module.get_oep_from_module("win32project1.exe")
-    print("OEP: {}".format(hex(module_oep)))
-
     dbg.close()
 ```
-
-模块类所支持的功能如下:
 
 
 
