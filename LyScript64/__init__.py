@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import socket,struct,time
 from ctypes import *
 
@@ -17,18 +18,15 @@ class MyStruct(Structure):
         ("Count", c_int),
         ("Flag", c_int),
     ]
-
     def pack(self):
         buffer = struct.pack("< 256s 256s 256s 256s 256s q q q q q i i",self.Command_String_A,self.Command_String_B,self.Command_String_C,self.Command_String_D,self.Command_String_E,
                              self.Command_int_A,self.Command_int_B,self.Command_int_C,self.Command_int_D,self.Command_int_E,
                              self.Count,self.Flag)
         return buffer
-
     def unpack(self,buffer):
         (self.Command_String_A,self.Command_String_B,self.Command_String_C,self.Command_String_D,self.Command_String_E,
          self.Command_int_A,self.Command_int_B,self.Command_int_C,self.Command_int_D,self.Command_int_E,
          self.Count,self.Flag) = struct.unpack("< 256s 256s 256s 256s 256s q q q q q i i",buffer)
-
 
 class MyDebug(object):
     def __init__(self,address="127.0.0.1",port=6589):
@@ -91,7 +89,7 @@ class MyDebug(object):
             ptr.Command_String_A = "GetRegister".encode("utf8")
             ptr.Command_String_B = register.upper().encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             return recv_struct.Command_int_A
         except Exception:
             return False
@@ -102,7 +100,7 @@ class MyDebug(object):
             ptr.Command_String_A = "SetRegister".encode("utf8")
             ptr.Command_String_B = register.upper().encode("utf8")
             ptr.Command_int_A = value
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
 
             if recv_struct.Flag == 1:
                 return True
@@ -117,7 +115,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "SetDebug".encode("utf8")
             ptr.Command_String_B = action.upper().encode("utf8")
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
 
             if recv_struct.Flag == 1:
                 return True
@@ -134,7 +132,7 @@ class MyDebug(object):
             ptr.Command_String_B = action.encode("utf8")
 
             for index in range(1,count):
-                recv_struct = dbg.send_recv_struct(ptr)
+                recv_struct = self.send_recv_struct(ptr)
                 time.sleep(0.1)
 
             if recv_struct.Flag == 1:
@@ -149,7 +147,7 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "IsDebugger".encode("utf8")
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -162,7 +160,7 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "IsRunning".encode("utf8")
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -177,7 +175,7 @@ class MyDebug(object):
             ptr.Command_String_A = "GetFlagRegister".encode("utf8")
             ptr.Command_String_B = register.upper().encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -197,7 +195,7 @@ class MyDebug(object):
             else:
                 ptr.Command_int_A = False
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -212,7 +210,7 @@ class MyDebug(object):
             ptr.Command_String_A = "SetBreakPoint".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -227,7 +225,7 @@ class MyDebug(object):
             ptr.Command_String_A = "DeleteBreakPoint".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -242,7 +240,7 @@ class MyDebug(object):
             ptr.Command_String_A = "CheckBreakPoint".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -265,7 +263,6 @@ class MyDebug(object):
                         dic = {"addr": None, "enabled": None, "hitcount": None, "type": None}
                         recv_bp = self.sock.recv(268)
                         (address,enabled,hitcount,type) = struct.unpack("< q q i i",recv_bp)
-
                         dic.update({"addr": address, "enabled": enabled, "hitcount": hitcount, "type": type})
                         ret_list.append(dic)
                     return ret_list
@@ -284,7 +281,7 @@ class MyDebug(object):
             ptr.Command_int_A = address
             ptr.Command_int_b = type
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -298,7 +295,8 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "DeleteHardwareBreakPoint".encode("utf8")
             ptr.Command_int_A = address
-            recv_struct = dbg.send_recv_struct(ptr)
+
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -310,22 +308,23 @@ class MyDebug(object):
     def get_disasm_code(self,address,count):
         try:
             ret_list = []
+
             send_struct = MyStruct()
             send_struct.Command_String_A = "DisasmCode".encode("utf8")
             send_struct.Command_int_A = address
             send_struct.Command_int_B = count
+
             try:
                 send_buffer = send_struct.pack()
                 self.sock.send(send_buffer)
+
                 recv_buffer = int.from_bytes(self.sock.recv(4), byteorder="little", signed=False)
                 if recv_buffer != 0:
                     for index in range(0,recv_buffer):
                         dic = {"addr": 0, "opcode": None}
                         recv_disasm = self.sock.recv(264)
-
                         (addr,opcode) = struct.unpack("< q 256s",recv_disasm)
                         asm = opcode.decode("utf8").replace('\0','')
-
                         dic.update({"addr": addr, "opcode": asm})
                         ret_list.append(dic)
                     return ret_list
@@ -342,7 +341,7 @@ class MyDebug(object):
             ptr.Command_String_A = "DisasmOneCode".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_String_B.decode("utf8")
             else:
@@ -357,7 +356,7 @@ class MyDebug(object):
             ptr.Command_String_A = "GetDisasmOperand".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -372,7 +371,7 @@ class MyDebug(object):
             ptr.Command_String_A = "GetOperandSize".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -387,8 +386,7 @@ class MyDebug(object):
             ptr.Command_String_A = "AssembleMemory".encode("utf8")
             ptr.Command_int_A = address
             ptr.Command_String_B = asm.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -403,7 +401,7 @@ class MyDebug(object):
             ptr.Command_String_A = "AssembleCodeSize".encode("utf8")
             ptr.Command_String_B = asm.encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -417,8 +415,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "ScanMemory".encode("utf8")
             ptr.Command_String_B = pattern.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -449,14 +446,13 @@ class MyDebug(object):
                 return False
         except Exception:
             return False
-
     def read_memory_byte(self,address):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "ReadMemoryByte".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -471,8 +467,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "ReadMemoryWord".encode("utf8")
             ptr.Command_int_A = address
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -487,8 +482,22 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "ReadMemoryDword".encode("utf8")
             ptr.Command_int_A = address
+            recv_struct = self.send_recv_struct(ptr)
+            if recv_struct.Flag == 1:
+                recv_address = recv_struct.Command_int_A
+                return recv_address
+            else:
+                return 0
+        except Exception:
+            return 0
+        return 0
 
-            recv_struct = dbg.send_recv_struct(ptr)
+    def read_memory_qword(self,address):
+        try:
+            ptr = MyStruct()
+            ptr.Command_String_A = "ReadMemoryQword".encode("utf8")
+            ptr.Command_int_A = address
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -504,7 +513,7 @@ class MyDebug(object):
             ptr.Command_String_A = "ReadMemoryPtr".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -521,7 +530,7 @@ class MyDebug(object):
             ptr.Command_int_A = address
             ptr.Command_int_B = value
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -537,7 +546,7 @@ class MyDebug(object):
             ptr.Command_int_A = address
             ptr.Command_int_B = value
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -553,7 +562,7 @@ class MyDebug(object):
             ptr.Command_int_A = address
             ptr.Command_int_B = value
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -561,7 +570,23 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+        
+    def write_memory_qword(self,address,value):
+        try:
+            ptr = MyStruct()
+            ptr.Command_String_A = "WriteMemoryQword".encode("utf8")
+            ptr.Command_int_A = address
+            ptr.Command_int_B = value
 
+            recv_struct = self.send_recv_struct(ptr)
+            if recv_struct.Flag == 1:
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+        return False
+        
     def write_memory_ptr(self,address,value):
         try:
             ptr = MyStruct()
@@ -569,7 +594,7 @@ class MyDebug(object):
             ptr.Command_int_A = address
             ptr.Command_int_B = value
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -584,7 +609,7 @@ class MyDebug(object):
             ptr.Command_String_A = "CreateAlloc".encode("utf8")
             ptr.Command_int_A = size
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 recv_address = recv_struct.Command_int_A
                 return recv_address
@@ -600,7 +625,7 @@ class MyDebug(object):
             ptr.Command_String_A = "DeleteAlloc".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -614,7 +639,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetLocalBase".encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 base_addr = recv_struct.Command_int_A
                 return base_addr
@@ -630,7 +655,7 @@ class MyDebug(object):
             ptr.Command_String_A = "GetLocalProtect".encode("utf8")
             ptr.Command_int_A = address
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 base_addr = recv_struct.Command_int_A
                 return base_addr
@@ -648,7 +673,7 @@ class MyDebug(object):
             ptr.Command_int_B= type
             ptr.Command_int_C = size
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -662,7 +687,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetLocalSize".encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 base_addr = recv_struct.Command_int_A
                 return base_addr
@@ -677,7 +702,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetLocalPageSize".encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 base_addr = recv_struct.Command_int_A
                 return base_addr
@@ -699,12 +724,9 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0, recv_count):
                         dic = {"addr": None, "size": None, "page_name": None}
-
                         recv_buffer = self.sock.recv(524)
                         (address, size, page_name) = struct.unpack("< q i 512s", recv_buffer)
-
                         decode_name = page_name.decode("utf8").replace('\0', '')
-
                         dic.update({"addr": address, "size": size, "page_name": decode_name})
                         all_list.append(dic)
 
@@ -722,8 +744,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetModuleBaseAddress".encode("utf8")
             ptr.Command_String_B = module_name.encode("utf-8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -739,7 +760,7 @@ class MyDebug(object):
             ptr.Command_String_B = module.encode("utf8")
             ptr.Command_String_C = function.encode("utf8")
 
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -760,16 +781,12 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0,recv_count):
                         dic = {"base": None, "entry": None, "name": None, "path": None, "size": None}
-
                         recv_buffer = self.sock.recv(536)
                         (base,entry,name,path,size) = struct.unpack("< q q 256s 260s i", recv_buffer)
-
                         decode_name = name.decode("utf8").replace('\0','')
                         decode_path = path.decode("utf8").replace('\0','')
-
                         dic.update({"base": base, "entry": entry, "name": decode_name, "path": decode_path, "size": size})
                         all_module.append(dic)
-
                     return all_module
                 else:
                     return False
@@ -792,10 +809,8 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0,recv_count):
                         dic = {"name": None, "iat_va": None, "iat_rva": None}
-
                         recv_buffer = self.sock.recv(528)
                         (name,iat_va,iat_rva) = struct.unpack("< 512s q q", recv_buffer)
-
                         decode_name = name.decode("utf8").replace('\0','')
                         dic.update({"name": decode_name, "iat_va": iat_va, "iat_rva": iat_rva})
                         all_module.append(dic)
@@ -821,15 +836,11 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0,recv_count):
                         dic = {"name": None, "iat_va": None, "iat_rva": None}
-
                         recv_buffer = self.sock.recv(528)
                         (name,va,rva) = struct.unpack("< 512s q q", recv_buffer)
-
                         decode_name = name.decode("utf8").replace('\0','')
-
                         dic.update({"name": decode_name, "va": va, "rva": rva})
                         all_module.append(dic)
-
                     return all_module
                 else:
                     return False
@@ -851,15 +862,11 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0,recv_count):
                         dic = {"addr": None, "name": None, "size": None}
-
                         recv_buffer = self.sock.recv(272)
                         (address,name,size) = struct.unpack("< q 256s q", recv_buffer)
-
                         decode_name = name.decode("utf8").replace('\0','')
-
                         dic.update({"addr": address, "name": decode_name, "size": size})
                         all_section.append(dic)
-
                     return all_section
                 else:
                     return False
@@ -874,8 +881,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetBaseFromAddr".encode("utf8")
             ptr.Command_int_A = address
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_B
             else:
@@ -889,8 +895,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetBaseFromName".encode("utf8")
             ptr.Command_String_B = name.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_B
             else:
@@ -904,8 +909,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetOEPFromAddr".encode("utf8")
             ptr.Command_int_A = address
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_B
             else:
@@ -919,8 +923,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetOEPFromName".encode("utf8")
             ptr.Command_String_B = name.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_B
             else:
@@ -934,8 +937,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "PushStack".encode("utf8")
             ptr.Command_int_A = value
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -948,8 +950,7 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "PopStack".encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -963,8 +964,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "PeekStack".encode("utf8")
             ptr.Command_int_A = index
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -985,15 +985,11 @@ class MyDebug(object):
                 if recv_count != 0:
                     for index in range(0,recv_count):
                         dic = {"thread_number": None, "thread_id": None, "thread_name": None, "local_base": None, "start_address": None}
-
                         recv_buffer = self.sock.recv(280)
                         (number,id,name,local_base,start_addr) = struct.unpack("< i i 256s q q", recv_buffer)
-
                         decode_name = name.decode("utf8").replace('\0','')
-
                         dic.update({"thread_number": number, "thread_id": id, "thread_name": decode_name, "local_base": local_base, "start_address": start_addr})
                         all_thread.append(dic)
-
                     return all_thread
                 else:
                     return False
@@ -1007,8 +1003,7 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "GetProcessHandle".encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -1021,8 +1016,7 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "GetProcessID".encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -1036,8 +1030,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetTebAddress".encode("utf8")
             ptr.Command_int_A = thread_id
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -1051,8 +1044,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "GetPebAddress".encode("utf8")
             ptr.Command_int_A = process_id
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return recv_struct.Command_int_A
             else:
@@ -1065,11 +1057,9 @@ class MyDebug(object):
         try:
             ptr = MyStruct()
             ptr.Command_String_A = "SetCommentNotes".encode("utf8")
-
             ptr.Command_int_A = address
             ptr.Command_String_B = note.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -1083,8 +1073,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "SetLoger".encode("utf8")
             ptr.Command_String_B = log.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
@@ -1098,8 +1087,7 @@ class MyDebug(object):
             ptr = MyStruct()
             ptr.Command_String_A = "RumCmdExec".encode("utf8")
             ptr.Command_String_B = cmd.encode("utf8")
-
-            recv_struct = dbg.send_recv_struct(ptr)
+            recv_struct = self.send_recv_struct(ptr)
             if recv_struct.Flag == 1:
                 return True
             else:
