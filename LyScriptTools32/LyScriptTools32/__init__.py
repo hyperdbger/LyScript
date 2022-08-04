@@ -893,3 +893,165 @@ class Module(object):
             return False
         except Exception:
             return False
+
+    # 得到指定模块的导入表
+    def get_module_from_import(self,module_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 检查指定模块内是否存在特定导入函数
+    def get_import_inside_function(self,module_name,function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return True
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据导入函数名得到函数iat_va地址
+    def get_import_iatva(self,module_name,function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("iat_va")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据导入函数名得到函数iat_rva地址
+    def get_import_iatrva(self,module_name,function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("iat_rva")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名,获取模块导出表
+    def get_module_from_export(self,module_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名以及导出函数名,得到va地址
+    def get_module_export_va(self,module_name,function_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("va")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名以及导出函数,得到rva地址
+    def get_module_export_rva(self,module_name,function_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("rva")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 得到程序节表信息
+    def get_local_section(self):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据节名称得到地址
+    def get_local_address_from_section(self,section_name):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(section_name):
+                        return ref[index].get("addr")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据节名称得到节大小
+    def get_local_size_from_section(self,section_name):
+        try:
+            ref = self.dbg.get_section()
+            print(ref)
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("name") == str(section_name):
+                        return ref[index].get("size")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据地址得到节名称
+    def get_local_section_from_address(self,address):
+        try:
+            ref = self.dbg.get_section()
+            print(ref)
+            if ref != False:
+                for index in range(0,len(ref)):
+                    if ref[index].get("addr") == int(address):
+                        return ref[index].get("name")
+                return False
+            return False
+        except Exception:
+            return False
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
