@@ -1216,15 +1216,32 @@ if __name__ == "__main__":
 
 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用。
 
-<b>Module类</b>
+<b>Module类：该类内包含了如下方法可供使用</b>
 
-
-
-
-
-
-
-
+|  Module类内函数名   | 函数作用  |
+|  ----  | ----  |
+| get_local_full_path() | 得到程序自身完整路径 |
+| get_local_program_name() | 获得加载程序的文件名 |
+| get_local_program_size() | 得到被加载程序的大小 |
+| get_local_program_base() | 得到基地址 |
+| get_local_program_entry() | 得到入口地址 |
+| check_module_imported(module_name) | 验证程序是否导入了指定模块 |
+| get_name_from_module(address) | 根据基地址得到模块名 |
+| get_base_from_module(module_name) | 根据模块名得到基地址 |
+| get_oep_from_module(module_name) | 根据模块名得到模块OEP入口 |
+| get_all_module_information() | 得到所有模块信息 |
+| get_module_base(module_name) | 得到特定模块基地址 |
+| get_local_base() | 得到当前OEP位置处模块基地址 |
+| get_local_size() | 获取当前OEP位置长度 |
+| get_local_protect() | 获取当前OEP位置保护属性 |
+| get_module_from_function(module,function) | 获取指定模块中指定函数内存地址 |
+| get_base_from_address(address) | 根据传入地址得到模块首地址,开头4D 5A |
+| get_base_address() | 得到当前.text节基地址 |
+| get_base_from_name(module_name) | 根据名字得到模块基地址 |
+| get_oep_from_name(module_name) | 传入模块名得到OEP位置 |
+| get_oep_from_address(address) | 传入模块地址得到OEP位置 |
+| get_module_from_import(module_name)| 得到指定模块的导入表 |
+| get_import_inside_function(module_name,function_name) | 检查指定模块内是否存在特定导入函数 |
 
 
 此处只提供一个演示案例，获取当前被调试进程详细参数，包括路径，名称，入口地址，基地址，长度等。
