@@ -1109,19 +1109,17 @@ if __name__ == "__main__":
 
 ### 扩展Script模块
 
-LyScriptTools模块是一个x64dbg的扩展包，该模块主要针对内置Script脚本命令的类版封装，使得用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现的，如下所有的命令封装都是围绕这个API函数进行的。
+LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准模块进行二次封装，目前脚本扩展模块分为两部分，第一部分是纯脚本模块，用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现的，第二部分则是对标准库的二次类版封装，使用户可以更精准的实现功能。
 
 该插件需要在安装有`LyScript32/64`包之上再安装一个`LyScriptTools32/64`扩展包。
 
  - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
-<br>
-
 #### Script 纯脚本模块
 
-<b>通用函数功能参考自：</b><a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a>
+纯脚本模块全部功能实现都是调用的x64dbg命令行，此种方式效率最低执行慢且当前只能回传一条整数类型的参数，建议尽量少使用此类模块实现功能。
 
-<br>
+通用函数功能参考自：<a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a>
 
 插件目前分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是一些杂类。
 
