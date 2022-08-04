@@ -1115,7 +1115,7 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
  - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
-#### LyScript 纯脚本模块
+#### LyScriptTools 纯脚本模块
 
 纯脚本模块全部功能实现都是调用的x64dbg命令行，此种方式效率最低执行慢且当前只能回传一条整数类型的参数，建议尽量少使用此类模块实现功能。
 
@@ -1212,7 +1212,7 @@ if __name__ == "__main__":
 
 当然如果你觉得上面这些通用函数不够用，或者没有补充全面，你完全可以调用任意类内的`ot.GetScriptValue()`函数自己去封装实现。
 
-#### LyScript 扩展类模块
+#### LyScriptTools 扩展类模块
 
 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制。
 
