@@ -666,3 +666,87 @@ class LyScriptOther(object):
         except Exception:
             return False
         return False
+
+# --------------------------------------------------------------------------------------------
+# 模块类封装
+class Module(object):
+    def __init__(self,ptr):
+        self.dbg = ptr
+
+    # 得到程序自身完整路径
+    def get_local_full_path(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("path")
+        except Exception:
+            return False
+
+    # 获得名称
+    def get_local_program_name(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("name")
+        except Exception:
+            return False
+
+    # 得到长度
+    def get_local_program_size(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("size")
+        except Exception:
+            return False
+
+    # 得到基地址
+    def get_local_program_base(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("base")
+        except Exception:
+            return False
+
+    # 得到入口地址
+    def get_local_program_entry(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("entry")
+        except Exception:
+            return False
+
+    # 验证程序是否导入了指定模块
+    def check_module_imported(self, module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0,len(module)):
+                if module[index].get("name") == module_name:
+                    return True
+            return False
+        except Exception:
+            return False
+
+    # 根据基地址得到模块名
+    def get_name_from_module(self,address):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0,len(module)):
+                if str(module[index].get("base")) == address:
+                    return module[index].get("name")
+            return False
+        except Exception:
+            return False
