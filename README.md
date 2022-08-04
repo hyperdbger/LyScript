@@ -1141,20 +1141,20 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
 <b>from LyScriptTools32 import LyScriptMemory</b>
 
- - mem.valid(addr) 判断addr是否有效,有效则返回True
- - mem.base(addr)  或者当前addr的基址
- - mem.size(addr)  获取当前addr内存的大小
- - mem.iscode(addr) 判断当前 addr是否是可执行页面,成功返回TRUE
- - mem.decodepointer(ptr) 解密指针,相当于调用了API. DecodePointer ptr
- - ReadByte(addr / reg); 从addr或者寄存器中读取一个字节内存并且返回
- - Byte(addr) byte(addr)  同上
- - ReadWord(addr)  Word(addr) word(addr) 同上 读取两个字节
- - ReadDDword(addr) Dword(addr) dword(addr) 同上 读取四个字节
- - ReadQword(addr) Qword(addr) qword(addr) 同上 读取8个字节,但是只能是64位程序方可使用
- - ReadPtr(addr) 从地址中读取指针(4/8字节)并返回读取的指针值
- - ReadPointer(addr) ptr(addr) Pointer(addr) pointer(addr) 都同上
- - ptr(mod.main()) --> 00905A4D
- - byte(mod.main()) --> 0x0000004D
+|  类内函数名   | 函数作用  |
+|  ----  | ----  |
+| mem.valid(addr) | 判断addr是否有效,有效则返回True |
+| mem.base(addr) | 或者当前addr的基址 |
+| mem.size(addr) | 获取当前addr内存的大小 |
+| mem.iscode(addr) | 判断当前 addr是否是可执行页面,成功返回TRUE |
+| mem.decodepointer(ptr) | 解密指针,相当于调用了DecodePointer ptr |
+| ReadByte(addr/eg)| 从addr或者寄存器中读取一个字节内存并且返回 |
+| Byte(addr) | 从addr或者寄存器中读取一个字节内存并且返回 |
+| ReadWord(addr) | 读取两个字节 |
+| ReadDDword(addr) | 读取四个字节 |
+| ReadQword(addr) | 读取8个字节,但是只能是64位程序方可使用 |
+| ReadPtr(addr) | 从地址中读取指针(4/8字节)并返回读取的指针值 |
+| ReadPointer(addr) | 从地址中读取指针(4/8字节)并返回读取的指针值 |
 
 <b>from LyScriptTools32 import LyScriptDisassemble</b>
 
