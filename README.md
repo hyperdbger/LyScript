@@ -1158,22 +1158,23 @@ LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准�
 
 <b>from LyScriptTools32 import LyScriptDisassemble</b>
 
- - dis.len(addr)      获取addr处的指令长度。
- - dis.iscond(addr)   判断当前addr位置是否是条件指令(比如jxx) 返回值: 是的话True 否则False
- - dis.isbranch(addr) 判断当前地址是否是分支指令   返回值: 同上
- - dis.isret(addr)    判断是否是ret指令          返回值: 同上  
- - dis.iscall(addr)   判断是否是call指令         返回值: 同上  
- - dis.ismem(addr)    判断是否是内存操作数        返回值: 同上
- - dis.isnop(addr)    判断是否是nop             返回值: 同上
- - dis.isunusual(addr)判断当前地址是否指示为异常地址 返回值: 同上
- - dis.branchdest(addr)：将指令的分支目标位于（如果按 Enter 键，它将遵循什么）。addr
- - dis.branchexec(addr)：如果 分支 at 要执行，则为 true。addr
- - dis.imm(addr)       获取当前指令位置的立即数(这一行指令中出现的立即数)
- - dis.brtrue(addr)：指令在 的分支目标。addr
- - dis.brfalse(addr)：下一条指令的地址（如果指令 at 是条件分支）。addr
- - dis.next(addr)：    获取addr的下一条地址
- - dis.prev(addr)：    获取addr上一条低地址
- - dis.iscallsystem(addr) 判断当前指令是否是系统模块指令
+|  类内函数名   | 函数作用  |
+|  ----  | ----  |
+| dis.len(addr) | 获取addr处的指令长度 |
+| dis.iscond(addr) | 判断当前addr位置是否是条件指令 |
+| dis.isbranch(addr) | 判断当前地址是否是分支指令 |
+| dis.isret(addr) | 判断是否是ret指令 |
+| dis.iscall(addr) | 判断是否是call指令 |
+| dis.ismem(addr) | 判断是否是内存操作数 |
+| dis.isnop(addr) | 判断是否是nop |
+| dis.isunusual(addr) | 判断当前地址是否指示为异常地址 |
+| dis.branchdest(addr) | 将指令的分支目标位于addr处 |
+| dis.branchexec(addr) | 如果分支要执行 |
+| dis.imm(addr) | 获取当前指令位置的立即数 |
+| dis.brtrue(addr) | 下一条指令的地址 |
+| dis.next(addr) | 获取addr的下一条地址 |
+| dis.prev(addr) | 获取addr上一条低地址 |
+| dis.iscallsystem(addr) | 判断当前指令是否是系统模块指令 |
 
 <b>from LyScriptTools32 import LyScriptOther</b>
 
