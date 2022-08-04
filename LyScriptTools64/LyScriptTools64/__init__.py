@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 import time
-from LyScript64 import MyDebug
+from LyScript32 import MyDebug
 
+# ----------------------------------------------------------------------
+# 纯脚本封装
+# ----------------------------------------------------------------------
 # 模块类
 class LyScriptModule(object):
     def GetScriptValue(self, dbg, script):
         try:
-            ref = dbg.run_command_exec("push rax")
+            ref = dbg.run_command_exec("push eax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"rax={script}")
+            ref = dbg.run_command_exec(f"eax={script}")
             if ref != True:
-                dbg.run_command_exec("pop rax")
+                dbg.run_command_exec("pop eax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
+            reg = dbg.get_register("eax")
+            ref = dbg.run_command_exec("pop eax")
             if ref != True:
                 return None
             return reg
@@ -144,20 +147,21 @@ class LyScriptModule(object):
             return False
         return False
 
+
 # 反汇编类封装
 class LyScriptDisassemble(object):
     def GetScriptValue(self, dbg, script):
         try:
-            ref = dbg.run_command_exec("push rax")
+            ref = dbg.run_command_exec("push eax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"rax={script}")
+            ref = dbg.run_command_exec(f"eax={script}")
             if ref != True:
-                dbg.run_command_exec("pop rax")
+                dbg.run_command_exec("pop eax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
+            reg = dbg.get_register("eax")
+            ref = dbg.run_command_exec("pop eax")
             if ref != True:
                 return None
             return reg
@@ -341,20 +345,21 @@ class LyScriptDisassemble(object):
             return False
         return False
 
+
 # 内存操作类
 class LyScriptMemory(object):
     def GetScriptValue(self, dbg, script):
         try:
-            ref = dbg.run_command_exec("push rax")
+            ref = dbg.run_command_exec("push eax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"rax={script}")
+            ref = dbg.run_command_exec(f"eax={script}")
             if ref != True:
-                dbg.run_command_exec("pop rax")
+                dbg.run_command_exec("pop eax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
+            reg = dbg.get_register("eax")
+            ref = dbg.run_command_exec("pop eax")
             if ref != True:
                 return None
             return reg
@@ -505,16 +510,15 @@ class LyScriptMemory(object):
             return False
         return False
 
-        # 读取8字节
-        def read_qword(self, dbg, address):
-            try:
-                ref = self.GetScriptValue(dbg, "ReadQword({})".format(address))
-                if ref != None:
-                    return ref
-                return False
-            except Exception:
-                return False
-
+    # 读取8字节
+    def read_qword(self, dbg, address):
+        try:
+            ref = self.GetScriptValue(dbg, "ReadQword({})".format(address))
+            if ref != None:
+                return ref
+            return False
+        except Exception:
+            return False
         return False
 
     # 从地址中读取指针(4/8字节)并返回读取的指针值
@@ -562,16 +566,16 @@ class LyScriptMemory(object):
 class LyScriptOther(object):
     def GetScriptValue(self, dbg, script):
         try:
-            ref = dbg.run_command_exec("push rax")
+            ref = dbg.run_command_exec("push eax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"rax={script}")
+            ref = dbg.run_command_exec(f"eax={script}")
             if ref != True:
-                dbg.run_command_exec("pop rax")
+                dbg.run_command_exec("pop eax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
+            reg = dbg.get_register("eax")
+            ref = dbg.run_command_exec("pop eax")
             if ref != True:
                 return None
             return reg
@@ -666,3 +670,679 @@ class LyScriptOther(object):
         except Exception:
             return False
         return False
+
+# ----------------------------------------------------------------------
+# 模块类封装
+# ----------------------------------------------------------------------
+class Module(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    # 得到程序自身完整路径
+    def get_local_full_path(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("path")
+        except Exception:
+            return False
+
+    # 获得名称
+    def get_local_program_name(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("name")
+        except Exception:
+            return False
+
+    # 得到长度
+    def get_local_program_size(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("size")
+        except Exception:
+            return False
+
+    # 得到基地址
+    def get_local_program_base(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("base")
+        except Exception:
+            return False
+
+    # 得到入口地址
+    def get_local_program_entry(self):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+            return module[0].get("entry")
+        except Exception:
+            return False
+
+    # 验证程序是否导入了指定模块
+    def check_module_imported(self, module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0, len(module)):
+                if module[index].get("name") == module_name:
+                    return True
+            return False
+        except Exception:
+            return False
+
+    # 根据基地址得到模块名
+    def get_name_from_module(self, address):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0, len(module)):
+                if str(module[index].get("base")) == address:
+                    return module[index].get("name")
+            return False
+        except Exception:
+            return False
+
+    # 根据模块名得到基地址
+    def get_base_from_module(self, module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0, len(module)):
+                if module[index].get("name") == module_name:
+                    return module[index].get("base")
+            return False
+        except Exception:
+            return False
+
+    # 根据模块名得到模块OEP入口
+    def get_oep_from_module(self, module_name):
+        try:
+            module = self.dbg.get_all_module()
+            if module == False:
+                return False
+
+            for index in range(0, len(module)):
+                if module[index].get("name") == module_name:
+                    return module[index].get("entry")
+            return False
+        except Exception:
+            return False
+
+    # 得到所有模块信息
+    def get_all_module_information(self):
+        try:
+            ref = self.dbg.get_all_module()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到特定模块基地址
+    def get_module_base(self, module_name):
+        try:
+            ref = self.dbg.get_module_base(module_name)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到当前OEP位置处模块基地址
+    def get_local_base(self):
+        try:
+            ref = self.dbg.get_local_base()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取当前OEP位置长度
+    def get_local_size(self):
+        try:
+            ref = self.dbg.get_local_size()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取当前OEP位置保护属性
+    def get_local_protect(self):
+        try:
+            ref = self.dbg.get_local_protect()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 获取指定模块中指定函数内存地址
+    def get_module_from_function(self, module, function):
+        try:
+            ref = self.dbg.get_module_from_function(module, function)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据传入地址得到模块首地址,开头4D 5A
+    def get_base_from_address(self, address):
+        try:
+            ref = self.dbg.get_base_from_address(int(address))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到当前.text节基地址
+    def get_base_address(self):
+        try:
+            module_base = self.dbg.get_local_base()
+            ref = self.dbg.get_base_from_address(int(module_base))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据名字得到模块基地址
+    def get_base_from_name(self, module_name):
+        try:
+            ref = self.dbg.get_base_from_address(module_name)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名得到OEP位置
+    def get_oep_from_name(self, module_name):
+        try:
+            ref = self.dbg.get_oep_from_name(module_name)
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块地址得到OEP位置
+    def get_oep_from_address(self, address):
+        try:
+            ref = self.dbg.get_oep_from_address(int(address))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 得到指定模块的导入表
+    def get_module_from_import(self, module_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 检查指定模块内是否存在特定导入函数
+    def get_import_inside_function(self, module_name, function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return True
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据导入函数名得到函数iat_va地址
+    def get_import_iatva(self, module_name, function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("iat_va")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据导入函数名得到函数iat_rva地址
+    def get_import_iatrva(self, module_name, function_name):
+        try:
+            ref = self.dbg.get_module_from_import(str(module_name))
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("iat_rva")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名,获取模块导出表
+    def get_module_from_export(self, module_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名以及导出函数名,得到va地址
+    def get_module_export_va(self, module_name, function_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("va")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 传入模块名以及导出函数,得到rva地址
+    def get_module_export_rva(self, module_name, function_name):
+        try:
+            ref = self.dbg.get_module_from_export(str(module_name))
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(function_name):
+                        return ref[index].get("rva")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 得到程序节表信息
+    def get_local_section(self):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                return ref
+            return False
+        except Exception:
+            return False
+
+    # 根据节名称得到地址
+    def get_local_address_from_section(self, section_name):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(section_name):
+                        return ref[index].get("addr")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据节名称得到节大小
+    def get_local_size_from_section(self, section_name):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("name") == str(section_name):
+                        return ref[index].get("size")
+                return False
+            return False
+        except Exception:
+            return False
+
+    # 根据地址得到节名称
+    def get_local_section_from_address(self, address):
+        try:
+            ref = self.dbg.get_section()
+            if ref != False:
+                for index in range(0, len(ref)):
+                    if ref[index].get("addr") == int(address):
+                        return ref[index].get("name")
+                return False
+            return False
+        except Exception:
+            return False
+
+# ----------------------------------------------------------------------
+# 反汇编类封装
+# ----------------------------------------------------------------------
+class Disassemble(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    # 是否是跳转指令
+    def is_call(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "call":
+                    return True
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否是jmp
+    def is_jmp(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "jmp":
+                    return True
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否是ret
+    def is_ret(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "ret":
+                    return True
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否是nop
+    def is_nop(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "nop":
+                    return True
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否是条件跳转指令
+    def is_cond(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() in ["je","jne","jz","jnz","ja","jna","jp","jnp","jb","jnb","jg","jng","jge","jl","jle"]:
+                    return True
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否cmp比较指令
+    def is_cmp(self, address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "cmp":
+                    return True
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 是否是test比较指令
+    def is_test(self,address = 0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == "test":
+                    return True
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 自定义判断条件
+    def is_(self,address, cond):
+        try:
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                if dis.split(" ")[0].replace(" ", "").lower() == str(cond.replace(" ","")):
+                    return True
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到指定位置汇编指令,不填写默认获取rip位置处
+    def get_assembly(self,address=0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到指定位置机器码
+    def get_opcode(self,address=0):
+        try:
+            ref_opcode = []
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+            # 得到汇编指令
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                # 转机器码
+                addr = self.dbg.create_alloc(1024)
+                asm_size = self.dbg.assemble_code_size(dis)
+                self.dbg.assemble_write_memory(addr, dis)
+                for index in range(0, asm_size):
+                    read = self.dbg.read_memory_byte(addr + index)
+                    ref_opcode.append(read)
+                self.dbg.delete_alloc(addr)
+                return ref_opcode
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 获取反汇编代码长度
+    def get_disasm_operand_size(self,address=0):
+        try:
+            if(address == 0):
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_operand_size(int(address))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 计算用户传入汇编指令长度
+    def assemble_code_size(self, assemble):
+        try:
+            dis = self.dbg.assemble_code_size(str(assemble))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 用户传入汇编指令返回机器码
+    def get_assemble_code(self,assemble):
+        try:
+            ref_opcode = []
+
+            # 转机器码
+            addr = self.dbg.create_alloc(1024)
+            asm_size = self.dbg.assemble_code_size(assemble)
+            self.dbg.assemble_write_memory(addr, assemble)
+            for index in range(0, asm_size):
+                read = self.dbg.read_memory_byte(addr + index)
+                ref_opcode.append(read)
+            self.dbg.delete_alloc(addr)
+            return ref_opcode
+        except Exception:
+            return False
+        return False
+
+    # 将汇编指令写出到指定内存位置
+    def write_assemble(self,address,assemble):
+        try:
+            opcode = []
+            # 转机器码
+            addr = self.dbg.create_alloc(1024)
+            asm_size = self.dbg.assemble_code_size(assemble)
+            self.dbg.assemble_write_memory(addr, assemble)
+            for index in range(0, asm_size):
+                read = self.dbg.read_memory_byte(addr + index)
+                opcode.append(read)
+            self.dbg.delete_alloc(addr)
+
+            # 写出到内存
+            for index in range(0,len(opcode)):
+                self.dbg.write_memory_byte(address + index,opcode[index])
+            return True
+        except Exception:
+            return False
+        return False
+
+    # 反汇编指定行数
+    def get_disasm_code(self,address,size):
+        try:
+            dis = self.dbg.get_disasm_code(int(address),int(size))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 向下反汇编一行
+    def get_disasm_one_code(self,address = 0):
+        try:
+            if address == 0:
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_one_code(int(address))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前内存地址反汇编代码的操作数
+    def get_disasm_operand_code(self,address=0):
+        try:
+            if address == 0:
+                address = self.dbg.get_register("rip")
+
+            dis = self.dbg.get_disasm_operand_code(int(address))
+            if dis != False or dis != None:
+                return dis
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 获取当前rip指令的下一条指令
+    def get_disasm_next(self, rip):
+        next = 0
+
+        # 检查当前内存地址是否被下了绊子
+        check_breakpoint = self.dbg.check_breakpoint(rip)
+
+        # 说明存在断点，如果存在则这里就是一个字节了
+        if check_breakpoint == True:
+
+            # 接着判断当前是否是rip，如果是rip则需要使用原来的字节
+            local_rip = self.dbg.get_register("rip")
+
+            # 说明是rip并且命中了断点
+            if local_rip == rip:
+                dis_size = self.dbg.get_disasm_operand_size(rip)
+                next = rip + dis_size
+                next_asm = self.dbg.get_disasm_one_code(next)
+                return next_asm
+            else:
+                next = rip + 1
+                next_asm = self.dbg.get_disasm_one_code(next)
+                return next_asm
+            return None
+
+        # 不是则需要获取到原始汇编代码的长度
+        elif check_breakpoint == False:
+            # 得到当前指令长度
+            dis_size = self.dbg.get_disasm_operand_size(rip)
+            next = rip + dis_size
+            next_asm = self.dbg.get_disasm_one_code(next)
+            return next_asm
+        else:
+            return None
+
+    # 获取当前rip指令的上一条指令
+    def get_disasm_prev(self, rip):
+        prev_dasm = None
+        # 得到当前汇编指令
+        local_disasm = self.dbg.get_disasm_one_code(rip)
+
+        # 只能向上扫描10行
+        rip = rip - 10
+        disasm = self.dbg.get_disasm_code(rip, 10)
+
+        # 循环扫描汇编代码
+        for index in range(0, len(disasm)):
+            # 如果找到了,就取出他的上一个汇编代码
+            if disasm[index].get("opcode") == local_disasm:
+                prev_dasm = disasm[index - 1].get("opcode")
+                break
+        return prev_dasm
