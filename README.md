@@ -1293,46 +1293,51 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+<b>from LyScriptTools32 import Disassemble</b>
 
+如下API定义中，地址后面带有0说明可以指定缺省值，缺省值默认取当前EIP位置。
 
+|  Disassemble 类内函数名   | 函数作用  |
+|  ----  | ----  |
+| is_call(address=0) | 是否是跳转指令 |
+| is_jmp(address=0) | 是否是jmp |
+| is_ret(address=0) | 是否是ret |
+| is_nop(address=0 )| 是否是nop |
+| is_cond(address=0)| 是否是条件跳转指令|
+| is_cmp(address=0) | 是否cmp比较指令 |
+| is_test(address=0 ) | 是否是test比较指令 |
+| is_(address,cond) | 自定义判断条件 |
+| get_assembly(address=0) | 得到指定位置汇编指令,不填写默认获取EIP位置处 |
+| get_opcode(address=0) | 得到指定位置机器码 |
+| get_disasm_operand_size(address=0) | 获取反汇编代码长度 |
+| assemble_code_size(assemble) | 计算用户传入汇编指令长度 |
+| get_assemble_code(assemble) | 用户传入汇编指令返回机器码 |
+| write_assemble(address,assemble) | 将汇编指令写出到指定内存位置 |
+| get_disasm_code(address,size) | 反汇编指定行数 |
+| get_disasm_one_code(address = 0)| 向下反汇编一行 |
+| get_disasm_operand_code(address=0) | 得到当前内存地址反汇编代码的操作数 |
+| get_disasm_next(eip) | 获取当前EIP指令的下一条指令 |
+| get_disasm_prev(eip) | 获取当前EIP指令的上一条指令 |
 
+我们来举一个使用案例，其实和模块调用原理是一样的，调用时先初始化，然后就可以使用内部的函数了。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import Module
+from LyScriptTools32 import Disassemble
 
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
 
+    # 反汇编类
+    dasm = Disassemble(dbg)
 
+    ref = dasm.is_jmp()
+    print("是否是JMP: {}".format(ref))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    dbg.close()
+```
 
 
 
