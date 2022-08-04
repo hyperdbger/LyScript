@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import time
 from LyScript64 import MyDebug
-
 
 # 模块类
 class LyScriptModule(object):
@@ -145,7 +143,6 @@ class LyScriptModule(object):
         except Exception:
             return False
         return False
-
 
 # 反汇编类封装
 class LyScriptDisassemble(object):
@@ -343,7 +340,6 @@ class LyScriptDisassemble(object):
         except Exception:
             return False
         return False
-
 
 # 内存操作类
 class LyScriptMemory(object):
@@ -561,7 +557,6 @@ class LyScriptMemory(object):
         except Exception:
             return False
         return False
-
 
 # 其他类封装
 class LyScriptOther(object):
