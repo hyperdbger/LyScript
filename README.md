@@ -1214,9 +1214,7 @@ if __name__ == "__main__":
 
 ### Module 模块类
 
-LyScriptTools 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用功能实现，对象化编程可以让功能更加清晰易懂。
-
-<b>from LyScriptTools32 import Module</b>
+Module模块类的封装，提供了针对模块参数的精细化控制，对导入表，导出表，节表等具有更好的过滤效果。
 
 |  Module 类内函数名   | 函数作用  |
 |  ----  | ----  |
@@ -1290,11 +1288,7 @@ if __name__ == "__main__":
 
 ### Disassemble 反汇编类
 
-<b>from LyScriptTools32 import Disassemble</b>
-
-反汇编类的封装过程，如下是所有反汇编类的可用函数，这些函数的实现都继承于LyScript
-
-如下API定义中，地址后面带有0说明可以指定缺省值，缺省值默认取当前EIP位置。
+Disassemble 反汇编类内的方法的实现都继承于LyScript是对该模块的二次封装，增加了一些新的API函数的让用户可以有更多选择，需要注意的是如下API定义中，地址后面带有0的说明其可以省略参数，缺省值默认取当前EIP位置。
 
 |  Disassemble 类内函数名   | 函数作用  |
 |  ----  | ----  |
@@ -1347,7 +1341,7 @@ if __name__ == "__main__":
 
 ### DebugControl 调试控制类
 
-<b>from LyScriptTools32 import DebugControl</b>
+DebugControl 调试控制类主要用于控制x64dbg的行为，例如获取或设置寄存器组，执行单步命令等，此类内的方法也是最常用的。
 
 DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Softnessi</a>
 
@@ -1400,7 +1394,7 @@ DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Soft
 | IsDebug() | 判断调试器是否在调试 |
 | IsRunning() | 判断调试器是否在运行 |
 
-自动控制类主要功能如上表示，其中Script开头的API是调用的脚本命令实现，其他的是API实现，我们以自动载入程序为例，演示该类内函数是如何使用的。
+自动控制类主要功能如上表示，其中Script开头的API是调用的脚本命令实现，其他的是API实现，我们以批量自动载入程序为例，演示该类内函数是如何使用的。
 ```Python
 import os
 import pefile
