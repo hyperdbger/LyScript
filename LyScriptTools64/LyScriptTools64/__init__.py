@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from LyScript32 import MyDebug
+from LyScript64 import MyDebug
 
 # ----------------------------------------------------------------------
 # 纯脚本封装
