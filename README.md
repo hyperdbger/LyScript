@@ -1220,7 +1220,7 @@ if __name__ == "__main__":
 
 #### LyScriptTools 扩展类模块
 
-扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用。
+LyScriptTools 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用功能实现，对象化编程可以让功能更加清晰易懂。
 
 <b>from LyScriptTools32 import Module</b>
 
@@ -1257,7 +1257,6 @@ if __name__ == "__main__":
 | get_local_address_from_section(section_name) | 根据节名称得到地址 |
 | get_local_size_from_section(section_name) | 根据节名称得到节大小 |
 | get_local_section_from_address(address)| 根据地址得到节名称 |
-
 
 此处只提供一个演示案例，获取当前被调试进程详细参数，包括路径，名称，入口地址，基地址，长度等。
 ```Python
@@ -1339,6 +1338,27 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
