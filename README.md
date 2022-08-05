@@ -1400,27 +1400,50 @@ DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Soft
 | IsDebug() | 判断调试器是否在调试 |
 | IsRunning() | 判断调试器是否在运行 |
 
+自动控制类主要功能如上表示，其中Script开头的API是调用的脚本命令实现，其他的是API实现，我们以自动载入程序为例，演示该类内函数是如何使用的。
+```Python
+import os
+import pefile
+import time
+from LyScript32 import MyDebug
+from LyScriptTools32 import Module
+from LyScriptTools32 import Disassemble
+from LyScriptTools32 import DebugControl
 
+# 得到特定目录下的所有文件,并返回列表
+def GetFullFilePaht(path):
+    ref = []
+    for root,dirs,files in os.walk(str(path)):
+        for index in range(0,len(files)):
+            ref.append(str(root + "/" + files[index]))
+    return ref
 
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
 
+    # 初始化调试控制器
+    debug = DebugControl(dbg)
 
+    # 得到特定目录下的所有文件
+    full_path = GetFullFilePaht("d://test/")
 
+    for i in range(0,len(full_path)):
+        debug.Script_InitDebug(str(full_path[i]))
+        time.sleep(0.3)
+        debug.Script_RunDebug()
 
+        time.sleep(0.3)
+        local_base = dbg.get_local_base()
+        print("当前调试进程: {} 基地址: {}".format(full_path[i],local_base))
 
+        time.sleep(0.3)
+        # 关闭调试器
+        debug.Script_CloseDebug()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    dbg.close()
+```
 
 <br>
 
