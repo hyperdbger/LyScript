@@ -1108,20 +1108,13 @@ if __name__ == "__main__":
 ```
 <br>
 
-### 扩展Script模块
+### LyScriptTools 纯脚本类
 
-LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准过程化函数进行二次封装，目前LyScriptTools脚本扩展包分为两部分，第一部分是纯脚本模块，用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现，第二部分则是对标准库的二次类版封装，其目的是增加功能并实现面向对象，运用对象化编程用户可以更精准的控制调试器行为。
-
-<br>
-
-#### LyScriptTools 纯脚本功能
-
-纯脚本模块功能实现都是调用的x64dbg命令行，目前由于`run_command_exec()`命令无法返回参数，故通过中转eax寄存器实现了取值，目前只能取出整数类型的参数，此种获取方式效率极低且会影响目标进程eax寄存器的变化，作者建议尽量不要使用此类纯脚本执行方式完成功能。
+纯脚本类的功能实现都是调用的x64dbg命令，目前由于`run_command_exec()`命令无法返回参数，故通过中转eax寄存器实现了取值，目前只能取出整数类型的参数，此种获取方式效率极低且会影响目标进程eax寄存器的变化，作者建议尽量不要使用此类纯脚本执行方式完成功能。
 
 纯脚本模块函数功能说明来源于：<a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a> 的博客
 
 纯脚本模块分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是不便于归类方法。
-
 
 <b>from LyScriptTools32 import LyScriptModule</b>
 
@@ -1219,7 +1212,7 @@ if __name__ == "__main__":
 
 <br>
 
-#### LyScriptTools 扩展类功能
+### LyScriptTools Module 模块类
 
 LyScriptTools 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用功能实现，对象化编程可以让功能更加清晰易懂。
 
@@ -1293,6 +1286,9 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+<br>
+
+### LyScriptTools Disassemble 反汇编类
 
 <b>from LyScriptTools32 import Disassemble</b>
 
@@ -1341,6 +1337,9 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+<br>
+
+### LyScriptTools DebugControl 调试控制类
 
 <b>from LyScriptTools32 import DebugControl</b>
 
