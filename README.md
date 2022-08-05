@@ -1218,7 +1218,7 @@ LyScriptTools 扩展类模块，其主要是二次封装LyScript插件实现的�
 
 <b>from LyScriptTools32 import Module</b>
 
-|  Module类内函数名   | 函数作用  |
+|  Module 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | get_local_full_path() | 得到程序自身完整路径 |
 | get_local_program_name() | 获得加载程序的文件名 |
@@ -1347,6 +1347,10 @@ DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Soft
 
 | DebugControl 类内函数名   | 函数作用 |
 |  ----  | ----  |
+| GetEAX() | 获取通用寄存器系列 |
+| SetEAX(decimal_value) | 设置特定寄存器中的值(十进制) |
+| GetZF() | 获取标志寄存器系列 |
+| SetZF(decimal_bool) | 设置标志寄存器的值(布尔型) |
 | Script_InitDebug(path) | 传入文件路径,载入被调试程序 |
 | Script_CloseDebug() | 终止当前被调试进程 |
 | Script_DetachDebug() | 让进程脱离当前调试器 |
