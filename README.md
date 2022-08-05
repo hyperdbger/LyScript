@@ -1378,7 +1378,7 @@ DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Soft
 | Script_Ror(register,decimal_int) | 对寄存器进行ror循环右移 |
 | Script_Shl(register,decimal_int) | 对寄存器进行shl逻辑左移 |
 | Script_Shr(register,decimal_int) | 对寄存器进行shr逻辑右移 |
-| Script_Sal(,register,decimal_int) | 对寄存器进行sal算数左移 |
+| Script_Sal(register,decimal_int) | 对寄存器进行sal算数左移 |
 | Script_Sar(register,decimal_int) | 对寄存器进行sar算数右移 |
 | Script_Not(register,decimal_int) | 对寄存器进行not按位取反 |
 | Script_Bswap(register,decimal_int) | 进行字节交换也就是反转 |
