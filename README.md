@@ -1382,7 +1382,7 @@ DebugControl脚本说明整理自：<a href="https://github.com/Softnessi">Softn
 | Script_Sal(,register,decimal_int) | 对寄存器进行sal算数左移 |
 | Script_Sar(register,decimal_int) | 对寄存器进行sar算数右移 |
 | Script_Not(register,decimal_int) | 对寄存器进行not按位取反 |
-| Script_Bswap(register,decimal_int) | 进行字节交换，也就是反转。 |
+| Script_Bswap(register,decimal_int) | 进行字节交换也就是反转 |
 | Script_Push(register_or_value) | 对寄存器入栈 |
 | Script_Pop(register_or_value) | 对寄存器弹出元素 |
 | Pause() | 内置API暂停 |
