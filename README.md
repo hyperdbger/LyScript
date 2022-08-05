@@ -29,7 +29,7 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
 
  - 插件下载：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32位插件)</a> 或者 <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64位插件)</a>
 
-插件下载好以后，请将该插件复制到x64dbg目录下的plugins目录下，程序运行后会自动加载插件文件。
+插件下载好以后，请将该插件复制到x64dbg的plugins目录下，程序运行后会自动加载插件。
 
 ![](https://img2022.cnblogs.com/blog/1379525/202203/1379525-20220327190905044-1815692787.png)
 
