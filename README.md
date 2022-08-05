@@ -1370,7 +1370,7 @@ if __name__ == "__main__":
 
 <br>
 
-### 通用API例程 (官方案例)
+### 函数版API例程 (官方案例)
 
 LyScript 模块中的通用案例，用于演示插件内置方法如何组合使用，用户可以自行研究学习API函数是如何灵活的调用的，并自己编写一些有用的案例。
 
@@ -2992,6 +2992,13 @@ if __name__ == "__main__":
                   format(dasm_memory_list[index].get("address"),dasm_memory_list[index].get("opcode"),dasm_file_list[index].get("opcode")))
     dbg.close()
 ```
+
+<br>
+
+### 类版API例程 (官方案例)
+
+类版本封装案例，推荐使用的版本。
+
 
 
 
