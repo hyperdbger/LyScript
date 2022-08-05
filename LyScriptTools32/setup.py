@@ -5,7 +5,7 @@ packages = ['LyScriptTools32']
 
 setup(
     name='LyScriptTools32',
-    version='1.0.1',
+    version='1.0.4',
     author='lyshark',
     description='A powerful x64dbg remote debugging module tools',
     author_email='me@lyshark.com',
