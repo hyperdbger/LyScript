@@ -1433,7 +1433,7 @@ if __name__ == "__main__":
         print("当前调试进程: {} 基地址: {}".format(full_path[i],local_base))
 
         time.sleep(0.3)
-        # 关闭调试器
+        # 关闭调试
         debug.Script_CloseDebug()
 
     dbg.close()
