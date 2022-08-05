@@ -1108,7 +1108,7 @@ if __name__ == "__main__":
 ```
 <br>
 
-### LyScriptTools 纯脚本类
+### LyScriptTools 脚本类
 
 纯脚本类的功能实现都是调用的x64dbg命令，目前由于`run_command_exec()`命令无法返回参数，故通过中转eax寄存器实现了取值，目前只能取出整数类型的参数，此种获取方式效率极低且会影响目标进程eax寄存器的变化，作者建议尽量不要使用此类纯脚本执行方式完成功能。
 
@@ -1212,7 +1212,7 @@ if __name__ == "__main__":
 
 <br>
 
-### LyScriptTools Module 模块类
+### Module 模块类
 
 LyScriptTools 扩展类模块，其主要是二次封装LyScript插件实现的一些新功能，或者将特定功能组件拆分开形成的独立模块，此类模块可实现更加精细化的功能控制，在实际开发中推荐使用此种方式调用功能实现，对象化编程可以让功能更加清晰易懂。
 
@@ -1288,7 +1288,7 @@ if __name__ == "__main__":
 ```
 <br>
 
-### LyScriptTools Disassemble 反汇编类
+### Disassemble 反汇编类
 
 <b>from LyScriptTools32 import Disassemble</b>
 
@@ -1339,7 +1339,7 @@ if __name__ == "__main__":
 ```
 <br>
 
-### LyScriptTools DebugControl 调试控制类
+### DebugControl 调试控制类
 
 <b>from LyScriptTools32 import DebugControl</b>
 
