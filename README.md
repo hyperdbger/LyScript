@@ -20,9 +20,10 @@
 </div>
 <br>
 
-python包请安装与插件一致的版本，在cmd命令行下执行pip 命令即可安装。
+Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令即可安装，推荐两个包全部安装。
 
  - 安装标准包：`pip install LyScript32` 或者 `pip install LyScript64`
+ - 安装扩展包：`pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
 其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定目录下。
 
@@ -1110,10 +1111,6 @@ if __name__ == "__main__":
 ### 扩展Script模块
 
 LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准过程化函数进行二次封装，目前LyScriptTools脚本扩展包分为两部分，第一部分是纯脚本模块，用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现，第二部分则是对标准库的二次类版封装，其目的是增加功能并实现面向对象，运用对象化编程用户可以更精准的控制调试器行为。
-
-该插件需要在安装有`LyScript`基础包之上，再安装`LyScriptTools`扩展插件包。
-
- - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
 <br>
 
