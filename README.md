@@ -1109,9 +1109,9 @@ if __name__ == "__main__":
 
 ### 扩展Script模块
 
-LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准模块进行二次封装，目前脚本扩展模块分为两部分，第一部分是纯脚本模块，用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现的，第二部分则是对标准库的二次类版封装，使用户可以更精准的实现功能。
+LyScriptTools 模块是LyScript插件的扩展包，该模块主要针对标准过程化函数进行二次封装，目前LyScriptTools脚本扩展包分为两部分，第一部分是纯脚本模块，用户可以方便的调用x64dbg中的内置脚本命令，该封装原理是利用了LyScript模块中的`run_command_exec()`命令实现，第二部分则是对标准库的二次类版封装，其目的是增加功能并实现面向对象，运用对象化编程用户可以更精准的控制调试器行为。
 
-该插件需要在安装有`LyScript32/64`包之上再安装一个`LyScriptTools32/64`扩展包。
+该插件需要在安装有`LyScript`基础包之上，再安装`LyScriptTools`扩展插件包。
 
  - 安装只需要执行 `pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
