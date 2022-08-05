@@ -1332,8 +1332,14 @@ if __name__ == "__main__":
     # 反汇编类
     dasm = Disassemble(dbg)
 
+    # 无参数使用
     ref = dasm.is_jmp()
     print("是否是JMP: {}".format(ref))
+
+    # 携带参数使用
+    eip = dbg.get_register("eip")
+    eip_flag = dasm.is_jmp(eip)
+    print("EIP位置: {}".format(eip_flag))
 
     dbg.close()
 ```
