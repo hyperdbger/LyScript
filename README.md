@@ -1299,6 +1299,8 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import Disassemble</b>
 
+反汇编类的封装过程，如下是所有反汇编类的可用函数，这些函数的实现都继承于LyScript
+
 如下API定义中，地址后面带有0说明可以指定缺省值，缺省值默认取当前EIP位置。
 
 |  Disassemble 类内函数名   | 函数作用  |
@@ -1343,8 +1345,55 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+<b>from LyScriptTools32 import DebugControl</b>
 
 
+DebugControl脚本说明整理自：<a href="https://github.com/Softnessi">Softnessi</a>
+
+| DebugControl 类内函数名   | 函数作用 |
+|  ----  | ----  |
+| Script_InitDebug(path) | 传入文件路径,载入被调试程序 |
+| Script_CloseDebug() | 终止当前被调试进程 |
+| Script_DetachDebug() | 让进程脱离当前调试器 |
+| Script_RunDebug() | 让进程运行起来 |
+| Script_ERun() | 释放锁并允许程序运行，忽略异常 |
+| Script_SeRun() | 释放锁并允许程序运行，跳过异常中断 |
+| Script_Pause() | 暂停调试器运行 |
+| Script_StepInto() | 步进 |
+| Script_EStepInfo() | 步进,跳过异常 |
+| Script_SeStepInto() | 步进,跳过中断 |
+| Script_StepOver() | 步过到结束 |
+| Script_StepOut() | 普通步过F8 |
+| Script_Skip() | 跳过执行 |
+| Script_Inc(register) | 递增寄存器 |
+| Script_Dec(register) | 递减寄存器 |
+| Script_Add(register,decimal_int) | 对寄存器进行add运算 |
+| Script_Sub(register,decimal_int) | 对寄存器进行sub运算 |
+| Script_Mul(register,decimal_int) | 对寄存器进行mul乘法 |
+| Script_Div(register,decimal_int) | 对寄存器进行div除法 |
+| Script_And(register,decimal_int) | 对寄存器进行and与运算 |
+| Script_Or(register,decimal_int) | 对寄存器进行or或运算 |
+| Script_Xor(register,decimal_int) | 对寄存器进行xor或运算 |
+| Script_Neg(register,decimal_int) | 对寄存器参数进行neg反转 |
+| Script_Rol(register,decimal_int) | 对寄存器进行rol循环左移 |
+| Script_Ror(register,decimal_int) | 对寄存器进行ror循环右移 |
+| Script_Shl(register,decimal_int) | 对寄存器进行shl逻辑左移 |
+| Script_Shr(register,decimal_int) | 对寄存器进行shr逻辑右移 |
+| Script_Sal(,register,decimal_int) | 对寄存器进行sal算数左移 |
+| Script_Sar(register,decimal_int) | 对寄存器进行sar算数右移 |
+| Script_Not(register,decimal_int) | 对寄存器进行not按位取反 |
+| Script_Bswap(register,decimal_int) | 进行字节交换，也就是反转。 |
+| Script_Push(register_or_value) | 对寄存器入栈 |
+| Script_Pop(register_or_value) | 对寄存器弹出元素 |
+| Pause() | 内置API暂停 |
+| Run() | 内置API运行 |
+| StepIn() | 内置API步入 |
+| StepOut() | 内置API步过 |
+| StepOut() | 内置API到结束 |
+| Stop() | 内置API停止 |
+| Wait() | 内置API等待 |
+| IsDebug() | 判断调试器是否在调试 |
+| IsRunning() | 判断调试器是否在运行 |
 
 
 
