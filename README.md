@@ -1347,8 +1347,7 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import DebugControl</b>
 
-
-DebugControl脚本说明整理自：<a href="https://github.com/Softnessi">Softnessi</a>
+DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Softnessi</a>
 
 | DebugControl 类内函数名   | 函数作用 |
 |  ----  | ----  |
