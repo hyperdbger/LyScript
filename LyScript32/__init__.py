@@ -598,6 +598,7 @@ class MyDebug(object):
         except Exception:
             return 0
         return 0
+
     def get_local_protect(self,address):
         try:
             ptr = MyStruct()
@@ -612,6 +613,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def set_local_protect(self,address,type,size):
         try:
             ptr = MyStruct()
@@ -627,6 +629,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_local_size(self):
         try:
             ptr = MyStruct()
@@ -640,6 +643,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_local_page_size(self):
         try:
             ptr = MyStruct()
@@ -653,6 +657,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_memory_section(self):
         all_list = []
         try:
@@ -678,6 +683,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_module_base(self,module_name):
         try:
             ptr = MyStruct()
@@ -691,6 +697,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_module_from_function(self,module,function):
         try:
             ptr = MyStruct()
@@ -705,6 +712,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_all_module(self):
         all_module = []
         try:
@@ -731,6 +739,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_module_from_import(self,module_name):
         all_module = []
         try:
@@ -757,6 +766,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_module_from_export(self,module_name):
         all_module = []
         try:
@@ -783,6 +793,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_section(self):
         all_section = []
         try:
@@ -808,6 +819,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_base_from_address(self,address):
         try:
             ptr = MyStruct()
@@ -821,6 +833,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_base_from_name(self,name):
         try:
             ptr = MyStruct()
@@ -834,6 +847,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_oep_from_address(self,address):
         try:
             ptr = MyStruct()
@@ -847,6 +861,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_oep_from_name(self,name):
         try:
             ptr = MyStruct()
@@ -860,6 +875,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def push_stack(self,value):
         try:
             ptr = MyStruct()
