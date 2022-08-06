@@ -1,5 +1,3 @@
-# A powerful x64dbg remote debugging module
-
 python -m pip install --user --upgrade setuptools wheel
 python -m pip install --user --upgrade twine
 
