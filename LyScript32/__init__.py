@@ -889,6 +889,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def pop_stack(self):
         try:
             ptr = MyStruct()
@@ -901,6 +902,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def peek_stack(self,index = 0):
         try:
             ptr = MyStruct()
@@ -914,6 +916,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_thread_list(self):
         all_thread = []
         try:
@@ -939,6 +942,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_process_handle(self):
         try:
             ptr = MyStruct()
@@ -951,6 +955,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_process_id(self):
         try:
             ptr = MyStruct()
@@ -963,6 +968,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_teb_address(self,thread_id):
         try:
             ptr = MyStruct()
@@ -976,6 +982,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def get_peb_address(self,process_id):
         try:
             ptr = MyStruct()
@@ -989,6 +996,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def set_comment_notes(self,address,note):
         try:
             ptr = MyStruct()
@@ -1003,6 +1011,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def set_loger_output(self,log):
         try:
             ptr = MyStruct()
@@ -1016,6 +1025,7 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
     def run_command_exec(self,cmd):
         try:
             ptr = MyStruct()
