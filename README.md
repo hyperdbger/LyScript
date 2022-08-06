@@ -1283,6 +1283,43 @@ if __name__ == "__main__":
 ```
 <br>
 
+### Memory 内存类
+
+内存操作类是对内存操作函数的二次封装，新增了新方法可供用户使用。
+
+| Memory 类内函数名 | 函数作用 |
+| ---- | ---- |
+| read_memory_byte(decimal_int=0) | 读取内存byte字节类型 |
+| read_memory_word(decimal_int=0) | 读取内存word字类型 |
+| read_memory_dword(decimal_int=0) | 读取内存dword双字类型 |
+| read_memory_ptr(decimal_int=0) | 读取内存ptr指针 |
+| read_memory(decimal_int=0,decimal_length=0) | 读取内存任意字节数,返回列表格式,错误则返回空列表 |
+| write_memory_byte(decimal_address=0, decimal_int=0) | 写内存byte字节类型 |
+| write_memory_word(decimal_address=0, decimal_int=0) | 写内存word字类型 |
+| write_memory_dword(decimal_address=0, decimal_int=0) | 写内存dword双字类型 |
+| write_memory_ptr(decimal_address=0, decimal_int=0) | 写内存ptr指针类型 |
+| write_memory(decimal_address=0, decimal_list = \[\]) | 写内存任意字节数,传入十进制列表格式 |
+| scan_local_memory_one(search_opcode="") | 扫描当前EIP所指向模块处的特征码 (传入参数 ff 25 ??) |
+| scan_local_memory_all(search_opcode="") | 扫描当前EIP所指向模块处的特征码,以列表形式反回全部 |
+| scan_memory_all_from_module(module_name="", search_opcode="") | 扫描特定模块中的特征码,以列表形式反汇所有 |
+| scan_memory_one_from_module(module_name="", search_opcode="") | 扫描特定模块中的特征码,返回第一条 |
+| scanall_memory_module_one(search_opcode="") | 扫描所有模块,找到了以列表形式返回模块名称与地址 |
+| get_local_protect() | 获取EIP所在位置处的内存属性值 |
+| get_memory_protect(decimal_address=0) | 获取指定位置处内存属性值 |
+| set_local_protect(decimal_address=0,decimal_attribute=32,decimal_size=0) | 设置指定位置保护属性值 ER执行/读取=32 |
+| get_local_page_size() | 获取当前页面长度 |
+| get_memory_section() | 得到内存中的节表 |
+| memory_xchage(memory_ptr_x=0, memory_ptr_y=0, bytes=0) | 交换两个内存区域 |
+| memory_cmp(dbg,memory_ptr_x=0,memory_ptr_y=0,bytes=0) | 对比两个内存区域 |
+| set_breakpoint(decimal_address=0) | 设置内存断点,传入十进制 |
+| delete_breakpoint(decimal_address=0) | 删除内存断点 |
+| check_breakpoint(decimal_address=0) | 检查内存断点是否命中 |
+| get_all_breakpoint() | 获取所有内存断点 |
+| set_hardware_breakpoint(decimal_address=0, decimal_type=0) | 设置硬件断点 [类型 0 = r / 1 = w / 2 = e] |
+| delete_hardware_breakpoint(decimal_address=0) | 删除硬件断点 |
+
+<br>
+
 ### Disassemble 反汇编类
 
 Disassemble 反汇编类内的方法的实现都继承于LyScript是对该模块的二次封装，增加了一些新的API函数的让用户可以有更多选择，需要注意的是如下API定义中，地址后面带有0的说明其可以省略参数，缺省值默认取当前EIP位置。
@@ -2929,33 +2966,3 @@ if __name__ == "__main__":
                   format(dasm_memory_list[index].get("address"),dasm_memory_list[index].get("opcode"),dasm_file_list[index].get("opcode")))
     dbg.close()
 ```
-
-<br>
-
-### 面向对象API例程 (官方案例)
-
-类版本封装案例，推荐使用的版本。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
