@@ -1977,3 +1977,300 @@ class DebugControl(object):
         except Exception:
             return False
         return False
+
+    # ----------------------------------------------------------------------
+# 内存类封装
+# ----------------------------------------------------------------------
+class Memory(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    # 读取内存byte字节类型
+    def read_memory_byte(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_byte(int(decimal_int))
+        except Exception:
+            return False
+
+    # 读取内存word字类型
+    def read_memory_word(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_word(int(decimal_int))
+        except Exception:
+            return False
+
+    # 读取内存dword双字类型
+    def read_memory_dword(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_dword(int(decimal_int))
+        except Exception:
+            return False
+
+    # 读取内存ptr指针
+    def read_memory_ptr(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_ptr(int(decimal_int))
+        except Exception:
+            return False
+
+    # 读取内存任意字节数,返回列表格式,错误则返回空列表
+    def read_memory(self,decimal_int=0,decimal_length=0):
+        try:
+            ref_list = []
+            for index in range(0,int(decimal_length)):
+                read_byte = self.dbg.read_memory_byte(int(decimal_int) + index)
+                ref_list.append(read_byte)
+            return ref_list
+        except Exception:
+            return []
+
+    # 写内存byte字节类型
+    def write_memory_byte(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_byte(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+
+    # 写内存word字类型
+    def write_memory_word(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_word(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+
+    # 写内存dword双字类型
+    def write_memory_dword(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_dword(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+
+    # 写内存ptr指针类型
+    def write_memory_ptr(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_ptr(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+
+    # 写内存任意字节数,传入十进制列表格式
+    def write_memory(self,decimal_address=0, decimal_list = []):
+        try:
+            ref_flag = False
+            # 判断列表长度
+            write_size = len(list(decimal_list))
+            if write_size == 0:
+                return False
+
+            # 循环写出
+            for index in range(0,len(decimal_list)):
+                ref_flag = self.dbg.write_memory_byte(int(decimal_address) + index , decimal_list[index])
+            return ref_flag
+        except Exception:
+            return False
+
+    # 扫描当前EIP所指向模块处的特征码 (传入参数 ff 25 ??)
+    def scan_local_memory_one(self,search_opcode=""):
+        try:
+            if len(str(search_opcode))==0:
+                return False
+            scan_ref = self.dbg.scan_memory_one(search_opcode)
+            return int(scan_ref)
+        except Exception:
+            return False
+
+    # 扫描当前EIP所指向模块处的特征码,以列表形式反回全部
+    def scan_local_memory_all(self,search_opcode=""):
+        try:
+            if len(search_opcode)==0:
+                return False
+            scan_ref = self.dbg.scan_memory_all(search_opcode)
+            return scan_ref
+        except Exception:
+            return False
+
+    # 扫描特定模块中的特征码,以列表形式反汇所有
+    def scan_memory_all_from_module(self, module_name="", search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(module_name) == "" or str(search_opcode) == "":
+                return False
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                # 找到模块就开始扫描
+                if entry.get("name") == module_name:
+                    set_ref = self.dbg.set_register("eip",int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+
+                    scan_ref = self.dbg.scan_memory_all(str(search_opcode))
+                    return scan_ref
+
+            return False
+        except Exception:
+            return False
+
+    # 扫描特定模块中的特征码,返回第一条
+    def scan_memory_one_from_module(self, module_name="", search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(module_name) == "" or str(search_opcode) == "":
+                return False
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                # 找到模块就开始扫描
+                if entry.get("name") == module_name:
+                    set_ref = self.dbg.set_register("eip",int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+
+                    scan_ref = self.dbg.scan_memory_one(str(search_opcode))
+                    return scan_ref
+
+            return False
+        except Exception:
+            return False
+
+    # 扫描所有模块,找到了以列表形式返回模块名称与地址
+    def scanall_memory_module_one(self, search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(search_opcode) == "":
+                return False
+
+            ref_list = []
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                item_dic = {"module": None, "address": None}
+                # ntdll不能搜索
+                if entry.get("name") != "ntdll.dll" and entry.get("name") != "kernel32.dll":
+
+                    # 设置到模块入口处
+                    set_ref = self.dbg.set_register("eip", int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+
+                    scan_ref = self.dbg.scan_memory_one(str(search_opcode))
+                    if scan_ref != 0:
+                        scan_name = entry.get("name")
+
+                        print("[+] 地址: {} 扫描模块: {}".format(hex(scan_ref),scan_name))
+
+                        item_dic["module"] = entry.get("name")
+                        item_dic["address"] = int(scan_ref)
+                        ref_list.append(item_dic)
+                    time.sleep(0.3)
+            return ref_list
+        except Exception:
+            return False
+
+    # 获取EIP所在位置处的内存属性值
+    def get_local_protect(self):
+        try:
+            eip = self.dbg.get_register("eip")
+            return self.dbg.get_local_protect(eip)
+        except Exception:
+            return False
+
+    # 获取指定位置处内存属性值
+    def get_memory_protect(self,decimal_address=0):
+        try:
+            return self.dbg.get_local_protect(int(decimal_address))
+        except Exception:
+            return False
+
+    # 设置指定位置保护属性值 ER执行/读取=32
+    def set_local_protect(self,decimal_address=0,decimal_attribute=32,decimal_size=0):
+        try:
+            return self.dbg.set_local_protect(decimal_address,decimal_attribute,decimal_size)
+        except Exception:
+            return False
+
+    # 获取当前页面长度
+    def get_local_page_size(self):
+        try:
+            return self.dbg.get_local_page_size()
+        except Exception:
+            return False
+
+    # 得到内存中的节表
+    def get_memory_section(self):
+        try:
+            return self.dbg.get_memory_section()
+        except Exception:
+            return
+
+    # 交换两个内存区域
+    def memory_xchage(self, memory_ptr_x=0, memory_ptr_y=0, bytes=0):
+        ref = False
+        for index in range(0, bytes):
+            # 读取两个内存区域
+            read_byte_x = self.dbg.read_memory_byte(int(memory_ptr_x) + index)
+            read_byte_y = self.dbg.read_memory_byte(int(memory_ptr_y) + index)
+
+            # 交换内存
+            ref = self.dbg.write_memory_byte(int(memory_ptr_x) + index, read_byte_y)
+            ref = self.dbg.write_memory_byte(int(memory_ptr_y) + index, read_byte_x)
+        return ref
+
+    # 对比两个内存区域
+    def memory_cmp(dbg,memory_ptr_x=0,memory_ptr_y=0,bytes=0):
+        cmp_memory = []
+        for index in range(0,bytes):
+
+            item = {"addr":0, "x": 0, "y": 0}
+
+            # 读取两个内存区域
+            read_byte_x = dbg.read_memory_byte(int(memory_ptr_x) + index)
+            read_byte_y = dbg.read_memory_byte(int(memory_ptr_y) + index)
+
+            if read_byte_x != read_byte_y:
+                item["addr"] = memory_ptr_x + index
+                item["x"] = read_byte_x
+                item["y"] = read_byte_y
+                cmp_memory.append(item)
+        return cmp_memory
+
+    # 设置内存断点,传入十进制
+    def set_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.set_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+
+    # 删除内存断点
+    def delete_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.delete_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+
+    # 检查内存断点是否命中
+    def check_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.check_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+
+    # 获取所有内存断点
+    def get_all_breakpoint(self):
+        try:
+            return self.dbg.get_all_breakpoint()
+        except Exception:
+            return False
+
+    # 设置硬件断点 [类型 0 = r / 1 = w / 2 = e]
+    def set_hardware_breakpoint(self,decimal_address=0, decimal_type=0):
+        try:
+            return self.dbg.set_hardware_breakpoint(int(decimal_address),int(decimal_type))
+        except Exception:
+            return False
+
+    # 删除硬件断点
+    def delete_hardware_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.delete_hardware_breakpoint(int(decimal_address))
+        except Exception:
+            return False
