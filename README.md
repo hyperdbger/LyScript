@@ -1118,7 +1118,7 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import LyScriptModule</b>
 
-|  类内函数名   | 函数作用  |
+|  LyScriptModule 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | party(addr) | 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块 |
 | base(addr) | 获取模块基址 |
@@ -1134,7 +1134,7 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import LyScriptMemory</b>
 
-|  类内函数名   | 函数作用  |
+|  LyScriptMemory 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | valid(addr) | 判断addr是否有效,有效则返回True |
 | base(addr) | 或者当前addr的基址 |
@@ -1151,7 +1151,7 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import LyScriptDisassemble</b>
 
-|  类内函数名   | 函数作用  |
+|  LyScriptDisassemble 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | len(addr) | 获取addr处的指令长度 |
 | iscond(addr) | 判断当前addr位置是否是条件指令 |
@@ -1171,7 +1171,7 @@ if __name__ == "__main__":
 
 <b>from LyScriptTools32 import LyScriptOther</b>
 
-|  类内函数名   | 函数作用  |
+|  LyScriptOther 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | get(index) | 获取当前函数堆栈中的第index个参数 |
 | set(index,value) | 设置的索引位置的值 |
@@ -1207,9 +1207,6 @@ if __name__ == "__main__":
     
     dbg.close()
 ```
-
-当然如果你觉得上面这些通用函数不够用，或者没有补充全面，你完全可以调用任意类内的`ot.GetScriptValue()`函数自己去封装实现。
-
 <br>
 
 ### Module 模块类
