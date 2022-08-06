@@ -446,6 +446,7 @@ class MyDebug(object):
                 return False
         except Exception:
             return False
+
     def read_memory_byte(self,address):
         try:
             ptr = MyStruct()
