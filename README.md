@@ -1120,27 +1120,27 @@ if __name__ == "__main__":
 
 |  类内函数名   | 函数作用  |
 |  ----  | ----  |
-| mod.party(addr) | 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块 |
-| mod.base(addr) | 获取模块基址 |
-| mod.size(addr) | 返回模块大小 |
-| mod.hash(addr) | 返回模块hash |
-| mod.entry(addr) | 返回模块入口 |
-| mod.system(addr) | 如果addr是系统模块则为true否则则是false |
-| mod.user(addr) | 如果是用户模块则返回true 否则为false |
-| mod.main() | 返回主模块基地址 |
-| mod.rva(addr) | 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移 |
-| mod.offset(addr) | 获取地址所对应的文件偏移量,如果不在模块则返回0 |
-| mod.isexport(addr) | 判断该地址是否是从模块导出的函数 |
+| party(addr) | 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块 |
+| base(addr) | 获取模块基址 |
+| size(addr) | 返回模块大小 |
+| hash(addr) | 返回模块hash |
+| entry(addr) | 返回模块入口 |
+| system(addr) | 如果addr是系统模块则为true否则则是false |
+| user(addr) | 如果是用户模块则返回true 否则为false |
+| main() | 返回主模块基地址 |
+| rva(addr) | 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移 |
+| offset(addr) | 获取地址所对应的文件偏移量,如果不在模块则返回0 |
+| isexport(addr) | 判断该地址是否是从模块导出的函数 |
 
 <b>from LyScriptTools32 import LyScriptMemory</b>
 
 |  类内函数名   | 函数作用  |
 |  ----  | ----  |
-| mem.valid(addr) | 判断addr是否有效,有效则返回True |
-| mem.base(addr) | 或者当前addr的基址 |
-| mem.size(addr) | 获取当前addr内存的大小 |
-| mem.iscode(addr) | 判断当前 addr是否是可执行页面,成功返回TRUE |
-| mem.decodepointer(ptr) | 解密指针,相当于调用了DecodePointer ptr |
+| valid(addr) | 判断addr是否有效,有效则返回True |
+| base(addr) | 或者当前addr的基址 |
+| size(addr) | 获取当前addr内存的大小 |
+| iscode(addr) | 判断当前 addr是否是可执行页面,成功返回TRUE |
+| decodepointer(ptr) | 解密指针,相当于调用了DecodePointer ptr |
 | ReadByte(addr/eg)| 从addr或者寄存器中读取一个字节内存并且返回 |
 | Byte(addr) | 从addr或者寄存器中读取一个字节内存并且返回 |
 | ReadWord(addr) | 读取两个字节 |
@@ -1153,34 +1153,34 @@ if __name__ == "__main__":
 
 |  类内函数名   | 函数作用  |
 |  ----  | ----  |
-| dis.len(addr) | 获取addr处的指令长度 |
-| dis.iscond(addr) | 判断当前addr位置是否是条件指令 |
-| dis.isbranch(addr) | 判断当前地址是否是分支指令 |
-| dis.isret(addr) | 判断是否是ret指令 |
-| dis.iscall(addr) | 判断是否是call指令 |
-| dis.ismem(addr) | 判断是否是内存操作数 |
-| dis.isnop(addr) | 判断是否是nop |
-| dis.isunusual(addr) | 判断当前地址是否指示为异常地址 |
-| dis.branchdest(addr) | 将指令的分支目标位于addr处 |
-| dis.branchexec(addr) | 如果分支要执行 |
-| dis.imm(addr) | 获取当前指令位置的立即数 |
-| dis.brtrue(addr) | 下一条指令的地址 |
-| dis.next(addr) | 获取addr的下一条地址 |
-| dis.prev(addr) | 获取addr上一条低地址 |
-| dis.iscallsystem(addr) | 判断当前指令是否是系统模块指令 |
+| len(addr) | 获取addr处的指令长度 |
+| iscond(addr) | 判断当前addr位置是否是条件指令 |
+| isbranch(addr) | 判断当前地址是否是分支指令 |
+| isret(addr) | 判断是否是ret指令 |
+| iscall(addr) | 判断是否是call指令 |
+| ismem(addr) | 判断是否是内存操作数 |
+| isnop(addr) | 判断是否是nop |
+| isunusual(addr) | 判断当前地址是否指示为异常地址 |
+| branchdest(addr) | 将指令的分支目标位于addr处 |
+| branchexec(addr) | 如果分支要执行 |
+| imm(addr) | 获取当前指令位置的立即数 |
+| brtrue(addr) | 下一条指令的地址 |
+| next(addr) | 获取addr的下一条地址 |
+| prev(addr) | 获取addr上一条低地址 |
+| iscallsystem(addr) | 判断当前指令是否是系统模块指令 |
 
 <b>from LyScriptTools32 import LyScriptOther</b>
 
 |  类内函数名   | 函数作用  |
 |  ----  | ----  |
-| arg.get(index) | 获取当前函数堆栈中的第index个参数 |
-| arg.set(index,value) | 设置的索引位置的值 |
-| ex.firstchance() | 最后一个异常是否为第一次机会异常 |
-| ex.addr() | 最后一个异常地址 |
-| ex.code() | 最后一个异常代码 |
-| ex.flags() | 最后一个异常标志 |
-| ex.infocount() | 上次异常信息计数 |
-| ex.info(index) | 最后一个异常信息 |
+| get(index) | 获取当前函数堆栈中的第index个参数 |
+| set(index,value) | 设置的索引位置的值 |
+| firstchance() | 最后一个异常是否为第一次机会异常 |
+| addr() | 最后一个异常地址 |
+| code() | 最后一个异常代码 |
+| flags() | 最后一个异常标志 |
+| infocount() | 上次异常信息计数 |
+| info(index) | 最后一个异常信息 |
 
 如上是一些常用的脚本命令的封装，他们的调用方式如下面代码中所示。
 ```Python
