@@ -1388,8 +1388,8 @@ DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Soft
 | StepOut() | 内置API到结束 |
 | Stop() | 内置API停止 |
 | Wait() | 内置API等待 |
-| IsDebug() | 判断调试器是否在调试 |
-| IsRunning() | 判断调试器是否在运行 |
+| IsDebug() | 内置API判断调试器是否在调试 |
+| IsRunning() | 内置API判断调试器是否在运行 |
 
 自动控制类主要功能如上表示，其中Script开头的API是调用的脚本命令实现，其他的是API实现，我们以批量自动载入程序为例，演示该类内函数是如何使用的。
 ```Python
