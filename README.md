@@ -1165,26 +1165,27 @@ if __name__ == "__main__":
 如上是一些常用的脚本命令的封装，他们的调用方式如下面代码中所示。
 ```Python
 from LyScript32 import MyDebug
-from LyScriptTools32 import LyScriptModule
-from LyScriptTools32 import LyScriptMemory
-from LyScriptTools32 import LyScriptDisassemble
-from LyScriptTools32 import LyScriptOther
+from LyScriptTools32 import Script
 
 if __name__ == "__main__":
     dbg = MyDebug()
-    dbg.connect()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
 
-    # 模块类
-    mod = LyScriptModule()
-
-    party = mod.base(dbg,"0x4c55ac")
-    print("party: {}".format(hex(party)))
-
-    # 读取参数时应注意转为十六进制
     eip = dbg.get_register("eip")
-    ret = mod.base(dbg, "{}".format(hex(eip)))
-    print("基地址: {}".format(hex(ret)))
-    
+
+    # 定义模块类
+    script = Script(dbg)
+
+    size = script.size(eip)
+    print("当前模块大小: {}".format(hex(size)))
+
+    entry = script.entry(eip)
+    print("当前模块入口: {}".format(hex(entry)))
+
+    hash = script.hash(eip)
+    print("当前模块hash: {}".format(hash))
+
     dbg.close()
 ```
 <br>
