@@ -2275,8 +2275,111 @@ class Stack(object):
     def __init__(self, ptr):
         self.dbg = ptr
 
-    def test(self):
-        print("ok")
+    # 开辟堆,传入长度,默认1024字节
+    def create_alloc(self,decimal_size=1024):
+        try:
+            return self.dbg.create_alloc(int(decimal_size))
+        except Exception:
+            return False
+        return False
+
+    # 销毁一个远程堆
+    def delete_alloc(self,decimal_address=0):
+        try:
+            return self.dbg.delete_alloc(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 将传入参数入栈
+    def push_stack(self,decimal_value=0):
+        try:
+            return self.dbg.push_stack(int(decimal_value))
+        except Exception:
+            return False
+        return False
+
+    # 从栈顶弹出元素,默认检查栈顶,可传入参数
+    def pop_stack(self):
+        try:
+            return self.dbg.pop_stack()
+        except Exception:
+            return False
+        return False
+
+    # 检查指定位置栈针中的地址,返回一个地址
+    def peek_stack(self,decimal_index=0):
+        try:
+            if decimal_index == 0:
+                return self.dbg.peek_stack()
+            else:
+                return self.dbg.peek_stack(int(decimal_index))
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 检查指定位置处前index个栈针中的地址,返回一个地址列表
+    def peek_stack_list(self,decimal_count=0):
+        try:
+            ref_list = []
+
+            for index in range(0,int(decimal_count)):
+                ref_list.append(int(self.dbg.peek_stack(index)))
+
+            return ref_list
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧顶部内存地址
+    def get_stack_top(self):
+        try:
+            return self.dbg.get_register("esp")
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧底部内存地址
+    def get_stack_bottom(self):
+        try:
+            return self.dbg.get_register("ebp")
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧长度
+    def get_stackframe_size(self):
+        try:
+            bottom = self.dbg.get_register("ebp")
+            top = self.dbg.get_register("esp")
+
+            if bottom != False and top != False:
+                if bottom != None and top != False:
+                    stack_size = bottom - top
+                    return stack_size
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 获取index指定的栈帧内存地址,返回列表
+    def get_stack_frame_list(self,decimal_count=0):
+        try:
+            ref_list = []
+
+            top_esp = self.dbg.get_register("esp")
+            if top_esp != None and top_esp != False:
+                for index in range(0,int(decimal_count * 4),4):
+                    ref_list.append(top_esp + index)
+                return ref_list
+            return False
+        except Exception:
+            return False
+        return False
+
+
 
 
 
