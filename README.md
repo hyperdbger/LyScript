@@ -1421,7 +1421,7 @@ Disassemble 反汇编类增加了新的API函数的让用户有更多选择，�
 | assemble_code_size(assemble) | 计算用户传入汇编指令长度 |
 | get_assemble_code(assemble) | 用户传入汇编指令返回机器码 |
 | write_assemble(address,assemble) | 将汇编指令写出到指定内存位置 |
-| get_disasm_code(address,size) | 反汇编指定行数 |
+| get_disasm_code(address,size) (x64存在问题) | 反汇编指定行数 |
 | get_disasm_one_code(address = 0)| 向下反汇编一行 |
 | get_disasm_operand_code(address=0) | 得到当前内存地址反汇编代码的操作数 |
 | get_disasm_next(eip) | 获取当前EIP指令的下一条指令 |
