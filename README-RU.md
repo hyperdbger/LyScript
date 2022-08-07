@@ -21,7 +21,7 @@
 <br>
 
  - установить пакет Python ：`pip install LyScript32` или  `pip install LyScript64`
- - модуль загрузки：<a href="https://cdn.lyshark.com/software/LyScript32.zip">LyScript32 (32bit)</a> or <a href="https://cdn.lyshark.com/software/LyScript64.zip">LyScript64 (64bit)</a>
+ - модуль загрузки：<a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript32.zip">LyScript32 (32bit)</a> or <a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript64.zip">LyScript64 (64bit)</a>
 
 после загрузки модуля, пожалуйста, скопируйте этот модуль в каталог plugins x64dbg, который будет загружен автоматически после запуска программы. 
 
