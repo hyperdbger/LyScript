@@ -5,20 +5,23 @@ from LyScript32 import MyDebug
 # ----------------------------------------------------------------------
 # 纯脚本封装
 # ----------------------------------------------------------------------
-# 模块类
-class LyScriptModule(object):
-    def GetScriptValue(self, dbg, script):
+class Script(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    def GetScriptValue(self, script):
         try:
-            ref = dbg.run_command_exec("push eax")
+            ref = self.dbg.run_command_exec("push eax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"eax={script}")
+            ref = self.dbg.run_command_exec(f"eax={script}")
             if ref != True:
-                dbg.run_command_exec("pop eax")
+                self.dbg.run_command_exec("pop eax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("eax")
-            ref = dbg.run_command_exec("pop eax")
+            reg = self.dbg.get_register("eax")
+            time.sleep(0.1)
+            ref = self.dbg.run_command_exec("pop eax")
             if ref != True:
                 return None
             return reg
@@ -27,9 +30,9 @@ class LyScriptModule(object):
         return None
 
     # 获取模块基址
-    def base(self, dbg, address):
+    def base(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.base({})".format(address))
+            ref = self.GetScriptValue("mod.base({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -38,9 +41,9 @@ class LyScriptModule(object):
         return False
 
     # 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块
-    def party(self, dbg, address):
+    def party(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.party({})".format(address))
+            ref = self.GetScriptValue("mod.party({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -49,9 +52,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块大小
-    def size(self, dbg, address):
+    def size(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.size({})".format(address))
+            ref = self.GetScriptValue("mod.size({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -60,9 +63,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块hash
-    def hash(self, dbg, address):
+    def hash(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.hash({})".format(address))
+            ref = self.GetScriptValue("mod.hash({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -71,9 +74,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块入口
-    def entry(self, dbg, address):
+    def entry(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.entry({})".format(address))
+            ref = self.GetScriptValue("mod.entry({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -82,9 +85,9 @@ class LyScriptModule(object):
         return False
 
     # 如果addr是系统模块则为true否则则是false
-    def system(self, dbg, address):
+    def system(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.system({})".format(address))
+            ref = self.GetScriptValue("mod.system({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -93,9 +96,9 @@ class LyScriptModule(object):
         return False
 
     # 如果是用户模块则返回true 否则为false
-    def user(self, dbg, address):
+    def user(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.user({})".format(address))
+            ref = self.GetScriptValue("mod.user({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -104,9 +107,9 @@ class LyScriptModule(object):
         return False
 
     # 返回主模块基地址
-    def main(self, dbg):
+    def main(self):
         try:
-            ref = self.GetScriptValue(dbg, "mod.main()")
+            ref = self.GetScriptValue("mod.main()")
             if ref != None:
                 return ref
             return False
@@ -114,10 +117,10 @@ class LyScriptModule(object):
             return False
         return False
 
-    # 如果addr不在模块则返回0,否则返回 addr所位于模块的 RVA偏移
-    def rva(self, dbg, address):
+    # 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移
+    def rva(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.rva({})".format(address))
+            ref = self.GetScriptValue("mod.rva({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -126,9 +129,9 @@ class LyScriptModule(object):
         return False
 
     # 获取地址所对应的文件偏移量,如果不在模块则返回0
-    def offset(self, dbg, address):
+    def offset(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.offset({})".format(address))
+            ref = self.GetScriptValue("mod.offset({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -136,43 +139,21 @@ class LyScriptModule(object):
             return False
         return False
 
-    # 判断该地址是否是从模块导出的函数,true是 false则不是
-    def isexport(self, dbg, address):
+    # 判断该地址是否是从模块导出的函数
+    def isexport(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.isexport({})".format(address))
+            ref = self.GetScriptValue("mod.isexport({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
         except Exception:
             return False
         return False
-
-
-# 反汇编类封装
-class LyScriptDisassemble(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push eax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"eax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop eax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("eax")
-            ref = dbg.run_command_exec("pop eax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
 
     # 获取addr处的指令长度
-    def len(self, dbg, address):
+    def len(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.len({})".format(address))
+            ref = self.GetScriptValue("dis.len({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -180,10 +161,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前addr位置是否是条件指令(比如jxx) 返回值: 是的话True 否则False
-    def iscond(self, dbg, address):
+    # 判断当前addr位置是否是条件指令(比如jxx)
+    def iscond(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscond({})".format(address))
+            ref = self.GetScriptValue("dis.iscond({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -191,10 +172,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前地址是否是分支指令   返回值: 同上
-    def isbranch(self, dbg, address):
+    # 判断当前地址是否是分支指令
+    def isbranch(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isbranch({})".format(address))
+            ref = self.GetScriptValue("dis.isbranch({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -202,10 +183,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是ret指令          返回值: 同上
-    def isret(self, dbg, address):
+    # 判断是否是ret指令
+    def isret(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isret({})".format(address))
+            ref = self.GetScriptValue("dis.isret({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -213,10 +194,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是call指令         返回值: 同上
-    def iscall(self, dbg, address):
+    # 判断是否是call指令
+    def iscall(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscall({})".format(address))
+            ref = self.GetScriptValue("dis.iscall({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -224,10 +205,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是内存操作数        返回值: 同上
-    def ismem(self, dbg, address):
+    # 判断是否是内存操作数
+    def ismem(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.ismem({})".format(address))
+            ref = self.GetScriptValue("dis.ismem({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -235,10 +216,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是nop             返回值: 同上
-    def isnop(self, dbg, address):
+    # 判断是否是nop
+    def isnop(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isnop({})".format(address))
+            ref = self.GetScriptValue("dis.isnop({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -246,10 +227,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前地址是否指示为异常地址 返回值: 同上
-    def isunusual(self, dbg, address):
+    # 判断当前地址是否指示为异常地址
+    def isunusual(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isunusual({})".format(address))
+            ref = self.GetScriptValue("dis.isunusual({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -257,10 +238,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 将指令的分支目标位于（如果按 Enter 键）
-    def branchdest(self, dbg, address):
+    # 将指令的分支目标位
+    def branchdest(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.branchdest({})".format(address))
+            ref = self.GetScriptValue("dis.branchdest({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -269,9 +250,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 如果 分支 at 要执行，则为 true。addr
-    def branchexec(self, dbg, address):
+    def branchexec(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.branchexec({})".format(address))
+            ref = self.GetScriptValue("dis.branchexec({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -280,9 +261,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取当前指令位置的立即数(这一行指令中出现的立即数)
-    def imm(self, dbg, address):
+    def imm(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.imm({})".format(address))
+            ref = self.GetScriptValue("dis.imm({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -291,9 +272,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 指令在分支目标。
-    def brtrue(self, dbg, address):
+    def brtrue(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.brtrue({})".format(address))
+            ref = self.GetScriptValue("dis.brtrue({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -302,9 +283,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 下一条指令的地址（如果指令 at 是条件分支）。
-    def brfalse(self, dbg, address):
+    def brfalse(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.brfalse({})".format(address))
+            ref = self.GetScriptValue("dis.brfalse({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -313,9 +294,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取addr的下一条地址
-    def next(self, dbg, address):
+    def next(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.next({})".format(address))
+            ref = self.GetScriptValue("dis.next({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -324,9 +305,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取addr上一条低地址
-    def prev(self, dbg, address):
+    def prev(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.prev({})".format(address))
+            ref = self.GetScriptValue("dis.prev({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -335,9 +316,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 判断当前指令是否是系统模块指令
-    def iscallsystem(self, dbg, address):
+    def iscallsystem(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscallsystem({})".format(address))
+            ref = self.GetScriptValue("dis.iscallsystem({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -345,32 +326,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-
-# 内存操作类
-class LyScriptMemory(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push eax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"eax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop eax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("eax")
-            ref = dbg.run_command_exec("pop eax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
-
     # 获取PEB的地址
-    def peb(self, dbg):
+    def peb(self):
         try:
-            ref = self.GetScriptValue(dbg, "peb()")
+            ref = self.GetScriptValue("peb()")
             if ref != None:
                 return ref
             return False
@@ -379,9 +338,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取TEB的地址
-    def teb(self, dbg):
+    def teb(self):
         try:
-            ref = self.GetScriptValue(dbg, "teb()")
+            ref = self.GetScriptValue("teb()")
             if ref != None:
                 return ref
             return False
@@ -390,9 +349,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前线程的ID
-    def tid(self, dbg):
+    def tid(self):
         try:
-            ref = self.GetScriptValue(dbg, "tid()")
+            ref = self.GetScriptValue("tid()")
             if ref != None:
                 return ref
             return False
@@ -401,9 +360,9 @@ class LyScriptMemory(object):
         return False
 
     # 查询X64Dbg 应该是获取用户共享数据 地址
-    def kusd(self, dbg):
+    def kusd(self):
         try:
-            ref = self.GetScriptValue(dbg, "kusd()")
+            ref = self.GetScriptValue("kusd()")
             if ref != None:
                 return ref
             return False
@@ -412,9 +371,9 @@ class LyScriptMemory(object):
         return False
 
     # 判断addr是否有效,有效则返回True
-    def valid(self, dbg, address):
+    def valid(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.valid({})".format(address))
+            ref = self.GetScriptValue("mem.valid({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -423,9 +382,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前addr的基址
-    def base(self, dbg, address):
+    def base(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.base({})".format(address))
+            ref = self.GetScriptValue("mem.base({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -434,9 +393,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前addr内存的大小
-    def size(self, dbg, address):
+    def size(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.size({})".format(address))
+            ref = self.GetScriptValue("mem.size({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -445,9 +404,9 @@ class LyScriptMemory(object):
         return False
 
     # 判断当前 addr是否是可执行页面,成功返回TRUE
-    def iscode(self, dbg, address):
+    def iscode(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.iscode({})".format(address))
+            ref = self.GetScriptValue("mem.iscode({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -456,9 +415,9 @@ class LyScriptMemory(object):
         return False
 
     # 解密指针,相当于调用了API. DecodePointer ptr
-    def decodepointer(self, dbg, address):
+    def decodepointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.decodepointer({})".format(address))
+            ref = self.GetScriptValue("mem.decodepointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -467,9 +426,9 @@ class LyScriptMemory(object):
         return False
 
     # 从addr或者寄存器中读取一个字节内存并且返回
-    def read_byte(self, dbg, address):
+    def read_byte(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadByte({})".format(address))
+            ref = self.GetScriptValue("ReadByte({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -477,10 +436,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上
-    def byte(self, dbg, address):
+    # 从addr或者寄存器中读取一个字节内存并且返回
+    def byte(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "byte({})".format(address))
+            ref = self.GetScriptValue("byte({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -488,10 +447,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上 读取两个字节
-    def read_word(self, dbg, address):
+    # 读取两个字节
+    def read_word(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadWord({})".format(address))
+            ref = self.GetScriptValue("ReadWord({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -499,10 +458,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上 读取四个字节
-    def read_dword(self, dbg, address):
+    # 读取四个字节
+    def read_dword(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadDword({})".format(address))
+            ref = self.GetScriptValue("ReadDword({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -510,10 +469,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 读取8字节
-    def read_qword(self, dbg, address):
+    # 读取八字节
+    def read_qword(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadQword({})".format(address))
+            ref = self.GetScriptValue("ReadQword({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -522,9 +481,9 @@ class LyScriptMemory(object):
         return False
 
     # 从地址中读取指针(4/8字节)并返回读取的指针值
-    def read_ptr(self, dbg, address):
+    def read_ptr(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadPtr({})".format(address))
+            ref = self.GetScriptValue("ReadPtr({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -532,9 +491,9 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def read_pointer(self, dbg, address):
+    def read_pointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadPointer({})".format(address))
+            ref = self.GetScriptValue("ReadPointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -542,9 +501,9 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def ptr(self, dbg, address):
+    def ptr(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ptr({})".format(address))
+            ref = self.GetScriptValue("ptr({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -552,41 +511,20 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def pointer(self, dbg, address):
+    def pointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "Pointer({})".format(address))
+            ref = self.GetScriptValue("Pointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
         except Exception:
             return False
         return False
-
-# 其他类封装
-class LyScriptOther(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push eax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"eax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop eax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("eax")
-            ref = dbg.run_command_exec("pop eax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
 
     # 获取当前函数堆栈中的第几个参数,假设返回地址在堆栈上,并且我们在函数内部.
-    def get(self, dbg, index):
+    def get(self, index):
         try:
-            ref = self.GetScriptValue(dbg, "arg.get({})".format(index))
+            ref = self.GetScriptValue("arg.get({})".format(index))
             if ref != None:
                 return ref
             return False
@@ -595,9 +533,9 @@ class LyScriptOther(object):
         return False
 
     # 设置的索引位置的值
-    def set(self, dbg, index, value):
+    def set(self, index, value):
         try:
-            ref = self.GetScriptValue(dbg, "arg.set({},{})".format(index, value))
+            ref = self.GetScriptValue("arg.set({},{})".format(index, value))
             if ref != None:
                 return ref
             return False
@@ -606,9 +544,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常是否为第一次机会异常。
-    def firstchance(self, dbg):
+    def firstchance(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.firstchance()")
+            ref = self.GetScriptValue("ex.firstchance()")
             if ref != None:
                 return ref
             return False
@@ -617,9 +555,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常地址。例如，导致异常的指令的地址。
-    def addr(self, dbg):
+    def addr(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.addr()")
+            ref = self.GetScriptValue("ex.addr()")
             if ref != None:
                 return ref
             return False
@@ -628,9 +566,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常代码。
-    def code(self, dbg):
+    def code(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.code()")
+            ref = self.GetScriptValue("ex.code()")
             if ref != None:
                 return ref
             return False
@@ -638,10 +576,10 @@ class LyScriptOther(object):
             return False
         return False
 
-    # 最后一个异常标志。
-    def flags(self, dbg):
+    # 最后一个异常标志
+    def flags(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.flags()")
+            ref = self.GetScriptValue("ex.flags()")
             if ref != None:
                 return ref
             return False
@@ -649,10 +587,10 @@ class LyScriptOther(object):
             return False
         return False
 
-    # 上次异常信息计数（参数数）。
-    def infocount(self, dbg):
+    # 上次异常信息计数
+    def infocount(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.infocount()")
+            ref = self.GetScriptValue("ex.infocount()")
             if ref != None:
                 return ref
             return False
@@ -661,9 +599,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常信息，如果索引超出范围，则为零。
-    def info(self, dbg, index):
+    def info(self, index):
         try:
-            ref = self.GetScriptValue(dbg, "ex.info({})".format(index))
+            ref = self.GetScriptValue("ex.info({})".format(index))
             if ref != None:
                 return ref
             return False
@@ -1715,190 +1653,190 @@ class DebugControl(object):
     def script_skip(self):
         try:
             self.dbg.run_command_exec("skip")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 递增寄存器
     def script_inc(self,register):
         try:
             self.dbg.run_command_exec(f"inc {register}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 递减寄存器
     def script_dec(self,register):
         try:
             self.dbg.run_command_exec(f"dec {register}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行add运算
     def script_add(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"add {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行sub运算
     def script_sub(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sub {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行mul乘法
     def script_mul(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"mul {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行div除法
     def script_div(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"div {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行and与运算
     def script_and(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"and {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行or或运算
     def script_or(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"or {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行xor或运算
     def script_xor(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"xor {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器参数进行neg反转
     def script_neg(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"neg {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行rol循环左移
     def script_rol(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"rol {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行ror循环右移
     def script_ror(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"ror {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行shl逻辑左移
     def script_shl(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shl {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行shr逻辑右移
     def script_shr(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shr {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行sal算数左移
     def script_sal(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sal {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行sar算数右移
     def script_sar(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sar {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器进行not按位取反
     def script_not(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"not {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 进行字节交换，也就是反转。
     def script_bswap(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"bswap {register},{decimal_int}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器入栈
     def script_push(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"push {register_or_value}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 对寄存器弹出元素
     def script_pop(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"pop {register_or_value}")
-            return true
-        except exception:
-            return false
-        return false
+            return True
+        except Exception:
+            return False
+        return False
 
     # 内置API暂停
     def pause(self):
