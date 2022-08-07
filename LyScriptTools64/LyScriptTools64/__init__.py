@@ -1,24 +1,41 @@
 # -*- coding: utf-8 -*-
-import time
+import os,sys,time
 from LyScript64 import MyDebug
+
+# 有符号整数转无符号数
+def long_to_ulong(inter, is_64=True):
+    if is_64 == False:
+        return inter & ((1 << 32) - 1)
+    else:
+        return inter & ((1 << 64) - 1)
+
+# 无符号整数转有符号数
+def ulong_to_long(inter, is_64=True):
+    if is_64 == False:
+        return (inter & ((1 << 31) - 1)) - (inter & (1 << 31))
+    else:
+        return (inter & ((1 << 63) - 1)) - (inter & (1 << 63))
 
 # ----------------------------------------------------------------------
 # 纯脚本封装
 # ----------------------------------------------------------------------
-# 模块类
-class LyScriptModule(object):
-    def GetScriptValue(self, dbg, script):
+class Script(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    def GetScriptValue(self, script):
         try:
-            ref = dbg.run_command_exec("push rax")
+            ref = self.dbg.run_command_exec("push rax")
             if ref != True:
                 return None
-            ref = dbg.run_command_exec(f"rax={script}")
+            ref = self.dbg.run_command_exec(f"rax={script}")
             if ref != True:
-                dbg.run_command_exec("pop rax")
+                self.dbg.run_command_exec("pop rax")
                 return None
             time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
+            reg = self.dbg.get_register("rax")
+            time.sleep(0.1)
+            ref = self.dbg.run_command_exec("pop rax")
             if ref != True:
                 return None
             return reg
@@ -27,9 +44,9 @@ class LyScriptModule(object):
         return None
 
     # 获取模块基址
-    def base(self, dbg, address):
+    def base(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.base({})".format(address))
+            ref = self.GetScriptValue("mod.base({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -38,9 +55,9 @@ class LyScriptModule(object):
         return False
 
     # 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块
-    def party(self, dbg, address):
+    def party(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.party({})".format(address))
+            ref = self.GetScriptValue("mod.party({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -49,9 +66,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块大小
-    def size(self, dbg, address):
+    def size(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.size({})".format(address))
+            ref = self.GetScriptValue("mod.size({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -60,9 +77,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块hash
-    def hash(self, dbg, address):
+    def hash(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.hash({})".format(address))
+            ref = self.GetScriptValue("mod.hash({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -71,9 +88,9 @@ class LyScriptModule(object):
         return False
 
     # 返回模块入口
-    def entry(self, dbg, address):
+    def entry(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.entry({})".format(address))
+            ref = self.GetScriptValue("mod.entry({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -82,9 +99,9 @@ class LyScriptModule(object):
         return False
 
     # 如果addr是系统模块则为true否则则是false
-    def system(self, dbg, address):
+    def system(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.system({})".format(address))
+            ref = self.GetScriptValue("mod.system({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -93,9 +110,9 @@ class LyScriptModule(object):
         return False
 
     # 如果是用户模块则返回true 否则为false
-    def user(self, dbg, address):
+    def user(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.user({})".format(address))
+            ref = self.GetScriptValue("mod.user({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -104,9 +121,9 @@ class LyScriptModule(object):
         return False
 
     # 返回主模块基地址
-    def main(self, dbg):
+    def main(self):
         try:
-            ref = self.GetScriptValue(dbg, "mod.main()")
+            ref = self.GetScriptValue("mod.main()")
             if ref != None:
                 return ref
             return False
@@ -114,10 +131,10 @@ class LyScriptModule(object):
             return False
         return False
 
-    # 如果addr不在模块则返回0,否则返回 addr所位于模块的 RVA偏移
-    def rva(self, dbg, address):
+    # 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移
+    def rva(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.rva({})".format(address))
+            ref = self.GetScriptValue("mod.rva({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -126,9 +143,9 @@ class LyScriptModule(object):
         return False
 
     # 获取地址所对应的文件偏移量,如果不在模块则返回0
-    def offset(self, dbg, address):
+    def offset(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.offset({})".format(address))
+            ref = self.GetScriptValue("mod.offset({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -136,43 +153,21 @@ class LyScriptModule(object):
             return False
         return False
 
-    # 判断该地址是否是从模块导出的函数,true是 false则不是
-    def isexport(self, dbg, address):
+    # 判断该地址是否是从模块导出的函数
+    def isexport(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mod.isexport({})".format(address))
+            ref = self.GetScriptValue("mod.isexport({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
         except Exception:
             return False
         return False
-
-
-# 反汇编类封装
-class LyScriptDisassemble(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push rax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"rax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop rax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
 
     # 获取addr处的指令长度
-    def len(self, dbg, address):
+    def len(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.len({})".format(address))
+            ref = self.GetScriptValue("dis.len({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -180,10 +175,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前addr位置是否是条件指令(比如jxx) 返回值: 是的话True 否则False
-    def iscond(self, dbg, address):
+    # 判断当前addr位置是否是条件指令(比如jxx)
+    def iscond(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscond({})".format(address))
+            ref = self.GetScriptValue("dis.iscond({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -191,10 +186,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前地址是否是分支指令   返回值: 同上
-    def isbranch(self, dbg, address):
+    # 判断当前地址是否是分支指令
+    def isbranch(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isbranch({})".format(address))
+            ref = self.GetScriptValue("dis.isbranch({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -202,10 +197,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是ret指令          返回值: 同上
-    def isret(self, dbg, address):
+    # 判断是否是ret指令
+    def isret(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isret({})".format(address))
+            ref = self.GetScriptValue("dis.isret({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -213,10 +208,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是call指令         返回值: 同上
-    def iscall(self, dbg, address):
+    # 判断是否是call指令
+    def iscall(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscall({})".format(address))
+            ref = self.GetScriptValue("dis.iscall({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -224,10 +219,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是内存操作数        返回值: 同上
-    def ismem(self, dbg, address):
+    # 判断是否是内存操作数
+    def ismem(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.ismem({})".format(address))
+            ref = self.GetScriptValue("dis.ismem({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -235,10 +230,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断是否是nop             返回值: 同上
-    def isnop(self, dbg, address):
+    # 判断是否是nop
+    def isnop(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isnop({})".format(address))
+            ref = self.GetScriptValue("dis.isnop({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -246,10 +241,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 判断当前地址是否指示为异常地址 返回值: 同上
-    def isunusual(self, dbg, address):
+    # 判断当前地址是否指示为异常地址
+    def isunusual(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.isunusual({})".format(address))
+            ref = self.GetScriptValue("dis.isunusual({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -257,10 +252,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-    # 将指令的分支目标位于（如果按 Enter 键）
-    def branchdest(self, dbg, address):
+    # 将指令的分支目标位
+    def branchdest(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.branchdest({})".format(address))
+            ref = self.GetScriptValue("dis.branchdest({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -269,9 +264,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 如果 分支 at 要执行，则为 true。addr
-    def branchexec(self, dbg, address):
+    def branchexec(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.branchexec({})".format(address))
+            ref = self.GetScriptValue("dis.branchexec({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -280,9 +275,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取当前指令位置的立即数(这一行指令中出现的立即数)
-    def imm(self, dbg, address):
+    def imm(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.imm({})".format(address))
+            ref = self.GetScriptValue("dis.imm({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -291,9 +286,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 指令在分支目标。
-    def brtrue(self, dbg, address):
+    def brtrue(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.brtrue({})".format(address))
+            ref = self.GetScriptValue("dis.brtrue({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -302,9 +297,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 下一条指令的地址（如果指令 at 是条件分支）。
-    def brfalse(self, dbg, address):
+    def brfalse(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.brfalse({})".format(address))
+            ref = self.GetScriptValue("dis.brfalse({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -313,9 +308,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取addr的下一条地址
-    def next(self, dbg, address):
+    def next(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.next({})".format(address))
+            ref = self.GetScriptValue("dis.next({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -324,9 +319,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 获取addr上一条低地址
-    def prev(self, dbg, address):
+    def prev(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.prev({})".format(address))
+            ref = self.GetScriptValue("dis.prev({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -335,9 +330,9 @@ class LyScriptDisassemble(object):
         return False
 
     # 判断当前指令是否是系统模块指令
-    def iscallsystem(self, dbg, address):
+    def iscallsystem(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "dis.iscallsystem({})".format(address))
+            ref = self.GetScriptValue("dis.iscallsystem({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -345,32 +340,10 @@ class LyScriptDisassemble(object):
             return False
         return False
 
-
-# 内存操作类
-class LyScriptMemory(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push rax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"rax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop rax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
-
     # 获取PEB的地址
-    def peb(self, dbg):
+    def peb(self):
         try:
-            ref = self.GetScriptValue(dbg, "peb()")
+            ref = self.GetScriptValue("peb()")
             if ref != None:
                 return ref
             return False
@@ -379,9 +352,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取TEB的地址
-    def teb(self, dbg):
+    def teb(self):
         try:
-            ref = self.GetScriptValue(dbg, "teb()")
+            ref = self.GetScriptValue("teb()")
             if ref != None:
                 return ref
             return False
@@ -390,9 +363,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前线程的ID
-    def tid(self, dbg):
+    def tid(self):
         try:
-            ref = self.GetScriptValue(dbg, "tid()")
+            ref = self.GetScriptValue("tid()")
             if ref != None:
                 return ref
             return False
@@ -401,9 +374,9 @@ class LyScriptMemory(object):
         return False
 
     # 查询X64Dbg 应该是获取用户共享数据 地址
-    def kusd(self, dbg):
+    def kusd(self):
         try:
-            ref = self.GetScriptValue(dbg, "kusd()")
+            ref = self.GetScriptValue("kusd()")
             if ref != None:
                 return ref
             return False
@@ -412,9 +385,9 @@ class LyScriptMemory(object):
         return False
 
     # 判断addr是否有效,有效则返回True
-    def valid(self, dbg, address):
+    def valid(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.valid({})".format(address))
+            ref = self.GetScriptValue("mem.valid({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -423,9 +396,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前addr的基址
-    def base(self, dbg, address):
+    def base(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.base({})".format(address))
+            ref = self.GetScriptValue("mem.base({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -434,9 +407,9 @@ class LyScriptMemory(object):
         return False
 
     # 获取当前addr内存的大小
-    def size(self, dbg, address):
+    def size(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.size({})".format(address))
+            ref = self.GetScriptValue("mem.size({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -445,9 +418,9 @@ class LyScriptMemory(object):
         return False
 
     # 判断当前 addr是否是可执行页面,成功返回TRUE
-    def iscode(self, dbg, address):
+    def iscode(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.iscode({})".format(address))
+            ref = self.GetScriptValue("mem.iscode({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -456,9 +429,9 @@ class LyScriptMemory(object):
         return False
 
     # 解密指针,相当于调用了API. DecodePointer ptr
-    def decodepointer(self, dbg, address):
+    def decodepointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "mem.decodepointer({})".format(address))
+            ref = self.GetScriptValue("mem.decodepointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -467,9 +440,9 @@ class LyScriptMemory(object):
         return False
 
     # 从addr或者寄存器中读取一个字节内存并且返回
-    def read_byte(self, dbg, address):
+    def read_byte(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadByte({})".format(address))
+            ref = self.GetScriptValue("ReadByte({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -477,10 +450,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上
-    def byte(self, dbg, address):
+    # 从addr或者寄存器中读取一个字节内存并且返回
+    def byte(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "byte({})".format(address))
+            ref = self.GetScriptValue("byte({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -488,10 +461,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上 读取两个字节
-    def read_word(self, dbg, address):
+    # 读取两个字节
+    def read_word(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadWord({})".format(address))
+            ref = self.GetScriptValue("ReadWord({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -499,10 +472,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 同上 读取四个字节
-    def read_dword(self, dbg, address):
+    # 读取四个字节
+    def read_dword(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadDword({})".format(address))
+            ref = self.GetScriptValue("ReadDword({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -510,10 +483,10 @@ class LyScriptMemory(object):
             return False
         return False
 
-    # 读取8字节
-    def read_qword(self, dbg, address):
+    # 读取八字节
+    def read_qword(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadQword({})".format(address))
+            ref = self.GetScriptValue("ReadQword({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -522,9 +495,9 @@ class LyScriptMemory(object):
         return False
 
     # 从地址中读取指针(4/8字节)并返回读取的指针值
-    def read_ptr(self, dbg, address):
+    def read_ptr(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadPtr({})".format(address))
+            ref = self.GetScriptValue("ReadPtr({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -532,9 +505,9 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def read_pointer(self, dbg, address):
+    def read_pointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ReadPointer({})".format(address))
+            ref = self.GetScriptValue("ReadPointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -542,9 +515,9 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def ptr(self, dbg, address):
+    def ptr(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "ptr({})".format(address))
+            ref = self.GetScriptValue("ptr({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
@@ -552,41 +525,20 @@ class LyScriptMemory(object):
             return False
         return False
 
-    def pointer(self, dbg, address):
+    def pointer(self, decimal_address):
         try:
-            ref = self.GetScriptValue(dbg, "Pointer({})".format(address))
+            ref = self.GetScriptValue("Pointer({})".format(str(hex(decimal_address))))
             if ref != None:
                 return ref
             return False
         except Exception:
             return False
         return False
-
-# 其他类封装
-class LyScriptOther(object):
-    def GetScriptValue(self, dbg, script):
-        try:
-            ref = dbg.run_command_exec("push rax")
-            if ref != True:
-                return None
-            ref = dbg.run_command_exec(f"rax={script}")
-            if ref != True:
-                dbg.run_command_exec("pop rax")
-                return None
-            time.sleep(0.1)
-            reg = dbg.get_register("rax")
-            ref = dbg.run_command_exec("pop rax")
-            if ref != True:
-                return None
-            return reg
-        except Exception:
-            return None
-        return None
 
     # 获取当前函数堆栈中的第几个参数,假设返回地址在堆栈上,并且我们在函数内部.
-    def get(self, dbg, index):
+    def get(self, index):
         try:
-            ref = self.GetScriptValue(dbg, "arg.get({})".format(index))
+            ref = self.GetScriptValue("arg.get({})".format(index))
             if ref != None:
                 return ref
             return False
@@ -595,9 +547,9 @@ class LyScriptOther(object):
         return False
 
     # 设置的索引位置的值
-    def set(self, dbg, index, value):
+    def set(self, index, value):
         try:
-            ref = self.GetScriptValue(dbg, "arg.set({},{})".format(index, value))
+            ref = self.GetScriptValue("arg.set({},{})".format(index, value))
             if ref != None:
                 return ref
             return False
@@ -606,9 +558,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常是否为第一次机会异常。
-    def firstchance(self, dbg):
+    def firstchance(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.firstchance()")
+            ref = self.GetScriptValue("ex.firstchance()")
             if ref != None:
                 return ref
             return False
@@ -617,9 +569,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常地址。例如，导致异常的指令的地址。
-    def addr(self, dbg):
+    def addr(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.addr()")
+            ref = self.GetScriptValue("ex.addr()")
             if ref != None:
                 return ref
             return False
@@ -628,9 +580,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常代码。
-    def code(self, dbg):
+    def code(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.code()")
+            ref = self.GetScriptValue("ex.code()")
             if ref != None:
                 return ref
             return False
@@ -638,10 +590,10 @@ class LyScriptOther(object):
             return False
         return False
 
-    # 最后一个异常标志。
-    def flags(self, dbg):
+    # 最后一个异常标志
+    def flags(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.flags()")
+            ref = self.GetScriptValue("ex.flags()")
             if ref != None:
                 return ref
             return False
@@ -649,10 +601,10 @@ class LyScriptOther(object):
             return False
         return False
 
-    # 上次异常信息计数（参数数）。
-    def infocount(self, dbg):
+    # 上次异常信息计数
+    def infocount(self):
         try:
-            ref = self.GetScriptValue(dbg, "ex.infocount()")
+            ref = self.GetScriptValue("ex.infocount()")
             if ref != None:
                 return ref
             return False
@@ -661,9 +613,9 @@ class LyScriptOther(object):
         return False
 
     # 最后一个异常信息，如果索引超出范围，则为零。
-    def info(self, dbg, index):
+    def info(self, index):
         try:
-            ref = self.GetScriptValue(dbg, "ex.info({})".format(index))
+            ref = self.GetScriptValue("ex.info({})".format(index))
             if ref != None:
                 return ref
             return False
@@ -687,6 +639,7 @@ class Module(object):
             return module[0].get("path")
         except Exception:
             return False
+        return False
 
     # 获得名称
     def get_local_program_name(self):
@@ -697,6 +650,7 @@ class Module(object):
             return module[0].get("name")
         except Exception:
             return False
+        return False
 
     # 得到长度
     def get_local_program_size(self):
@@ -707,6 +661,7 @@ class Module(object):
             return module[0].get("size")
         except Exception:
             return False
+        return False
 
     # 得到基地址
     def get_local_program_base(self):
@@ -717,6 +672,7 @@ class Module(object):
             return module[0].get("base")
         except Exception:
             return False
+        return False
 
     # 得到入口地址
     def get_local_program_entry(self):
@@ -727,6 +683,7 @@ class Module(object):
             return module[0].get("entry")
         except Exception:
             return False
+        return False
 
     # 验证程序是否导入了指定模块
     def check_module_imported(self, module_name):
@@ -741,6 +698,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据基地址得到模块名
     def get_name_from_module(self, address):
@@ -755,6 +713,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据模块名得到基地址
     def get_base_from_module(self, module_name):
@@ -769,6 +728,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据模块名得到模块OEP入口
     def get_oep_from_module(self, module_name):
@@ -783,6 +743,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到所有模块信息
     def get_all_module_information(self):
@@ -793,6 +754,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到特定模块基地址
     def get_module_base(self, module_name):
@@ -803,6 +765,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到当前OEP位置处模块基地址
     def get_local_base(self):
@@ -813,6 +776,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取当前OEP位置长度
     def get_local_size(self):
@@ -823,6 +787,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取当前OEP位置保护属性
     def get_local_protect(self):
@@ -833,6 +798,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取指定模块中指定函数内存地址
     def get_module_from_function(self, module, function):
@@ -843,6 +809,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据传入地址得到模块首地址,开头4D 5A
     def get_base_from_address(self, address):
@@ -853,6 +820,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到当前.text节基地址
     def get_base_address(self):
@@ -864,6 +832,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据名字得到模块基地址
     def get_base_from_name(self, module_name):
@@ -874,6 +843,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名得到OEP位置
     def get_oep_from_name(self, module_name):
@@ -884,6 +854,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块地址得到OEP位置
     def get_oep_from_address(self, address):
@@ -894,6 +865,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到指定模块的导入表
     def get_module_from_import(self, module_name):
@@ -904,6 +876,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 检查指定模块内是否存在特定导入函数
     def get_import_inside_function(self, module_name, function_name):
@@ -917,6 +890,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据导入函数名得到函数iat_va地址
     def get_import_iatva(self, module_name, function_name):
@@ -930,6 +904,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据导入函数名得到函数iat_rva地址
     def get_import_iatrva(self, module_name, function_name):
@@ -943,6 +918,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名,获取模块导出表
     def get_module_from_export(self, module_name):
@@ -953,6 +929,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名以及导出函数名,得到va地址
     def get_module_export_va(self, module_name, function_name):
@@ -966,6 +943,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名以及导出函数,得到rva地址
     def get_module_export_rva(self, module_name, function_name):
@@ -979,6 +957,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到程序节表信息
     def get_local_section(self):
@@ -989,6 +968,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据节名称得到地址
     def get_local_address_from_section(self, section_name):
@@ -1002,6 +982,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据节名称得到节大小
     def get_local_size_from_section(self, section_name):
@@ -1015,6 +996,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据地址得到节名称
     def get_local_section_from_address(self, address):
@@ -1028,6 +1010,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
 # ----------------------------------------------------------------------
 # 反汇编类封装
@@ -1154,7 +1137,7 @@ class Disassemble(object):
             return False
         return False
 
-    # 得到指定位置汇编指令,不填写默认获取rip位置处
+    # 得到指定位置汇编指令,不填写默认获取EIP位置处
     def get_assembly(self,address=0):
         try:
             if(address == 0):
@@ -1294,27 +1277,27 @@ class Disassemble(object):
             return False
         return False
 
-    # 获取当前rip指令的下一条指令
-    def get_disasm_next(self, rip):
+    # 获取当前EIP指令的下一条指令
+    def get_disasm_next(self, eip):
         next = 0
 
         # 检查当前内存地址是否被下了绊子
-        check_breakpoint = self.dbg.check_breakpoint(rip)
+        check_breakpoint = self.dbg.check_breakpoint(eip)
 
         # 说明存在断点，如果存在则这里就是一个字节了
         if check_breakpoint == True:
 
-            # 接着判断当前是否是rip，如果是rip则需要使用原来的字节
-            local_rip = self.dbg.get_register("rip")
+            # 接着判断当前是否是EIP，如果是EIP则需要使用原来的字节
+            local_eip = self.dbg.get_register("rip")
 
-            # 说明是rip并且命中了断点
-            if local_rip == rip:
-                dis_size = self.dbg.get_disasm_operand_size(rip)
-                next = rip + dis_size
+            # 说明是EIP并且命中了断点
+            if local_eip == eip:
+                dis_size = self.dbg.get_disasm_operand_size(eip)
+                next = eip + dis_size
                 next_asm = self.dbg.get_disasm_one_code(next)
                 return next_asm
             else:
-                next = rip + 1
+                next = eip + 1
                 next_asm = self.dbg.get_disasm_one_code(next)
                 return next_asm
             return None
@@ -1322,22 +1305,22 @@ class Disassemble(object):
         # 不是则需要获取到原始汇编代码的长度
         elif check_breakpoint == False:
             # 得到当前指令长度
-            dis_size = self.dbg.get_disasm_operand_size(rip)
-            next = rip + dis_size
+            dis_size = self.dbg.get_disasm_operand_size(eip)
+            next = eip + dis_size
             next_asm = self.dbg.get_disasm_one_code(next)
             return next_asm
         else:
             return None
 
-    # 获取当前rip指令的上一条指令
-    def get_disasm_prev(self, rip):
+    # 获取当前EIP指令的上一条指令
+    def get_disasm_prev(self, eip):
         prev_dasm = None
         # 得到当前汇编指令
-        local_disasm = self.dbg.get_disasm_one_code(rip)
+        local_disasm = self.dbg.get_disasm_one_code(eip)
 
         # 只能向上扫描10行
-        rip = rip - 10
-        disasm = self.dbg.get_disasm_code(rip, 10)
+        eip = eip - 10
+        disasm = self.dbg.get_disasm_code(eip, 10)
 
         # 循环扫描汇编代码
         for index in range(0, len(disasm)):
@@ -1355,520 +1338,520 @@ class DebugControl(object):
         self.dbg = ptr
 
     # 寄存器读写
-    def GetEAX(self):
+    def get_eax(self):
         return self.dbg.get_register("eax")
 
-    def SetEAX(self,decimal_value):
+    def set_eax(self,decimal_value):
         return self.dbg.set_register("eax",decimal_value)
 
-    def GetAX(self):
+    def get_ax(self):
         return self.dbg.get_register("ax")
 
-    def SetAX(self,decimal_value):
+    def set_ax(self,decimal_value):
         return self.dbg.set_register("ax",decimal_value)
 
-    def GetAH(self):
+    def get_ah(self):
         return self.dbg.get_register("ah")
 
-    def SetAH(self,decimal_value):
+    def set_ah(self,decimal_value):
         return self.dbg.set_register("ah",decimal_value)
 
-    def GetAL(self):
+    def get_al(self):
         return self.dbg.get_register("al")
 
-    def SetAL(self,decimal_value):
+    def set_al(self,decimal_value):
         return self.dbg.set_register("al",decimal_value)
 
-    def GetEBX(self):
+    def get_ebx(self):
         return self.dbg.get_register("ebx")
 
-    def SetEBX(self,decimal_value):
+    def set_ebx(self,decimal_value):
         return self.dbg.set_register("ebx",decimal_value)
 
-    def GetBX(self):
+    def get_bx(self):
         return self.dbg.get_register("bx")
 
-    def SetBX(self,decimal_value):
+    def set_bx(self,decimal_value):
         return self.dbg.set_register("bx",decimal_value)
 
-    def GetBH(self):
+    def get_bh(self):
         return self.dbg.get_register("bh")
 
-    def SetBH(self,decimal_value):
+    def set_bh(self,decimal_value):
         return self.dbg.set_register("bh",decimal_value)
 
-    def GetBL(self):
+    def get_bl(self):
         return self.dbg.get_register("bl")
 
-    def SetBL(self,decimal_value):
+    def set_bl(self,decimal_value):
         return self.dbg.set_register("bl",decimal_value)
 
-    def GetECX(self):
+    def get_ecx(self):
         return self.dbg.get_register("ecx")
 
-    def SetECX(self,decimal_value):
+    def set_ecx(self,decimal_value):
         return self.dbg.set_register("ecx",decimal_value)
 
-    def GetCX(self):
+    def get_cx(self):
         return self.dbg.get_register("cx")
 
-    def SetCX(self,decimal_value):
+    def set_cx(self,decimal_value):
         return self.dbg.set_register("cx",decimal_value)
 
-    def GetCH(self):
+    def get_ch(self):
         return self.dbg.get_register("ch")
 
-    def SetCH(self,decimal_value):
+    def set_ch(self,decimal_value):
         return self.dbg.set_register("ch",decimal_value)
 
-    def GetCL(self):
+    def get_cl(self):
         return self.dbg.get_register("cl")
 
-    def SetCL(self,decimal_value):
+    def set_cl(self,decimal_value):
         return self.dbg.set_register("cl",decimal_value)
 
-    def GetEDX(self):
+    def get_edx(self):
         return self.dbg.get_register("edx")
 
-    def SetEDX(self,decimal_value):
+    def set_edx(self,decimal_value):
         return self.dbg.set_register("edx",decimal_value)
 
-    def GetDX(self):
+    def get_dx(self):
         return self.dbg.get_register("dx")
 
-    def SetDX(self,decimal_value):
+    def set_dx(self,decimal_value):
         return self.dbg.set_register("dx",decimal_value)
 
-    def GetDH(self):
+    def get_dh(self):
         return self.dbg.get_register("dh")
 
-    def SetDH(self,decimal_value):
+    def set_dh(self,decimal_value):
         return self.dbg.set_register("dh",decimal_value)
 
-    def GetDL(self):
+    def get_dl(self):
         return self.dbg.get_register("dl")
 
-    def SetDL(self,decimal_value):
+    def set_dl(self,decimal_value):
         return self.dbg.set_register("dl",decimal_value)
 
-    def GetEDI(self):
+    def get_edi(self):
         return self.dbg.get_register("edi")
 
-    def SetEDI(self,decimal_value):
+    def set_edi(self,decimal_value):
         return self.dbg.set_register("edi",decimal_value)
 
-    def GetDI(self):
+    def get_di(self):
         return self.dbg.get_register("di")
 
-    def SetDI(self,decimal_value):
+    def set_di(self,decimal_value):
         return self.dbg.set_register("di",decimal_value)
 
-    def GetESI(self):
+    def get_esi(self):
         return self.dbg.get_register("esi")
 
-    def SetESI(self,decimal_value):
+    def set_esi(self,decimal_value):
         return self.dbg.set_register("esi",decimal_value)
 
-    def GetSI(self):
+    def get_si(self):
         return self.dbg.get_register("si")
 
-    def SetSI(self,decimal_value):
+    def set_si(self,decimal_value):
         return self.dbg.set_register("si",decimal_value)
 
-    def GetEBP(self):
+    def get_ebp(self):
         return self.dbg.get_register("ebp")
 
-    def SetEBP(self,decimal_value):
+    def set_ebp(self,decimal_value):
         return self.dbg.set_register("ebp",decimal_value)
 
-    def GetBP(self):
+    def get_bp(self):
         return self.dbg.get_register("bp")
 
-    def SetBP(self,decimal_value):
+    def set_bp(self,decimal_value):
         return self.dbg.set_register("bp",decimal_value)
 
-    def GetESP(self):
+    def get_esp(self):
         return self.dbg.get_register("esp")
 
-    def SetESP(self,decimal_value):
+    def set_esp(self,decimal_value):
         return self.dbg.set_register("esp",decimal_value)
 
-    def GetSP(self):
+    def get_sp(self):
         return self.dbg.get_register("sp")
 
-    def SetSP(self,decimal_value):
+    def set_sp(self,decimal_value):
         return self.dbg.set_register("sp",decimal_value)
 
-    def GetEIP(self):
+    def get_eip(self):
         return self.dbg.get_register("eip")
 
-    def SetEIP(self,decimal_value):
+    def set_eip(self,decimal_value):
         return self.dbg.set_register("eip",decimal_value)
 
-    def GetDR0(self):
+    def get_dr0(self):
         return self.dbg.get_register("dr0")
 
-    def SetDR0(self,decimal_value):
+    def set_dr0(self,decimal_value):
         return self.dbg.set_register("dr0",decimal_value)
 
-    def GetDR1(self):
+    def get_dr1(self):
         return self.dbg.get_register("dr1")
 
-    def SetDR1(self,decimal_value):
+    def set_dr1(self,decimal_value):
         return self.dbg.set_register("dr1",decimal_value)
 
-    def GetDR2(self):
+    def get_dr2(self):
         return self.dbg.get_register("dr2")
 
-    def SetDR2(self,decimal_value):
+    def set_dr2(self,decimal_value):
         return self.dbg.set_register("dr2",decimal_value)
 
-    def GetDR3(self):
+    def get_dr3(self):
         return self.dbg.get_register("dr3")
 
-    def SetDR3(self,decimal_value):
+    def set_dr3(self,decimal_value):
         return self.dbg.set_register("dr3",decimal_value)
 
-    def GetDR6(self):
+    def get_dr6(self):
         return self.dbg.get_register("dr6")
 
-    def SetDR6(self,decimal_value):
+    def set_dr6(self,decimal_value):
         return self.dbg.set_register("dr6",decimal_value)
 
-    def GetDR7(self):
+    def get_dr7(self):
         return self.dbg.get_register("dr7")
 
-    def SetDR7(self,decimal_value):
+    def set_dr7(self,decimal_value):
         return self.dbg.set_register("dr7",decimal_value)
 
-    # 64位寄存器
-    def GetRAX(self):
-        return self.dbg.get_register("rax")
-
-    def SetRAX(self,decimal_int):
-        return self.dbg.set_register("rax",decimal_int)
-
-    def GetRBX(self):
-        return self.dbg.get_register("rbx")
-
-    def SetRBX(self,decimal_int):
-        return self.dbg.set_register("rbx",decimal_int)
-
-    def GetRCX(self):
-        return self.dbg.get_register("rcx")
-
-    def SetRCX(self,decimal_int):
-         return self.dbg.set_register("rcx",decimal_int)
-
-    def GetRDX(self):
-        return self.dbg.get_register("rdx")
-
-    def SetRDX(self,decimal_int):
-         return self.dbg.set_register("rdx",decimal_int)
-
-    def GetRSI(self):
-        return self.dbg.get_register("rsi")
-
-    def SetRSI(self,decimal_int):
-         return self.dbg.set_register("rsi",decimal_int)
-
-    def GetSIL(self):
-        return self.dbg.get_register("sit")
-
-    def SetSIL(self,decimal_int):
-         return self.dbg.set_register("sit",decimal_int)
-
-    def GetRDI(self):
-        return self.dbg.get_register("rdi")
-
-    def SetRDI(self,decimal_int):
-         return self.dbg.set_register("rdi",decimal_int)
-
-    def GetDIL(self):
-        return self.dbg.get_register("dit")
-
-    def SetDIL(self,decimal_int):
-         return self.dbg.set_register("dit",decimal_int)
-
-    def GetRBP(self):
-        return self.dbg.get_register("rbp")
-
-    def SetRBP(self,decimal_int):
-         return self.dbg.set_register("rbp",decimal_int)
-
-    def GetBPL(self):
-        return self.dbg.get_register("bpl")
-
-    def SetBPL(self,decimal_int):
-         return self.dbg.set_register("bpl",decimal_int)
-
-    def GetRSP(self):
-        return self.dbg.get_register("rsp")
-
-    def SetRSP(self,decimal_int):
-         return self.dbg.set_register("rsp",decimal_int)
-
-    def GetSPL(self):
-        return self.dbg.get_register("spl")
-
-    def SetSPL(self,decimal_int):
-         return self.dbg.set_register("spl",decimal_int)
-
-    def GetRIP(self):
-        return self.dbg.get_register("rip")
-
-    def SetRIP(self,decimal_int):
-         return self.dbg.set_register("rip",decimal_int)
-
-    def GetR8(self):
-        return self.dbg.get_register("r8")
-
-    def SetR8(self,decimal_int):
-         return self.dbg.set_register("r8",decimal_int)
-
-    def GetR8D(self):
-        return self.dbg.get_register("r8d")
-
-    def SetR8D(self,decimal_int):
-         return self.dbg.set_register("r8d",decimal_int)
-
-    def GetR8W(self):
-        return self.dbg.get_register("r8w")
-
-    def SetR8W(self,decimal_int):
-         return self.dbg.set_register("r8w",decimal_int)
-
-    def GetR8B(self):
-        return self.dbg.get_register("r8b")
-
-    def SetR8B(self,decimal_int):
-         return self.dbg.set_register("r8b",decimal_int)
-
-    def GetR9(self):
-        return self.dbg.get_register("r9")
-
-    def SetR9(self,decimal_int):
-         return self.dbg.set_register("r9",decimal_int)
-
-    def GetR9D(self):
-        return self.dbg.get_register("r9d")
-
-    def SetR9D(self,decimal_int):
-         return self.dbg.set_register("r9d",decimal_int)
-
-    def GetR9W(self):
-        return self.dbg.get_register("r9w")
-
-    def SetR9W(self,decimal_int):
-         return self.dbg.set_register("r9w",decimal_int)
-
-    def GetR9B(self):
-        return self.dbg.get_register("r9b")
-
-    def SetR9B(self,decimal_int):
-         return self.dbg.set_register("r9b",decimal_int)
-
-    def GetR10(self):
-        return self.dbg.get_register("r10")
-
-    def SetR10(self,decimal_int):
-         return self.dbg.set_register("r10",decimal_int)
-
-    def GetR10D(self):
-        return self.dbg.get_register("r10d")
-
-    def SetR10D(self,decimal_int):
-         return self.dbg.set_register("r10d",decimal_int)
-
-    def GetR10W(self):
-        return self.dbg.get_register("r10w")
-
-    def SetR10W(self,decimal_int):
-         return self.dbg.set_register("r10w",decimal_int)
-
-    def GetR10B(self):
-        return self.dbg.get_register("r10b")
-
-    def SetR10B(self,decimal_int):
-         return self.dbg.set_register("r10b",decimal_int)
-
-    def GetR11(self):
-        return self.dbg.get_register("r11")
-
-    def SetR11(self,decimal_int):
-         return self.dbg.set_register("r11",decimal_int)
-
-    def GetR11D(self):
-        return self.dbg.get_register("r11d")
-
-    def SetR11D(self,decimal_int):
-         return self.dbg.set_register("r11d",decimal_int)
-
-    def GetR11W(self):
-        return self.dbg.get_register("r11w")
-
-    def SetR11W(self,decimal_int):
-         return self.dbg.set_register("r11w",decimal_int)
-
-    def GetR11B(self):
-        return self.dbg.get_register("r11b")
-
-    def SetR11B(self,decimal_int):
-         return self.dbg.set_register("r11b",decimal_int)
-
-    def GetR12(self):
-        return self.dbg.get_register("r12")
-
-    def SetR12(self,decimal_int):
-         return self.dbg.set_register("r12",decimal_int)
-
-    def GetR12D(self):
-        return self.dbg.get_register("r12d")
-
-    def SetR12D(self,decimal_int):
-         return self.dbg.set_register("r12d",decimal_int)
-
-    def GetR12W(self):
-        return self.dbg.get_register("r12w")
-
-    def SetR12W(self,decimal_int):
-         return self.dbg.set_register("r12w",decimal_int)
-
-    def GetR12B(self):
-        return self.dbg.get_register("r12b")
-
-    def SetR12B(self,decimal_int):
-         return self.dbg.set_register("r12b",decimal_int)
-
-    def GetR13(self):
-        return self.dbg.get_register("r13")
-
-    def SetR13(self,decimal_int):
-         return self.dbg.set_register("r13",decimal_int)
-
-    def GetR13D(self):
-        return self.dbg.get_register("r13d")
-
-    def SetR13D(self,decimal_int):
-         return self.dbg.set_register("r13d",decimal_int)
-
-    def GetR13W(self):
-        return self.dbg.get_register("r13w")
-
-    def SetR13W(self,decimal_int):
-         return self.dbg.set_register("r13w",decimal_int)
-
-    def GetR13B(self):
-        return self.dbg.get_register("r13b")
-
-    def SetR13B(self,decimal_int):
-         return self.dbg.set_register("r13b",decimal_int)
-
-    def GetR14(self):
-        return self.dbg.get_register("r14")
-
-    def SetR14(self,decimal_int):
-         return self.dbg.set_register("r14",decimal_int)
-
-    def GetR14D(self):
-        return self.dbg.get_register("r14d")
-
-    def SetR14D(self,decimal_int):
-         return self.dbg.set_register("r14d",decimal_int)
-
-    def GetR14W(self):
-        return self.dbg.get_register("r14w")
-
-    def SetR14W(self,decimal_int):
-         return self.dbg.set_register("r14w",decimal_int)
-
-    def GetR14B(self):
-        return self.dbg.get_register("r14b")
-
-    def SetR14B(self,decimal_int):
-         return self.dbg.set_register("r14b",decimal_int)
-
-    def GetR15(self):
-        return self.dbg.get_register("r15")
-
-    def SetR15(self,decimal_int):
-         return self.dbg.set_register("r15",decimal_int)
-
-    def GetR15D(self):
-        return self.dbg.get_register("r15d")
-
-    def SetR15D(self,decimal_int):
-         return self.dbg.set_register("r15d",decimal_int)
-
-    def GetR15W(self):
-        return self.dbg.get_register("r15w")
-
-    def SetR15W(self,decimal_int):
-         return self.dbg.set_register("r15w",decimal_int)
-
-    def GetR15B(self):
-        return self.dbg.get_register("r15b")
-
-    def SetR15B(self,decimal_int):
-         return self.dbg.set_register("r15b",decimal_int)
-
     # 标志位读写
-    def GetZF(self):
+    def get_zf(self):
         return self.dbg.get_flag_register("zf")
 
-    def SetZF(self,decimal_bool):
+    def set_zf(self,decimal_bool):
         return self.dbg.set_flag_register("zf",decimal_bool)
 
-    def GetOF(self):
+    def get_of(self):
         return self.dbg.get_flag_register("of")
 
-    def SetOF(self,decimal_bool):
+    def set_of(self,decimal_bool):
         return self.dbg.set_flag_register("of",decimal_bool)
 
-    def GetCF(self):
+    def get_cf(self):
         return self.dbg.get_flag_register("cf")
 
-    def SetCF(self,decimal_bool):
+    def set_cf(self,decimal_bool):
         return self.dbg.set_flag_register("cf",decimal_bool)
 
-    def GetPF(self):
+    def get_pf(self):
         return self.dbg.get_flag_register("pf")
 
-    def SetPF(self,decimal_bool):
+    def set_pf(self,decimal_bool):
         return self.dbg.set_flag_register("pf",decimal_bool)
 
-    def GetSF(self):
+    def get_sf(self):
         return self.dbg.get_flag_register("sf")
 
-    def SetSF(self,decimal_bool):
+    def set_sf(self,decimal_bool):
         return self.dbg.set_flag_register("sf",decimal_bool)
 
-    def GetTF(self):
+    def get_tf(self):
         return self.dbg.get_flag_register("tf")
 
-    def SetTF(self,decimal_bool):
+    def set_tf(self,decimal_bool):
         return self.dbg.set_flag_register("tf",decimal_bool)
 
-    def GetAF(self):
+    def get_af(self):
         return self.dbg.get_flag_register("af")
 
-    def SetAF(self,decimal_bool):
+    def set_af(self,decimal_bool):
         return self.dbg.set_flag_register("af",decimal_bool)
 
-    def GetDF(self):
+    def get_df(self):
         return self.dbg.get_flag_register("df")
 
-    def SetDF(self,decimal_bool):
+    def set_df(self,decimal_bool):
         return self.dbg.set_flag_register("df",decimal_bool)
 
-    def GetIF(self):
+    def get_if(self):
         return self.dbg.get_flag_register("if")
 
-    def SetIF(self,decimal_bool):
+    def set_if(self,decimal_bool):
         return self.dbg.set_flag_register("if",decimal_bool)
 
+    # 64位寄存器
+    def get_rax(self):
+        return self.dbg.get_register("rax")
+
+    def set_rax(self, decimal_int):
+        return self.dbg.set_register("rax", decimal_int)
+
+    def get_rbx(self):
+        return self.dbg.get_register("rbx")
+
+    def set_rbx(self, decimal_int):
+        return self.dbg.set_register("rbx", decimal_int)
+
+    def get_rcx(self):
+        return self.dbg.get_register("rcx")
+
+    def set_rcx(self, decimal_int):
+        return self.dbg.set_register("rcx", decimal_int)
+
+    def get_rdx(self):
+        return self.dbg.get_register("rdx")
+
+    def set_rdx(self, decimal_int):
+        return self.dbg.set_register("rdx", decimal_int)
+
+    def get_rsi(self):
+        return self.dbg.get_register("rsi")
+
+    def set_rsi(self, decimal_int):
+        return self.dbg.set_register("rsi", decimal_int)
+
+    def get_sit(self):
+        return self.dbg.get_register("sit")
+
+    def set_sit(self, decimal_int):
+        return self.dbg.set_register("sit", decimal_int)
+
+    def get_rdi(self):
+        return self.dbg.get_register("rdi")
+
+    def set_rdi(self, decimal_int):
+        return self.dbg.set_register("rdi", decimal_int)
+
+    def get_dit(self):
+        return self.dbg.get_register("dit")
+
+    def set_dit(self, decimal_int):
+        return self.dbg.set_register("dit", decimal_int)
+
+    def get_rbp(self):
+        return self.dbg.get_register("rbp")
+
+    def set_rbp(self, decimal_int):
+        return self.dbg.set_register("rbp", decimal_int)
+
+    def get_bpl(self):
+        return self.dbg.get_register("bpl")
+
+    def set_bpl(self, decimal_int):
+        return self.dbg.set_register("bpl", decimal_int)
+
+    def get_rsp(self):
+        return self.dbg.get_register("rsp")
+
+    def set_rsp(self, decimal_int):
+        return self.dbg.set_register("rsp", decimal_int)
+
+    def get_spl(self):
+        return self.dbg.get_register("spl")
+
+    def set_spl(self, decimal_int):
+        return self.dbg.set_register("spl", decimal_int)
+
+    def get_rip(self):
+        return self.dbg.get_register("rip")
+
+    def set_rip(self, decimal_int):
+        return self.dbg.set_register("rip", decimal_int)
+
+    def get_r8(self):
+        return self.dbg.get_register("r8")
+
+    def set_r8(self, decimal_int):
+        return self.dbg.set_register("r8", decimal_int)
+
+    def get_r8d(self):
+        return self.dbg.get_register("r8d")
+
+    def set_r8d(self, decimal_int):
+        return self.dbg.set_register("r8d", decimal_int)
+
+    def get_r8w(self):
+        return self.dbg.get_register("r8w")
+
+    def set_r8w(self, decimal_int):
+        return self.dbg.set_register("r8w", decimal_int)
+
+    def get_r8b(self):
+        return self.dbg.get_register("r8b")
+
+    def set_r8b(self, decimal_int):
+        return self.dbg.set_register("r8b", decimal_int)
+
+    def get_r9(self):
+        return self.dbg.get_register("r9")
+
+    def set_r9(self, decimal_int):
+        return self.dbg.set_register("r9", decimal_int)
+
+    def get_r9d(self):
+        return self.dbg.get_register("r9d")
+
+    def set_r9d(self, decimal_int):
+        return self.dbg.set_register("r9d", decimal_int)
+
+    def get_r9w(self):
+        return self.dbg.get_register("r9w")
+
+    def set_r9w(self, decimal_int):
+        return self.dbg.set_register("r9w", decimal_int)
+
+    def get_r9b(self):
+        return self.dbg.get_register("r9b")
+
+    def set_r9b(self, decimal_int):
+        return self.dbg.set_register("r9b", decimal_int)
+
+    def get_r10(self):
+        return self.dbg.get_register("r10")
+
+    def set_r10(self, decimal_int):
+        return self.dbg.set_register("r10", decimal_int)
+
+    def get_r10d(self):
+        return self.dbg.get_register("r10d")
+
+    def set_r10d(self, decimal_int):
+        return self.dbg.set_register("r10d", decimal_int)
+
+    def get_r10w(self):
+        return self.dbg.get_register("r10w")
+
+    def set_r10w(self, decimal_int):
+        return self.dbg.set_register("r10w", decimal_int)
+
+    def get_r10b(self):
+        return self.dbg.get_register("r10b")
+
+    def set_r10b(self, decimal_int):
+        return self.dbg.set_register("r10b", decimal_int)
+
+    def get_r11(self):
+        return self.dbg.get_register("r11")
+
+    def set_r11(self, decimal_int):
+        return self.dbg.set_register("r11", decimal_int)
+
+    def get_r11d(self):
+        return self.dbg.get_register("r11d")
+
+    def set_r11d(self, decimal_int):
+        return self.dbg.set_register("r11d", decimal_int)
+
+    def get_r11w(self):
+        return self.dbg.get_register("r11w")
+
+    def set_r11w(self, decimal_int):
+        return self.dbg.set_register("r11w", decimal_int)
+
+    def get_r11b(self):
+        return self.dbg.get_register("r11b")
+
+    def set_r11b(self, decimal_int):
+        return self.dbg.set_register("r11b", decimal_int)
+
+    def get_r12(self):
+        return self.dbg.get_register("r12")
+
+    def set_r12(self, decimal_int):
+        return self.dbg.set_register("r12", decimal_int)
+
+    def get_r12d(self):
+        return self.dbg.get_register("r12d")
+
+    def set_r12d(self, decimal_int):
+        return self.dbg.set_register("r12d", decimal_int)
+
+    def get_r12w(self):
+        return self.dbg.get_register("r12w")
+
+    def set_r12w(self, decimal_int):
+        return self.dbg.set_register("r12w", decimal_int)
+
+    def get_r12b(self):
+        return self.dbg.get_register("r12b")
+
+    def set_r12b(self, decimal_int):
+        return self.dbg.set_register("r12b", decimal_int)
+
+    def get_r13(self):
+        return self.dbg.get_register("r13")
+
+    def set_r13(self, decimal_int):
+        return self.dbg.set_register("r13", decimal_int)
+
+    def get_r13d(self):
+        return self.dbg.get_register("r13d")
+
+    def set_r13d(self, decimal_int):
+        return self.dbg.set_register("r13d", decimal_int)
+
+    def get_r13w(self):
+        return self.dbg.get_register("r13w")
+
+    def set_r13w(self, decimal_int):
+        return self.dbg.set_register("r13w", decimal_int)
+
+    def get_r13b(self):
+        return self.dbg.get_register("r13b")
+
+    def set_r13b(self, decimal_int):
+        return self.dbg.set_register("r13b", decimal_int)
+
+    def get_r14(self):
+        return self.dbg.get_register("r14")
+
+    def set_r14(self, decimal_int):
+        return self.dbg.set_register("r14", decimal_int)
+
+    def get_r14d(self):
+        return self.dbg.get_register("r14d")
+
+    def set_r14d(self, decimal_int):
+        return self.dbg.set_register("r14d", decimal_int)
+
+    def get_r14w(self):
+        return self.dbg.get_register("r14w")
+
+    def set_r14w(self, decimal_int):
+        return self.dbg.set_register("r14w", decimal_int)
+
+    def get_r14b(self):
+        return self.dbg.get_register("r14b")
+
+    def set_r14b(self, decimal_int):
+        return self.dbg.set_register("r14b", decimal_int)
+
+    def get_r15(self):
+        return self.dbg.get_register("r15")
+
+    def set_r15(self, decimal_int):
+        return self.dbg.set_register("r15", decimal_int)
+
+    def get_r15d(self):
+        return self.dbg.get_register("r15d")
+
+    def set_r15d(self, decimal_int):
+        return self.dbg.set_register("r15d", decimal_int)
+
+    def get_r15w(self):
+        return self.dbg.get_register("r15w")
+
+    def set_r15w(self, decimal_int):
+        return self.dbg.set_register("r15w", decimal_int)
+
+    def get_r15b(self):
+        return self.dbg.get_register("r15b")
+
+    def set_r15b(self, decimal_int):
+        return self.dbg.set_register("r15b", decimal_int)
+
     # 传入文件路径,载入被调试程序
-    def Script_InitDebug(self, path):
+    def script_initdebug(self, path):
         try:
             return self.dbg.run_command_exec(f"InitDebug {path}")
         except Exception:
@@ -1876,7 +1859,7 @@ class DebugControl(object):
         return False
 
     # 终止当前被调试进程
-    def Script_CloseDebug(self):
+    def script_closedebug(self):
         try:
             return self.dbg.run_command_exec("StopDebug")
         except Exception:
@@ -1884,7 +1867,7 @@ class DebugControl(object):
         return False
 
     # 让进程脱离当前调试器
-    def Script_DetachDebug(self):
+    def script_detachdebug(self):
         try:
             return self.dbg.run_command_exec("DetachDebugger")
         except Exception:
@@ -1892,7 +1875,7 @@ class DebugControl(object):
         return False
 
     # 让进程运行起来
-    def Script_RunDebug(self):
+    def script_rundebug(self):
         try:
             self.dbg.run_command_exec("run")
             return True
@@ -1901,7 +1884,7 @@ class DebugControl(object):
         return False
 
     # 释放锁并允许程序运行，忽略异常
-    def Script_ERun(self):
+    def script_erun(self):
         try:
             self.dbg.run_command_exec("erun")
             return True
@@ -1910,7 +1893,7 @@ class DebugControl(object):
         return False
 
     # 释放锁并允许程序运行，跳过异常中断
-    def Script_SeRun(self):
+    def script_serun(self):
         try:
             self.dbg.run_command_exec("serun")
             return True
@@ -1919,7 +1902,7 @@ class DebugControl(object):
         return False
 
     # 暂停调试器运行
-    def Script_Pause(self):
+    def script_pause(self):
         try:
             self.dbg.run_command_exec("pause")
             return True
@@ -1928,7 +1911,7 @@ class DebugControl(object):
         return False
 
     # 步进
-    def Script_StepInto(self):
+    def script_stepinto(self):
         try:
             self.dbg.run_command_exec("StepInto")
             return True
@@ -1937,7 +1920,7 @@ class DebugControl(object):
         return False
 
     # 步进,跳过异常
-    def Script_EStepInfo(self):
+    def script_estepinfo(self):
         try:
             self.dbg.run_command_exec("eStepInto")
             return True
@@ -1946,7 +1929,7 @@ class DebugControl(object):
         return False
 
     # 步进,跳过中断
-    def Script_SeStepInto(self):
+    def script_sestepinto(self):
         try:
             self.dbg.run_command_exec("seStepInto")
             return True
@@ -1955,7 +1938,7 @@ class DebugControl(object):
         return False
 
     # 步过到结束
-    def Script_StepOver(self):
+    def script_stepover(self):
         try:
             self.dbg.run_command_exec("StepOver")
             return True
@@ -1964,7 +1947,7 @@ class DebugControl(object):
         return False
 
     # 普通步过F8
-    def Script_StepOut(self):
+    def script_stepout(self):
         try:
             self.dbg.run_command_exec("StepOut")
             return True
@@ -1973,7 +1956,7 @@ class DebugControl(object):
         return False
 
     # 普通步过F8，忽略异常
-    def Script_eStepOut(self):
+    def script_estepout(self):
         try:
             self.dbg.run_command_exec("eStepOut")
             return True
@@ -1982,7 +1965,7 @@ class DebugControl(object):
         return False
 
     # 跳过执行
-    def Script_Skip(self):
+    def script_skip(self):
         try:
             self.dbg.run_command_exec("skip")
             return True
@@ -1991,7 +1974,7 @@ class DebugControl(object):
         return False
 
     # 递增寄存器
-    def Script_Inc(self,register):
+    def script_inc(self,register):
         try:
             self.dbg.run_command_exec(f"inc {register}")
             return True
@@ -2000,7 +1983,7 @@ class DebugControl(object):
         return False
 
     # 递减寄存器
-    def Script_Dec(self,register):
+    def script_dec(self,register):
         try:
             self.dbg.run_command_exec(f"dec {register}")
             return True
@@ -2009,7 +1992,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行add运算
-    def Script_Add(self,register,decimal_int):
+    def script_add(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"add {register},{decimal_int}")
             return True
@@ -2018,7 +2001,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行sub运算
-    def Script_Sub(self,register,decimal_int):
+    def script_sub(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sub {register},{decimal_int}")
             return True
@@ -2027,7 +2010,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行mul乘法
-    def Script_Mul(self,register,decimal_int):
+    def script_mul(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"mul {register},{decimal_int}")
             return True
@@ -2036,7 +2019,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行div除法
-    def Script_Div(self,register,decimal_int):
+    def script_div(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"div {register},{decimal_int}")
             return True
@@ -2045,7 +2028,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行and与运算
-    def Script_And(self,register,decimal_int):
+    def script_and(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"and {register},{decimal_int}")
             return True
@@ -2054,7 +2037,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行or或运算
-    def Script_Or(self,register,decimal_int):
+    def script_or(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"or {register},{decimal_int}")
             return True
@@ -2063,7 +2046,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行xor或运算
-    def Script_Xor(self,register,decimal_int):
+    def script_xor(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"xor {register},{decimal_int}")
             return True
@@ -2072,7 +2055,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器参数进行neg反转
-    def Script_Neg(self,register,decimal_int):
+    def script_neg(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"neg {register},{decimal_int}")
             return True
@@ -2081,7 +2064,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行rol循环左移
-    def Script_Rol(self,register,decimal_int):
+    def script_rol(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"rol {register},{decimal_int}")
             return True
@@ -2090,7 +2073,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行ror循环右移
-    def Script_Ror(self,register,decimal_int):
+    def script_ror(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"ror {register},{decimal_int}")
             return True
@@ -2099,7 +2082,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行shl逻辑左移
-    def Script_Shl(self,register,decimal_int):
+    def script_shl(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shl {register},{decimal_int}")
             return True
@@ -2108,7 +2091,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行shr逻辑右移
-    def Script_Shr(self,register,decimal_int):
+    def script_shr(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shr {register},{decimal_int}")
             return True
@@ -2117,7 +2100,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行sal算数左移
-    def Script_Sal(self,register,decimal_int):
+    def script_sal(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sal {register},{decimal_int}")
             return True
@@ -2126,7 +2109,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行sar算数右移
-    def Script_Sar(self,register,decimal_int):
+    def script_sar(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sar {register},{decimal_int}")
             return True
@@ -2135,7 +2118,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器进行not按位取反
-    def Script_Not(self,register,decimal_int):
+    def script_not(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"not {register},{decimal_int}")
             return True
@@ -2144,7 +2127,7 @@ class DebugControl(object):
         return False
 
     # 进行字节交换，也就是反转。
-    def Script_Bswap(self,register,decimal_int):
+    def script_bswap(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"bswap {register},{decimal_int}")
             return True
@@ -2153,7 +2136,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器入栈
-    def Script_Push(self,register_or_value):
+    def script_push(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"push {register_or_value}")
             return True
@@ -2162,7 +2145,7 @@ class DebugControl(object):
         return False
 
     # 对寄存器弹出元素
-    def Script_Pop(self,register_or_value):
+    def script_pop(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"pop {register_or_value}")
             return True
@@ -2171,7 +2154,7 @@ class DebugControl(object):
         return False
 
     # 内置API暂停
-    def Pause(self):
+    def pause(self):
         try:
             self.dbg.set_debug("Pause")
             return True
@@ -2180,7 +2163,7 @@ class DebugControl(object):
         return False
 
     # 内置API运行
-    def Run(self):
+    def run(self):
         try:
             self.dbg.set_debug("Run")
             return True
@@ -2189,7 +2172,7 @@ class DebugControl(object):
         return False
 
     # 内置API步入
-    def StepIn(self):
+    def stepin(self):
         try:
             self.dbg.set_debug("StepIn")
             return True
@@ -2198,16 +2181,7 @@ class DebugControl(object):
         return False
 
     # 内置API步过
-    def StepOut(self):
-        try:
-            self.dbg.set_debug("StepOut")
-            return True
-        except Exception:
-            return False
-        return False
-
-    # 内置API到结束
-    def StepOut(self):
+    def stepout(self):
         try:
             self.dbg.set_debug("StepOut")
             return True
@@ -2216,7 +2190,7 @@ class DebugControl(object):
         return False
 
     # 内置API停止
-    def Stop(self):
+    def stop(self):
         try:
             self.dbg.set_debug("Stop")
             return True
@@ -2225,7 +2199,7 @@ class DebugControl(object):
         return False
 
     # 内置API等待
-    def Wait(self):
+    def wait(self):
         try:
             self.dbg.set_debug("Wait")
             return True
@@ -2234,7 +2208,7 @@ class DebugControl(object):
         return False
 
     # 判断调试器是否在调试
-    def IsDebug(self):
+    def is_debug(self):
         try:
             return self.dbg.is_debugger()
         except Exception:
@@ -2242,9 +2216,572 @@ class DebugControl(object):
         return False
 
     # 判断调试器是否在运行
-    def IsRunning(self):
+    def is_running(self):
         try:
             return self.dbg.is_running()
+        except Exception:
+            return False
+        return False
+
+# ----------------------------------------------------------------------
+# 内存类封装
+# ----------------------------------------------------------------------
+class Memory(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    # 读取内存byte字节类型
+    def read_memory_byte(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_byte(int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 读取内存word字类型
+    def read_memory_word(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_word(int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 读取内存dword双字类型
+    def read_memory_dword(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_dword(int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 读取内存ptr指针
+    def read_memory_ptr(self,decimal_int=0):
+        try:
+            return self.dbg.read_memory_ptr(int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 读取内存任意字节数,返回列表格式,错误则返回空列表
+    def read_memory(self,decimal_int=0,decimal_length=0):
+        try:
+            ref_list = []
+            for index in range(0,int(decimal_length)):
+                read_byte = self.dbg.read_memory_byte(int(decimal_int) + index)
+                ref_list.append(read_byte)
+            return ref_list
+        except Exception:
+            return []
+        return []
+
+    # 写内存byte字节类型
+    def write_memory_byte(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_byte(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 写内存word字类型
+    def write_memory_word(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_word(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 写内存dword双字类型
+    def write_memory_dword(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_dword(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 写内存ptr指针类型
+    def write_memory_ptr(self,decimal_address=0, decimal_int=0):
+        try:
+            return self.dbg.write_memory_ptr(int(decimal_address), int(decimal_int))
+        except Exception:
+            return False
+        return False
+
+    # 写内存任意字节数,传入十进制列表格式
+    def write_memory(self,decimal_address=0, decimal_list = []):
+        try:
+            ref_flag = False
+            # 判断列表长度
+            write_size = len(list(decimal_list))
+            if write_size == 0:
+                return False
+
+            # 循环写出
+            for index in range(0,len(decimal_list)):
+                ref_flag = self.dbg.write_memory_byte(int(decimal_address) + index , decimal_list[index])
+            return ref_flag
+        except Exception:
+            return False
+        return False
+
+    # 扫描当前EIP所指向模块处的特征码 (传入参数 ff 25 ??)
+    def scan_local_memory_one(self,search_opcode=""):
+        try:
+            if len(str(search_opcode))==0:
+                return False
+            scan_ref = self.dbg.scan_memory_one(search_opcode)
+            return int(scan_ref)
+        except Exception:
+            return False
+        return False
+
+    # 扫描当前EIP所指向模块处的特征码,以列表形式反回全部
+    def scan_local_memory_all(self,search_opcode=""):
+        try:
+            if len(search_opcode)==0:
+                return False
+            scan_ref = self.dbg.scan_memory_all(search_opcode)
+            return scan_ref
+        except Exception:
+            return False
+        return False
+
+    # 扫描特定模块中的特征码,以列表形式反汇所有
+    def scan_memory_all_from_module(self, module_name="", search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(module_name) == "" or str(search_opcode) == "":
+                return False
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                # 找到模块就开始扫描
+                if entry.get("name") == module_name:
+                    set_ref = self.dbg.set_register("rip",int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+                    scan_ref = self.dbg.scan_memory_all(str(search_opcode))
+                    return scan_ref
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 扫描特定模块中的特征码,返回第一条
+    def scan_memory_one_from_module(self, module_name="", search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(module_name) == "" or str(search_opcode) == "":
+                return False
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                # 找到模块就开始扫描
+                if entry.get("name") == module_name:
+                    set_ref = self.dbg.set_register("rip",int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+                    scan_ref = self.dbg.scan_memory_one(str(search_opcode))
+                    return scan_ref
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 扫描所有模块,找到了以列表形式返回模块名称与地址
+    def scanall_memory_module_one(self, search_opcode=""):
+        try:
+            # 参数不能为空
+            if str(search_opcode) == "":
+                return False
+
+            ref_list = []
+
+            # 循环模块
+            for entry in self.dbg.get_all_module():
+                item_dic = {"module": None, "address": None}
+                # ntdll不能搜索
+                if entry.get("name") != "ntdll.dll" and entry.get("name") != "kernel32.dll":
+
+                    # 设置到模块入口处
+                    set_ref = self.dbg.set_register("rip", int(entry.get("entry")))
+                    if set_ref == False:
+                        return False
+
+                    scan_ref = self.dbg.scan_memory_one(str(search_opcode))
+                    if scan_ref != 0:
+                        # scan_name = entry.get("name")
+                        # print("[+] 地址: {} 扫描模块: {}".format(hex(scan_ref),scan_name))
+                        item_dic["module"] = entry.get("name")
+                        item_dic["address"] = int(scan_ref)
+                        ref_list.append(item_dic)
+                    time.sleep(0.3)
+            return ref_list
+        except Exception:
+            return False
+        return False
+
+    # 获取EIP所在位置处的内存属性值
+    def get_local_protect(self):
+        try:
+            eip = self.dbg.get_register("rip")
+            return self.dbg.get_local_protect(eip)
+        except Exception:
+            return False
+        return False
+
+    # 获取指定位置处内存属性值
+    def get_memory_protect(self,decimal_address=0):
+        try:
+            return self.dbg.get_local_protect(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 设置指定位置保护属性值 ER执行/读取=32
+    def set_local_protect(self,decimal_address=0,decimal_attribute=32,decimal_size=0):
+        try:
+            return self.dbg.set_local_protect(decimal_address,decimal_attribute,decimal_size)
+        except Exception:
+            return False
+        return False
+
+    # 获取当前页面长度
+    def get_local_page_size(self):
+        try:
+            return self.dbg.get_local_page_size()
+        except Exception:
+            return False
+        return False
+
+    # 得到内存中的节表
+    def get_memory_section(self):
+        try:
+            return self.dbg.get_memory_section()
+        except Exception:
+            return False
+        return False
+
+    # 交换两个内存区域
+    def memory_xchage(self, memory_ptr_x=0, memory_ptr_y=0, bytes=0):
+        ref = False
+        try:
+            for index in range(0, bytes):
+                try:
+                    # 读取两个内存区域
+                    read_byte_x = self.dbg.read_memory_byte(int(memory_ptr_x) + index)
+                    read_byte_y = self.dbg.read_memory_byte(int(memory_ptr_y) + index)
+
+                    # 交换内存
+                    ref = self.dbg.write_memory_byte(int(memory_ptr_x) + index, read_byte_y)
+                    ref = self.dbg.write_memory_byte(int(memory_ptr_y) + index, read_byte_x)
+                except Exception:
+                    pass
+            return ref
+        except Exception:
+            return False
+        return False
+
+    # 对比两个内存区域
+    def memory_cmp(dbg,memory_ptr_x=0,memory_ptr_y=0,bytes=0):
+        cmp_memory = []
+        try:
+            for index in range(0,bytes):
+                try:
+                    item = {"addr":0, "x": 0, "y": 0}
+
+                    # 读取两个内存区域
+                    read_byte_x = dbg.read_memory_byte(int(memory_ptr_x) + index)
+                    read_byte_y = dbg.read_memory_byte(int(memory_ptr_y) + index)
+
+                    if read_byte_x != read_byte_y:
+                        item["addr"] = memory_ptr_x + index
+                        item["x"] = read_byte_x
+                        item["y"] = read_byte_y
+                        cmp_memory.append(item)
+                except Exception:
+                    pass
+            return cmp_memory
+        except Exception:
+            return False
+        return False
+
+    # 设置内存断点,传入十进制
+    def set_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.set_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 删除内存断点
+    def delete_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.delete_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 检查内存断点是否命中
+    def check_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.check_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 获取所有内存断点
+    def get_all_breakpoint(self):
+        try:
+            return self.dbg.get_all_breakpoint()
+        except Exception:
+            return False
+        return False
+
+    # 设置硬件断点 [类型 0 = r / 1 = w / 2 = e]
+    def set_hardware_breakpoint(self,decimal_address=0, decimal_type=0):
+        try:
+            return self.dbg.set_hardware_breakpoint(int(decimal_address),int(decimal_type))
+        except Exception:
+            return False
+        return False
+
+    # 删除硬件断点
+    def delete_hardware_breakpoint(self,decimal_address=0):
+        try:
+            return self.dbg.delete_hardware_breakpoint(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+# ----------------------------------------------------------------------
+# 堆栈封装
+# ----------------------------------------------------------------------
+class Stack(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    # 开辟堆,传入长度,默认1024字节
+    def create_alloc(self,decimal_size=1024):
+        try:
+            return self.dbg.create_alloc(int(decimal_size))
+        except Exception:
+            return False
+        return False
+
+    # 销毁一个远程堆
+    def delete_alloc(self,decimal_address=0):
+        try:
+            return self.dbg.delete_alloc(int(decimal_address))
+        except Exception:
+            return False
+        return False
+
+    # 将传入参数入栈
+    def push_stack(self,decimal_value=0):
+        try:
+            return self.dbg.push_stack(int(decimal_value))
+        except Exception:
+            return False
+        return False
+
+    # 从栈顶弹出元素,默认检查栈顶,可传入参数
+    def pop_stack(self):
+        try:
+            return self.dbg.pop_stack()
+        except Exception:
+            return False
+        return False
+
+    # 检查指定位置栈针中的地址,返回一个地址
+    def peek_stack(self,decimal_index=0):
+        try:
+            if decimal_index == 0:
+                return self.dbg.peek_stack()
+            else:
+                return self.dbg.peek_stack(int(decimal_index))
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 检查指定位置处前index个栈针中的地址,返回一个地址列表
+    def peek_stack_list(self,decimal_count=0):
+        try:
+            ref_list = []
+
+            for index in range(0,int(decimal_count)):
+                ref_list.append(int(self.dbg.peek_stack(index)))
+
+            return ref_list
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧顶部内存地址
+    def get_current_stack_top(self):
+        try:
+            return self.dbg.get_register("rsp")
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧底部内存地址
+    def get_current_stack_bottom(self):
+        try:
+            return self.dbg.get_register("rbp")
+        except Exception:
+            return False
+        return False
+
+    # 获取当前栈帧长度
+    def get_current_stackframe_size(self):
+        try:
+            bottom = self.dbg.get_register("rbp")
+            top = self.dbg.get_register("rsp")
+
+            if bottom != False and top != False:
+                if bottom != None and top != False:
+                    stack_size = bottom - top
+                    return stack_size
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 获取index指定的栈帧内存地址,返回列表
+    def get_stack_frame_list(self,decimal_count=0):
+        try:
+            ref_list = []
+
+            top_esp = self.dbg.get_register("rsp")
+            if top_esp != None and top_esp != False:
+                # 64位需要x8字节
+                for index in range(0,int(decimal_count * 8),8):
+                    ref_list.append(top_esp + index)
+                return ref_list
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 堆当前栈地址反汇编
+    def get_current_stack_disassemble(self):
+        try:
+            stack_address = self.dbg.peek_stack()
+            if stack_address != False or stack_address != None:
+                dasm = self.dbg.get_disasm_one_code(stack_address)
+                if dasm != False or dasm != None:
+                    return dasm
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 对当前栈帧地址反汇编
+    def get_current_stack_frame_disassemble(self):
+        try:
+            stack_address = self.dbg.get_register("rsp")
+            if stack_address != False or stack_address != None:
+                dasm = self.dbg.get_disasm_one_code(stack_address)
+                if dasm != False or dasm != None:
+                    return dasm
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址的基地址
+    def get_current_stack_base(self):
+        try:
+            stack_address = self.dbg.peek_stack()
+            return self.dbg.get_base_from_address(long_to_ulong(stack_address))
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址返回到的模块名
+    def get_current_stack_return_name(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
+
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
+
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("name")
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址返回到的模块大小
+    def get_current_stack_return_size(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
+
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
+
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("size")
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址返回到的模块入口
+    def get_current_stack_return_entry(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
+
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
+
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("entry")
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址返回到的模块基地址
+    def get_current_stack_return_base(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
+
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
+
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return mod_base
+            return False
         except Exception:
             return False
         return False
