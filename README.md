@@ -1113,11 +1113,7 @@ if __name__ == "__main__":
 
 纯脚本模块函数功能说明来源于：<a href="https://www.cnblogs.com/iBinary/p/16359195.html">iBinary</a> 的博客
 
-纯脚本模块分为四部分，其中`LyScriptModule`是针对模块操作的封装，`LyScriptMemory`是内存封装，`LyScriptDisassemble`是反汇编封装，`LyScriptOther`是不便于归类方法。
-
-<b>from LyScriptTools32 import LyScriptModule</b>
-
-|  LyScriptModule 类内函数名   | 函数作用  |
+|  Script 类内函数名   | 函数作用  |
 |  ----  | ----  |
 | party(addr) | 获取模块的模式编号, addr = 0则是用户模块,1则是系统模块 |
 | base(addr) | 获取模块基址 |
@@ -1130,11 +1126,6 @@ if __name__ == "__main__":
 | rva(addr) | 如果addr不在模块则返回0,否则返回addr所位于模块的RVA偏移 |
 | offset(addr) | 获取地址所对应的文件偏移量,如果不在模块则返回0 |
 | isexport(addr) | 判断该地址是否是从模块导出的函数 |
-
-<b>from LyScriptTools32 import LyScriptMemory</b>
-
-|  LyScriptMemory 类内函数名   | 函数作用  |
-|  ----  | ----  |
 | valid(addr) | 判断addr是否有效,有效则返回True |
 | base(addr) | 或者当前addr的基址 |
 | size(addr) | 获取当前addr内存的大小 |
@@ -1147,11 +1138,6 @@ if __name__ == "__main__":
 | ReadQword(addr) | 读取8个字节,但是只能是64位程序方可使用 |
 | ReadPtr(addr) | 从地址中读取指针(4/8字节)并返回读取的指针值 |
 | ReadPointer(addr) | 从地址中读取指针(4/8字节)并返回读取的指针值 |
-
-<b>from LyScriptTools32 import LyScriptDisassemble</b>
-
-|  LyScriptDisassemble 类内函数名   | 函数作用  |
-|  ----  | ----  |
 | len(addr) | 获取addr处的指令长度 |
 | iscond(addr) | 判断当前addr位置是否是条件指令 |
 | isbranch(addr) | 判断当前地址是否是分支指令 |
@@ -1167,11 +1153,6 @@ if __name__ == "__main__":
 | next(addr) | 获取addr的下一条地址 |
 | prev(addr) | 获取addr上一条低地址 |
 | iscallsystem(addr) | 判断当前指令是否是系统模块指令 |
-
-<b>from LyScriptTools32 import LyScriptOther</b>
-
-|  LyScriptOther 类内函数名   | 函数作用  |
-|  ----  | ----  |
 | get(index) | 获取当前函数堆栈中的第index个参数 |
 | set(index,value) | 设置的索引位置的值 |
 | firstchance() | 最后一个异常是否为第一次机会异常 |
