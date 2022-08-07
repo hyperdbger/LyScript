@@ -1266,7 +1266,7 @@ if __name__ == "__main__":
 
 ### Memory 内存类
 
-内存操作类是对内存操作函数的二次封装，新增了新方法可供用户使用。
+内存操作类是对内存操作函数与断点系列函数，二次封装而成，新增了新方法可供用户使用。
 
 | Memory 类内函数名 | 函数作用 |
 | ---- | ---- |
@@ -1299,6 +1299,27 @@ if __name__ == "__main__":
 | set_hardware_breakpoint(decimal_address=0, decimal_type=0) | 设置硬件断点 [类型 0 = r / 1 = w / 2 = e] |
 | delete_hardware_breakpoint(decimal_address=0) | 删除硬件断点 |
 
+我们以扫描当前程序中所有符合特定特征条件的代码为例说明使用方法。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import Memory
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    # 定义内存类
+    memory = Memory(dbg)
+
+    # 扫描整个模块中包含特征的地址
+    ref = memory.scanall_memory_module_one("ff 25 ??")
+    print("输出列表: {}".format(ref))
+
+    dbg.close()
+```
 <br>
 
 ### Disassemble 反汇编类
