@@ -1165,17 +1165,34 @@ if __name__ == "__main__":
 如上是一些常用的脚本命令的封装，他们的调用方式如下面代码中所示。
 ```Python
 from LyScript32 import MyDebug
+from LyScriptTools32 import DebugControl
 from LyScriptTools32 import Script
+
+# 有符号整数转无符号数
+def long_to_ulong(inter, is_64=False):
+    if is_64 == False:
+        return inter & ((1 << 32) - 1)
+    else:
+        return inter & ((1 << 64) - 1)
+
+# 无符号整数转有符号数
+def ulong_to_long(inter, is_64=False):
+    if is_64 == False:
+        return (inter & ((1 << 31) - 1)) - (inter & (1 << 31))
+    else:
+        return (inter & ((1 << 63) - 1)) - (inter & (1 << 63))
 
 if __name__ == "__main__":
     dbg = MyDebug()
     connect_flag = dbg.connect()
     print("连接状态: {}".format(connect_flag))
 
-    eip = dbg.get_register("eip")
-
-    # 定义模块类
+    # 定义堆栈类
+    control = DebugControl(dbg)
     script = Script(dbg)
+
+    # 得到EIP
+    eip = control.get_eip()
 
     size = script.size(eip)
     print("当前模块大小: {}".format(hex(size)))
@@ -1183,8 +1200,12 @@ if __name__ == "__main__":
     entry = script.entry(eip)
     print("当前模块入口: {}".format(hex(entry)))
 
+    # 得到hash值,默认有符号需要转换
     hash = script.hash(eip)
-    print("当前模块hash: {}".format(hash))
+    print("有符号hash值: {}".format(hash))
+
+    hash = long_to_ulong(script.hash(eip))
+    print("无符号hash值: {}".format(hex(hash)))
 
     dbg.close()
 ```
@@ -1192,7 +1213,7 @@ if __name__ == "__main__":
 
 ### Stack 堆栈类
 
-Stack 类二次封装stack堆栈操作命令，并增加了全新的调用函数。
+Stack 类是通过二次封装stack堆栈操作API函数得到的，并在此基础上增加了全新的调用函数。
 
 |  Stack 类内函数名   | 函数作用  |
 |  ----  | ----  |
