@@ -1355,249 +1355,250 @@ class DebugControl(object):
         self.dbg = ptr
 
     # 寄存器读写
-    def GetEAX(self):
+    def get_eax(self):
         return self.dbg.get_register("eax")
 
-    def SetEAX(self,decimal_value):
+    def set_eax(self,decimal_value):
         return self.dbg.set_register("eax",decimal_value)
 
-    def GetAX(self):
+    def get_ax(self):
         return self.dbg.get_register("ax")
 
-    def SetAX(self,decimal_value):
+    def set_ax(self,decimal_value):
         return self.dbg.set_register("ax",decimal_value)
 
-    def GetAH(self):
+    def get_ah(self):
         return self.dbg.get_register("ah")
 
-    def SetAH(self,decimal_value):
+    def set_ah(self,decimal_value):
         return self.dbg.set_register("ah",decimal_value)
 
-    def GetAL(self):
+    def get_al(self):
         return self.dbg.get_register("al")
 
-    def SetAL(self,decimal_value):
+    def set_al(self,decimal_value):
         return self.dbg.set_register("al",decimal_value)
 
-    def GetEBX(self):
+    def get_ebx(self):
         return self.dbg.get_register("ebx")
 
-    def SetEBX(self,decimal_value):
+    def set_ebx(self,decimal_value):
         return self.dbg.set_register("ebx",decimal_value)
 
-    def GetBX(self):
+    def get_bx(self):
         return self.dbg.get_register("bx")
 
-    def SetBX(self,decimal_value):
+    def set_bx(self,decimal_value):
         return self.dbg.set_register("bx",decimal_value)
 
-    def GetBH(self):
+    def get_bh(self):
         return self.dbg.get_register("bh")
 
-    def SetBH(self,decimal_value):
+    def set_bh(self,decimal_value):
         return self.dbg.set_register("bh",decimal_value)
 
-    def GetBL(self):
+    def get_bl(self):
         return self.dbg.get_register("bl")
 
-    def SetBL(self,decimal_value):
+    def set_bl(self,decimal_value):
         return self.dbg.set_register("bl",decimal_value)
 
-    def GetECX(self):
+    def get_ecx(self):
         return self.dbg.get_register("ecx")
 
-    def SetECX(self,decimal_value):
+    def set_ecx(self,decimal_value):
         return self.dbg.set_register("ecx",decimal_value)
 
-    def GetCX(self):
+    def get_cx(self):
         return self.dbg.get_register("cx")
 
-    def SetCX(self,decimal_value):
+    def set_cx(self,decimal_value):
         return self.dbg.set_register("cx",decimal_value)
 
-    def GetCH(self):
+    def get_ch(self):
         return self.dbg.get_register("ch")
 
-    def SetCH(self,decimal_value):
+    def set_ch(self,decimal_value):
         return self.dbg.set_register("ch",decimal_value)
 
-    def GetCL(self):
+    def get_cl(self):
         return self.dbg.get_register("cl")
 
-    def SetCL(self,decimal_value):
+    def set_cl(self,decimal_value):
         return self.dbg.set_register("cl",decimal_value)
 
-    def GetEDX(self):
+    def get_edx(self):
         return self.dbg.get_register("edx")
 
-    def SetEDX(self,decimal_value):
+    def set_edx(self,decimal_value):
         return self.dbg.set_register("edx",decimal_value)
 
-    def GetDX(self):
+    def get_dx(self):
         return self.dbg.get_register("dx")
 
-    def SetDX(self,decimal_value):
+    def set_dx(self,decimal_value):
         return self.dbg.set_register("dx",decimal_value)
 
-    def GetDH(self):
+    def get_dh(self):
         return self.dbg.get_register("dh")
 
-    def SetDH(self,decimal_value):
+    def set_dh(self,decimal_value):
         return self.dbg.set_register("dh",decimal_value)
 
-    def GetDL(self):
+    def get_dl(self):
         return self.dbg.get_register("dl")
 
-    def SetDL(self,decimal_value):
+    def set_dl(self,decimal_value):
         return self.dbg.set_register("dl",decimal_value)
 
-    def GetEDI(self):
+    def get_edi(self):
         return self.dbg.get_register("edi")
 
-    def SetEDI(self,decimal_value):
+    def set_edi(self,decimal_value):
         return self.dbg.set_register("edi",decimal_value)
 
-    def GetDI(self):
+    def get_di(self):
         return self.dbg.get_register("di")
 
-    def SetDI(self,decimal_value):
+    def set_di(self,decimal_value):
         return self.dbg.set_register("di",decimal_value)
 
-    def GetESI(self):
+    def get_esi(self):
         return self.dbg.get_register("esi")
 
-    def SetESI(self,decimal_value):
+    def set_esi(self,decimal_value):
         return self.dbg.set_register("esi",decimal_value)
 
-    def GetSI(self):
+    def get_si(self):
         return self.dbg.get_register("si")
 
-    def SetSI(self,decimal_value):
+    def set_si(self,decimal_value):
         return self.dbg.set_register("si",decimal_value)
 
-    def GetEBP(self):
+    def get_ebp(self):
         return self.dbg.get_register("ebp")
 
-    def SetEBP(self,decimal_value):
+    def set_ebp(self,decimal_value):
         return self.dbg.set_register("ebp",decimal_value)
 
-    def GetBP(self):
+    def get_bp(self):
         return self.dbg.get_register("bp")
 
-    def SetBP(self,decimal_value):
+    def set_bp(self,decimal_value):
         return self.dbg.set_register("bp",decimal_value)
 
-    def GetESP(self):
+    def get_esp(self):
         return self.dbg.get_register("esp")
 
-    def SetESP(self,decimal_value):
+    def set_esp(self,decimal_value):
         return self.dbg.set_register("esp",decimal_value)
 
-    def GetSP(self):
+    def get_sp(self):
         return self.dbg.get_register("sp")
 
-    def SetSP(self,decimal_value):
+    def set_sp(self,decimal_value):
         return self.dbg.set_register("sp",decimal_value)
 
-    def GetEIP(self):
+    def get_eip(self):
         return self.dbg.get_register("eip")
 
-    def SetEIP(self,decimal_value):
+    def set_eip(self,decimal_value):
         return self.dbg.set_register("eip",decimal_value)
 
-    def GetDR0(self):
+    def get_dr0(self):
         return self.dbg.get_register("dr0")
 
-    def SetDR0(self,decimal_value):
+    def set_dr0(self,decimal_value):
         return self.dbg.set_register("dr0",decimal_value)
 
-    def GetDR1(self):
+    def get_dr1(self):
         return self.dbg.get_register("dr1")
 
-    def SetDR1(self,decimal_value):
+    def set_dr1(self,decimal_value):
         return self.dbg.set_register("dr1",decimal_value)
 
-    def GetDR2(self):
+    def get_dr2(self):
         return self.dbg.get_register("dr2")
 
-    def SetDR2(self,decimal_value):
+    def set_dr2(self,decimal_value):
         return self.dbg.set_register("dr2",decimal_value)
 
-    def GetDR3(self):
+    def get_dr3(self):
         return self.dbg.get_register("dr3")
 
-    def SetDR3(self,decimal_value):
+    def set_dr3(self,decimal_value):
         return self.dbg.set_register("dr3",decimal_value)
 
-    def GetDR6(self):
+    def get_dr6(self):
         return self.dbg.get_register("dr6")
 
-    def SetDR6(self,decimal_value):
+    def set_dr6(self,decimal_value):
         return self.dbg.set_register("dr6",decimal_value)
 
-    def GetDR7(self):
+    def get_dr7(self):
         return self.dbg.get_register("dr7")
 
-    def SetDR7(self,decimal_value):
+    def set_dr7(self,decimal_value):
         return self.dbg.set_register("dr7",decimal_value)
 
     # 标志位读写
-    def GetZF(self):
+    def get_zf(self):
         return self.dbg.get_flag_register("zf")
 
-    def SetZF(self,decimal_bool):
+    def set_zf(self,decimal_bool):
         return self.dbg.set_flag_register("zf",decimal_bool)
 
-    def GetOF(self):
+    def get_of(self):
         return self.dbg.get_flag_register("of")
 
-    def SetOF(self,decimal_bool):
+    def set_of(self,decimal_bool):
         return self.dbg.set_flag_register("of",decimal_bool)
 
-    def GetCF(self):
+    def get_cf(self):
         return self.dbg.get_flag_register("cf")
 
-    def SetCF(self,decimal_bool):
+    def set_cf(self,decimal_bool):
         return self.dbg.set_flag_register("cf",decimal_bool)
 
-    def GetPF(self):
+    def get_pf(self):
         return self.dbg.get_flag_register("pf")
 
-    def SetPF(self,decimal_bool):
+    def set_pf(self,decimal_bool):
         return self.dbg.set_flag_register("pf",decimal_bool)
 
-    def GetSF(self):
+    def get_sf(self):
         return self.dbg.get_flag_register("sf")
 
-    def SetSF(self,decimal_bool):
+    def set_sf(self,decimal_bool):
         return self.dbg.set_flag_register("sf",decimal_bool)
 
-    def GetTF(self):
+    def get_tf(self):
         return self.dbg.get_flag_register("tf")
 
-    def SetTF(self,decimal_bool):
+    def set_tf(self,decimal_bool):
         return self.dbg.set_flag_register("tf",decimal_bool)
 
-    def GetAF(self):
+    def get_af(self):
         return self.dbg.get_flag_register("af")
 
-    def SetAF(self,decimal_bool):
+    def set_af(self,decimal_bool):
         return self.dbg.set_flag_register("af",decimal_bool)
 
-    def GetDF(self):
+    def get_df(self):
         return self.dbg.get_flag_register("df")
 
-    def SetDF(self,decimal_bool):
+    def set_df(self,decimal_bool):
         return self.dbg.set_flag_register("df",decimal_bool)
 
-    def GetIF(self):
+    def get_if(self):
         return self.dbg.get_flag_register("if")
 
-    def SetIF(self,decimal_bool):
+    def set_if(self,decimal_bool):
         return self.dbg.set_flag_register("if",decimal_bool)
 
+
     # 传入文件路径,载入被调试程序
-    def Script_InitDebug(self, path):
+    def script_initdebug(self, path):
         try:
             return self.dbg.run_command_exec(f"InitDebug {path}")
         except Exception:
@@ -1605,7 +1606,7 @@ class DebugControl(object):
         return False
 
     # 终止当前被调试进程
-    def Script_CloseDebug(self):
+    def script_closedebug(self):
         try:
             return self.dbg.run_command_exec("StopDebug")
         except Exception:
@@ -1613,7 +1614,7 @@ class DebugControl(object):
         return False
 
     # 让进程脱离当前调试器
-    def Script_DetachDebug(self):
+    def script_detachdebug(self):
         try:
             return self.dbg.run_command_exec("DetachDebugger")
         except Exception:
@@ -1621,7 +1622,7 @@ class DebugControl(object):
         return False
 
     # 让进程运行起来
-    def Script_RunDebug(self):
+    def script_rundebug(self):
         try:
             self.dbg.run_command_exec("run")
             return True
@@ -1630,7 +1631,7 @@ class DebugControl(object):
         return False
 
     # 释放锁并允许程序运行，忽略异常
-    def Script_ERun(self):
+    def script_erun(self):
         try:
             self.dbg.run_command_exec("erun")
             return True
@@ -1639,7 +1640,7 @@ class DebugControl(object):
         return False
 
     # 释放锁并允许程序运行，跳过异常中断
-    def Script_SeRun(self):
+    def script_serun(self):
         try:
             self.dbg.run_command_exec("serun")
             return True
@@ -1648,7 +1649,7 @@ class DebugControl(object):
         return False
 
     # 暂停调试器运行
-    def Script_Pause(self):
+    def script_pause(self):
         try:
             self.dbg.run_command_exec("pause")
             return True
@@ -1657,7 +1658,7 @@ class DebugControl(object):
         return False
 
     # 步进
-    def Script_StepInto(self):
+    def script_stepinto(self):
         try:
             self.dbg.run_command_exec("StepInto")
             return True
@@ -1666,7 +1667,7 @@ class DebugControl(object):
         return False
 
     # 步进,跳过异常
-    def Script_EStepInfo(self):
+    def script_estepinfo(self):
         try:
             self.dbg.run_command_exec("eStepInto")
             return True
@@ -1675,7 +1676,7 @@ class DebugControl(object):
         return False
 
     # 步进,跳过中断
-    def Script_SeStepInto(self):
+    def script_sestepinto(self):
         try:
             self.dbg.run_command_exec("seStepInto")
             return True
@@ -1684,7 +1685,7 @@ class DebugControl(object):
         return False
 
     # 步过到结束
-    def Script_StepOver(self):
+    def script_stepover(self):
         try:
             self.dbg.run_command_exec("StepOver")
             return True
@@ -1693,7 +1694,7 @@ class DebugControl(object):
         return False
 
     # 普通步过F8
-    def Script_StepOut(self):
+    def script_stepout(self):
         try:
             self.dbg.run_command_exec("StepOut")
             return True
@@ -1702,7 +1703,7 @@ class DebugControl(object):
         return False
 
     # 普通步过F8，忽略异常
-    def Script_eStepOut(self):
+    def script_estepout(self):
         try:
             self.dbg.run_command_exec("eStepOut")
             return True
@@ -1711,196 +1712,196 @@ class DebugControl(object):
         return False
 
     # 跳过执行
-    def Script_Skip(self):
+    def script_skip(self):
         try:
             self.dbg.run_command_exec("skip")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 递增寄存器
-    def Script_Inc(self,register):
+    def script_inc(self,register):
         try:
             self.dbg.run_command_exec(f"inc {register}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 递减寄存器
-    def Script_Dec(self,register):
+    def script_dec(self,register):
         try:
             self.dbg.run_command_exec(f"dec {register}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行add运算
-    def Script_Add(self,register,decimal_int):
+    def script_add(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"add {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行sub运算
-    def Script_Sub(self,register,decimal_int):
+    def script_sub(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sub {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行mul乘法
-    def Script_Mul(self,register,decimal_int):
+    def script_mul(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"mul {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行div除法
-    def Script_Div(self,register,decimal_int):
+    def script_div(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"div {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行and与运算
-    def Script_And(self,register,decimal_int):
+    def script_and(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"and {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行or或运算
-    def Script_Or(self,register,decimal_int):
+    def script_or(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"or {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行xor或运算
-    def Script_Xor(self,register,decimal_int):
+    def script_xor(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"xor {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器参数进行neg反转
-    def Script_Neg(self,register,decimal_int):
+    def script_neg(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"neg {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行rol循环左移
-    def Script_Rol(self,register,decimal_int):
+    def script_rol(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"rol {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行ror循环右移
-    def Script_Ror(self,register,decimal_int):
+    def script_ror(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"ror {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行shl逻辑左移
-    def Script_Shl(self,register,decimal_int):
+    def script_shl(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shl {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行shr逻辑右移
-    def Script_Shr(self,register,decimal_int):
+    def script_shr(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"shr {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行sal算数左移
-    def Script_Sal(self,register,decimal_int):
+    def script_sal(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sal {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行sar算数右移
-    def Script_Sar(self,register,decimal_int):
+    def script_sar(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"sar {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器进行not按位取反
-    def Script_Not(self,register,decimal_int):
+    def script_not(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"not {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 进行字节交换，也就是反转。
-    def Script_Bswap(self,register,decimal_int):
+    def script_bswap(self,register,decimal_int):
         try:
             self.dbg.run_command_exec(f"bswap {register},{decimal_int}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器入栈
-    def Script_Push(self,register_or_value):
+    def script_push(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"push {register_or_value}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 对寄存器弹出元素
-    def Script_Pop(self,register_or_value):
+    def script_pop(self,register_or_value):
         try:
             self.dbg.run_command_exec(f"pop {register_or_value}")
-            return True
-        except Exception:
-            return False
-        return False
+            return true
+        except exception:
+            return false
+        return false
 
     # 内置API暂停
-    def Pause(self):
+    def pause(self):
         try:
             self.dbg.set_debug("Pause")
             return True
@@ -1909,7 +1910,7 @@ class DebugControl(object):
         return False
 
     # 内置API运行
-    def Run(self):
+    def run(self):
         try:
             self.dbg.set_debug("Run")
             return True
@@ -1918,7 +1919,7 @@ class DebugControl(object):
         return False
 
     # 内置API步入
-    def StepIn(self):
+    def stepin(self):
         try:
             self.dbg.set_debug("StepIn")
             return True
@@ -1927,16 +1928,7 @@ class DebugControl(object):
         return False
 
     # 内置API步过
-    def StepOut(self):
-        try:
-            self.dbg.set_debug("StepOut")
-            return True
-        except Exception:
-            return False
-        return False
-
-    # 内置API到结束
-    def StepOut(self):
+    def stepout(self):
         try:
             self.dbg.set_debug("StepOut")
             return True
@@ -1945,7 +1937,7 @@ class DebugControl(object):
         return False
 
     # 内置API停止
-    def Stop(self):
+    def stop(self):
         try:
             self.dbg.set_debug("Stop")
             return True
@@ -1954,7 +1946,7 @@ class DebugControl(object):
         return False
 
     # 内置API等待
-    def Wait(self):
+    def wait(self):
         try:
             self.dbg.set_debug("Wait")
             return True
@@ -1963,7 +1955,7 @@ class DebugControl(object):
         return False
 
     # 判断调试器是否在调试
-    def IsDebug(self):
+    def is_debug(self):
         try:
             return self.dbg.is_debugger()
         except Exception:
@@ -1971,7 +1963,7 @@ class DebugControl(object):
         return False
 
     # 判断调试器是否在运行
-    def IsRunning(self):
+    def is_running(self):
         try:
             return self.dbg.is_running()
         except Exception:
