@@ -1192,35 +1192,60 @@ if __name__ == "__main__":
 
 ### Stack 堆栈类
 
-正在开发。。。
+Stack 类二次封装stack堆栈操作命令，并增加了全新的调用函数。
 
+|  Stack 类内函数名   | 函数作用  |
+|  ----  | ----  |
+| create_alloc(decimal_size=1024) | 开辟堆,传入长度,默认1024字节 |
+| delete_alloc(decimal_address=0) | 销毁一个远程堆 |
+| push_stack(decimal_value=0) | 将传入参数入栈 |
+| pop_stack() | 从栈顶弹出元素,默认检查栈顶,可传入参数 |
+| peek_stack(decimal_index=0) | 检查指定位置栈针中的地址,返回一个地址 |
+| peek_stack_list(decimal_count=0) | 检查指定位置处前index个栈针中的地址,返回一个地址列表 |
+| get_current_stack_top() | 获取当前栈帧顶部内存地址 |
+| get_current_stack_bottom() | 获取当前栈帧底部内存地址 |
+| get_current_stackframe_size() | 获取当前栈帧长度 |
+| get_stack_frame_list(decimal_count=0) | 获取index指定的栈帧内存地址,返回列表 |
+| get_current_stack_disassemble() | 堆当前栈地址反汇编 |
+| get_current_stack_frame_disassemble() | 对当前栈帧地址反汇编 |
+| get_current_stack_base() | 得到当前栈地址的基地址 |
+| get_current_stack_return_name() | 得到当前栈地址返回到的模块名 |
+| get_current_stack_return_size() | 得到当前栈地址返回到的模块大小 |
+| get_current_stack_return_entry() | 得到当前栈地址返回到的模块入口 |
+| get_current_stack_return_base() | 得到当前栈地址返回到的模块基地址 |
 
+我们以输出当前堆栈中模块地址为例，演示堆栈类如何使用。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import Stack
+from LyScriptTools32 import DebugControl
 
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
 
+    # 定义堆栈类
+    control = DebugControl(dbg)
+    stack = Stack(dbg)
 
+    # 得到EIP
+    eip = control.get_eip()
 
+    return_name = stack.get_current_stack_return_name()
+    print("堆栈返回到: {}".format(return_name))
 
+    return_size = stack.get_current_stack_return_size()
+    print("堆栈返回大小: {}".format(return_size))
 
+    return_entry = stack.get_current_stack_return_entry()
+    print("堆栈返回模块的入口: {}".format(hex(return_entry)))
 
+    return_base = stack.get_current_stack_return_base()
+    print("堆栈返回模块入口基地址: {}".format(hex(return_base)))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    dbg.close()
+```
 <br>
 
 ### Module 模块类
