@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time
+import os,sys,time
 from LyScript32 import MyDebug
 
 # ----------------------------------------------------------------------
@@ -625,6 +625,7 @@ class Module(object):
             return module[0].get("path")
         except Exception:
             return False
+        return False
 
     # 获得名称
     def get_local_program_name(self):
@@ -635,6 +636,7 @@ class Module(object):
             return module[0].get("name")
         except Exception:
             return False
+        return False
 
     # 得到长度
     def get_local_program_size(self):
@@ -645,6 +647,7 @@ class Module(object):
             return module[0].get("size")
         except Exception:
             return False
+        return False
 
     # 得到基地址
     def get_local_program_base(self):
@@ -655,6 +658,7 @@ class Module(object):
             return module[0].get("base")
         except Exception:
             return False
+        return False
 
     # 得到入口地址
     def get_local_program_entry(self):
@@ -665,6 +669,7 @@ class Module(object):
             return module[0].get("entry")
         except Exception:
             return False
+        return False
 
     # 验证程序是否导入了指定模块
     def check_module_imported(self, module_name):
@@ -679,6 +684,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据基地址得到模块名
     def get_name_from_module(self, address):
@@ -693,6 +699,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据模块名得到基地址
     def get_base_from_module(self, module_name):
@@ -707,6 +714,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据模块名得到模块OEP入口
     def get_oep_from_module(self, module_name):
@@ -721,6 +729,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到所有模块信息
     def get_all_module_information(self):
@@ -731,6 +740,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到特定模块基地址
     def get_module_base(self, module_name):
@@ -741,6 +751,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到当前OEP位置处模块基地址
     def get_local_base(self):
@@ -751,6 +762,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取当前OEP位置长度
     def get_local_size(self):
@@ -761,6 +773,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取当前OEP位置保护属性
     def get_local_protect(self):
@@ -771,6 +784,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 获取指定模块中指定函数内存地址
     def get_module_from_function(self, module, function):
@@ -781,6 +795,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据传入地址得到模块首地址,开头4D 5A
     def get_base_from_address(self, address):
@@ -791,6 +806,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到当前.text节基地址
     def get_base_address(self):
@@ -802,6 +818,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据名字得到模块基地址
     def get_base_from_name(self, module_name):
@@ -812,6 +829,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名得到OEP位置
     def get_oep_from_name(self, module_name):
@@ -822,6 +840,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块地址得到OEP位置
     def get_oep_from_address(self, address):
@@ -832,6 +851,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到指定模块的导入表
     def get_module_from_import(self, module_name):
@@ -842,6 +862,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 检查指定模块内是否存在特定导入函数
     def get_import_inside_function(self, module_name, function_name):
@@ -855,6 +876,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据导入函数名得到函数iat_va地址
     def get_import_iatva(self, module_name, function_name):
@@ -868,6 +890,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据导入函数名得到函数iat_rva地址
     def get_import_iatrva(self, module_name, function_name):
@@ -881,6 +904,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名,获取模块导出表
     def get_module_from_export(self, module_name):
@@ -891,6 +915,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名以及导出函数名,得到va地址
     def get_module_export_va(self, module_name, function_name):
@@ -904,6 +929,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 传入模块名以及导出函数,得到rva地址
     def get_module_export_rva(self, module_name, function_name):
@@ -917,6 +943,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 得到程序节表信息
     def get_local_section(self):
@@ -927,6 +954,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据节名称得到地址
     def get_local_address_from_section(self, section_name):
@@ -940,6 +968,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据节名称得到节大小
     def get_local_size_from_section(self, section_name):
@@ -953,6 +982,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
     # 根据地址得到节名称
     def get_local_section_from_address(self, address):
@@ -966,6 +996,7 @@ class Module(object):
             return False
         except Exception:
             return False
+        return False
 
 # ----------------------------------------------------------------------
 # 反汇编类封装
@@ -1534,7 +1565,6 @@ class DebugControl(object):
     def set_if(self,decimal_bool):
         return self.dbg.set_flag_register("if",decimal_bool)
 
-
     # 传入文件路径,载入被调试程序
     def script_initdebug(self, path):
         try:
@@ -1921,6 +1951,7 @@ class Memory(object):
             return self.dbg.read_memory_byte(int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 读取内存word字类型
     def read_memory_word(self,decimal_int=0):
@@ -1928,6 +1959,7 @@ class Memory(object):
             return self.dbg.read_memory_word(int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 读取内存dword双字类型
     def read_memory_dword(self,decimal_int=0):
@@ -1935,6 +1967,7 @@ class Memory(object):
             return self.dbg.read_memory_dword(int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 读取内存ptr指针
     def read_memory_ptr(self,decimal_int=0):
@@ -1942,6 +1975,7 @@ class Memory(object):
             return self.dbg.read_memory_ptr(int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 读取内存任意字节数,返回列表格式,错误则返回空列表
     def read_memory(self,decimal_int=0,decimal_length=0):
@@ -1953,6 +1987,7 @@ class Memory(object):
             return ref_list
         except Exception:
             return []
+        return []
 
     # 写内存byte字节类型
     def write_memory_byte(self,decimal_address=0, decimal_int=0):
@@ -1960,6 +1995,7 @@ class Memory(object):
             return self.dbg.write_memory_byte(int(decimal_address), int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 写内存word字类型
     def write_memory_word(self,decimal_address=0, decimal_int=0):
@@ -1967,6 +2003,7 @@ class Memory(object):
             return self.dbg.write_memory_word(int(decimal_address), int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 写内存dword双字类型
     def write_memory_dword(self,decimal_address=0, decimal_int=0):
@@ -1974,6 +2011,7 @@ class Memory(object):
             return self.dbg.write_memory_dword(int(decimal_address), int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 写内存ptr指针类型
     def write_memory_ptr(self,decimal_address=0, decimal_int=0):
@@ -1981,6 +2019,7 @@ class Memory(object):
             return self.dbg.write_memory_ptr(int(decimal_address), int(decimal_int))
         except Exception:
             return False
+        return False
 
     # 写内存任意字节数,传入十进制列表格式
     def write_memory(self,decimal_address=0, decimal_list = []):
@@ -1997,6 +2036,7 @@ class Memory(object):
             return ref_flag
         except Exception:
             return False
+        return False
 
     # 扫描当前EIP所指向模块处的特征码 (传入参数 ff 25 ??)
     def scan_local_memory_one(self,search_opcode=""):
@@ -2007,6 +2047,7 @@ class Memory(object):
             return int(scan_ref)
         except Exception:
             return False
+        return False
 
     # 扫描当前EIP所指向模块处的特征码,以列表形式反回全部
     def scan_local_memory_all(self,search_opcode=""):
@@ -2017,6 +2058,7 @@ class Memory(object):
             return scan_ref
         except Exception:
             return False
+        return False
 
     # 扫描特定模块中的特征码,以列表形式反汇所有
     def scan_memory_all_from_module(self, module_name="", search_opcode=""):
@@ -2032,13 +2074,12 @@ class Memory(object):
                     set_ref = self.dbg.set_register("eip",int(entry.get("entry")))
                     if set_ref == False:
                         return False
-
                     scan_ref = self.dbg.scan_memory_all(str(search_opcode))
                     return scan_ref
-
             return False
         except Exception:
             return False
+        return False
 
     # 扫描特定模块中的特征码,返回第一条
     def scan_memory_one_from_module(self, module_name="", search_opcode=""):
@@ -2054,13 +2095,12 @@ class Memory(object):
                     set_ref = self.dbg.set_register("eip",int(entry.get("entry")))
                     if set_ref == False:
                         return False
-
                     scan_ref = self.dbg.scan_memory_one(str(search_opcode))
                     return scan_ref
-
             return False
         except Exception:
             return False
+        return False
 
     # 扫描所有模块,找到了以列表形式返回模块名称与地址
     def scanall_memory_module_one(self, search_opcode=""):
@@ -2084,10 +2124,8 @@ class Memory(object):
 
                     scan_ref = self.dbg.scan_memory_one(str(search_opcode))
                     if scan_ref != 0:
-                        scan_name = entry.get("name")
-
-                        print("[+] 地址: {} 扫描模块: {}".format(hex(scan_ref),scan_name))
-
+                        # scan_name = entry.get("name")
+                        # print("[+] 地址: {} 扫描模块: {}".format(hex(scan_ref),scan_name))
                         item_dic["module"] = entry.get("name")
                         item_dic["address"] = int(scan_ref)
                         ref_list.append(item_dic)
@@ -2095,6 +2133,7 @@ class Memory(object):
             return ref_list
         except Exception:
             return False
+        return False
 
     # 获取EIP所在位置处的内存属性值
     def get_local_protect(self):
@@ -2103,6 +2142,7 @@ class Memory(object):
             return self.dbg.get_local_protect(eip)
         except Exception:
             return False
+        return False
 
     # 获取指定位置处内存属性值
     def get_memory_protect(self,decimal_address=0):
@@ -2110,6 +2150,7 @@ class Memory(object):
             return self.dbg.get_local_protect(int(decimal_address))
         except Exception:
             return False
+        return False
 
     # 设置指定位置保护属性值 ER执行/读取=32
     def set_local_protect(self,decimal_address=0,decimal_attribute=32,decimal_size=0):
@@ -2117,6 +2158,7 @@ class Memory(object):
             return self.dbg.set_local_protect(decimal_address,decimal_attribute,decimal_size)
         except Exception:
             return False
+        return False
 
     # 获取当前页面长度
     def get_local_page_size(self):
@@ -2124,44 +2166,59 @@ class Memory(object):
             return self.dbg.get_local_page_size()
         except Exception:
             return False
+        return False
 
     # 得到内存中的节表
     def get_memory_section(self):
         try:
             return self.dbg.get_memory_section()
         except Exception:
-            return
+            return False
+        return False
 
     # 交换两个内存区域
     def memory_xchage(self, memory_ptr_x=0, memory_ptr_y=0, bytes=0):
         ref = False
-        for index in range(0, bytes):
-            # 读取两个内存区域
-            read_byte_x = self.dbg.read_memory_byte(int(memory_ptr_x) + index)
-            read_byte_y = self.dbg.read_memory_byte(int(memory_ptr_y) + index)
+        try:
+            for index in range(0, bytes):
+                try:
+                    # 读取两个内存区域
+                    read_byte_x = self.dbg.read_memory_byte(int(memory_ptr_x) + index)
+                    read_byte_y = self.dbg.read_memory_byte(int(memory_ptr_y) + index)
 
-            # 交换内存
-            ref = self.dbg.write_memory_byte(int(memory_ptr_x) + index, read_byte_y)
-            ref = self.dbg.write_memory_byte(int(memory_ptr_y) + index, read_byte_x)
-        return ref
+                    # 交换内存
+                    ref = self.dbg.write_memory_byte(int(memory_ptr_x) + index, read_byte_y)
+                    ref = self.dbg.write_memory_byte(int(memory_ptr_y) + index, read_byte_x)
+                except Exception:
+                    pass
+            return ref
+        except Exception:
+            return False
+        return False
 
     # 对比两个内存区域
     def memory_cmp(dbg,memory_ptr_x=0,memory_ptr_y=0,bytes=0):
         cmp_memory = []
-        for index in range(0,bytes):
+        try:
+            for index in range(0,bytes):
+                try:
+                    item = {"addr":0, "x": 0, "y": 0}
 
-            item = {"addr":0, "x": 0, "y": 0}
+                    # 读取两个内存区域
+                    read_byte_x = dbg.read_memory_byte(int(memory_ptr_x) + index)
+                    read_byte_y = dbg.read_memory_byte(int(memory_ptr_y) + index)
 
-            # 读取两个内存区域
-            read_byte_x = dbg.read_memory_byte(int(memory_ptr_x) + index)
-            read_byte_y = dbg.read_memory_byte(int(memory_ptr_y) + index)
-
-            if read_byte_x != read_byte_y:
-                item["addr"] = memory_ptr_x + index
-                item["x"] = read_byte_x
-                item["y"] = read_byte_y
-                cmp_memory.append(item)
-        return cmp_memory
+                    if read_byte_x != read_byte_y:
+                        item["addr"] = memory_ptr_x + index
+                        item["x"] = read_byte_x
+                        item["y"] = read_byte_y
+                        cmp_memory.append(item)
+                except Exception:
+                    pass
+            return cmp_memory
+        except Exception:
+            return False
+        return False
 
     # 设置内存断点,传入十进制
     def set_breakpoint(self,decimal_address=0):
@@ -2169,6 +2226,7 @@ class Memory(object):
             return self.dbg.set_breakpoint(int(decimal_address))
         except Exception:
             return False
+        return False
 
     # 删除内存断点
     def delete_breakpoint(self,decimal_address=0):
@@ -2176,6 +2234,7 @@ class Memory(object):
             return self.dbg.delete_breakpoint(int(decimal_address))
         except Exception:
             return False
+        return False
 
     # 检查内存断点是否命中
     def check_breakpoint(self,decimal_address=0):
@@ -2183,6 +2242,7 @@ class Memory(object):
             return self.dbg.check_breakpoint(int(decimal_address))
         except Exception:
             return False
+        return False
 
     # 获取所有内存断点
     def get_all_breakpoint(self):
@@ -2190,6 +2250,7 @@ class Memory(object):
             return self.dbg.get_all_breakpoint()
         except Exception:
             return False
+        return False
 
     # 设置硬件断点 [类型 0 = r / 1 = w / 2 = e]
     def set_hardware_breakpoint(self,decimal_address=0, decimal_type=0):
@@ -2197,6 +2258,7 @@ class Memory(object):
             return self.dbg.set_hardware_breakpoint(int(decimal_address),int(decimal_type))
         except Exception:
             return False
+        return False
 
     # 删除硬件断点
     def delete_hardware_breakpoint(self,decimal_address=0):
@@ -2204,3 +2266,26 @@ class Memory(object):
             return self.dbg.delete_hardware_breakpoint(int(decimal_address))
         except Exception:
             return False
+        return False
+
+# ----------------------------------------------------------------------
+# 堆栈封装
+# ----------------------------------------------------------------------
+class Stack(object):
+    def __init__(self, ptr):
+        self.dbg = ptr
+
+    def test(self):
+        print("ok")
+
+
+
+
+
+
+
+
+
+
+
+
