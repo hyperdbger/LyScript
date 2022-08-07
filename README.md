@@ -754,7 +754,7 @@ if __name__ == "__main__":
 
 ### 堆栈系列函数
 
-**create_alloc() 函数：** 函数`CreateRemoteAlloc()`可在远程开辟一段堆空间，成功返回内存首地址。
+**create_alloc() 函数：** 函数`create_alloc()`可在远程开辟一段堆空间，成功返回内存首地址。
 
  - 参数1：开辟的堆长度（十进制）
 
