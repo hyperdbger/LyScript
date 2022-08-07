@@ -25,7 +25,7 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
  - 安装标准包：`pip install LyScript32` 或者 `pip install LyScript64`
  - 安装扩展包：`pip install LyScriptTools32` 或者 `pip install LyScriptTools64`
 
-其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定目录下。
+其次您需要手动下载对应x64dbg版本的驱动文件，并放入指定的`plugins`目录下。
 
  - 插件下载：<a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript32.zip">LyScript32 (32位插件)</a> 或者 <a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript64.zip">LyScript64 (64位插件)</a>
 
@@ -37,7 +37,7 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
 
 ![image](https://user-images.githubusercontent.com/52789403/161062658-0452fe0c-3e11-4df4-a83b-b026f74884d0.png)
 
-如果需要远程调试，则只需要在初始化`MyDebug()`类是传入对端IP地址即可，如果不填写参数则默认使用`127.0.0.1`地址，请确保对端放行了`6589`端口，否则无法连接。
+如果需要远程调试，则只需要在初始化`MyDebug()`类时传入对端IP地址即可，如果不填写参数则默认使用`127.0.0.1`地址，请确保对端放行了`6589`端口，否则无法连接。
 
 ![image](https://user-images.githubusercontent.com/52789403/161062393-df04aabb-2d70-4434-80b9-a46974bccf8a.png)
 
