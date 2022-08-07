@@ -606,7 +606,6 @@ if __name__ == "__main__":
     dbg = MyDebug()
     connect_flag = dbg.connect()
 
-
     eip = dbg.get_register("eip")
 
     ref = dbg.read_memory_byte(eip)
@@ -1211,7 +1210,7 @@ if __name__ == "__main__":
 
 ### Module 模块类
 
-Module模块类的封装，提供了针对模块参数的精细化控制，对导入表，导出表，节表等具有更好的过滤效果。
+Module 类主要封装自Module系列函数，在提供了标准函数的同时还提供了更多。
 
 |  Module 类内函数名   | 函数作用  |
 |  ----  | ----  |
@@ -1322,7 +1321,7 @@ if __name__ == "__main__":
 
 ### Disassemble 反汇编类
 
-Disassemble 反汇编类内的方法的实现都继承于LyScript是对该模块的二次封装，增加了一些新的API函数的让用户可以有更多选择，需要注意的是如下API定义中，地址后面带有0的说明其可以省略参数，缺省值默认取当前EIP位置。
+Disassemble 反汇编类增加了新的API函数的让用户有更多选择，需要注意API定义中，地址后面带有0的说明其可以省略参数，缺省值默认取当前EIP位置。
 
 |  Disassemble 类内函数名   | 函数作用  |
 |  ----  | ----  |
@@ -1375,58 +1374,56 @@ if __name__ == "__main__":
 
 ### DebugControl 调试控制类
 
-DebugControl 调试控制类主要用于控制x64dbg的行为，例如获取或设置寄存器组，执行单步命令等，此类内的方法也是最常用的。
+DebugControl 调试控制类，封装自寄存器系列函数。
 
-DebugControl 说明文档整理自：<a href="https://github.com/Softnessi">Softnessi</a>
-
-| DebugControl 类内函数名   | 函数作用 |
+| debugcontrol 类内函数名   | 函数作用 |
 |  ----  | ----  |
-| GetEAX() | 获取通用寄存器系列 |
-| SetEAX(decimal_value) | 设置特定寄存器中的值(十进制) |
-| GetZF() | 获取标志寄存器系列 |
-| SetZF(decimal_bool) | 设置标志寄存器的值(布尔型) |
-| Script_InitDebug(path) | 传入文件路径,载入被调试程序 |
-| Script_CloseDebug() | 终止当前被调试进程 |
-| Script_DetachDebug() | 让进程脱离当前调试器 |
-| Script_RunDebug() | 让进程运行起来 |
-| Script_ERun() | 释放锁并允许程序运行，忽略异常 |
-| Script_SeRun() | 释放锁并允许程序运行，跳过异常中断 |
-| Script_Pause() | 暂停调试器运行 |
-| Script_StepInto() | 步进 |
-| Script_EStepInfo() | 步进,跳过异常 |
-| Script_SeStepInto() | 步进,跳过中断 |
-| Script_StepOver() | 步过到结束 |
-| Script_StepOut() | 普通步过F8 |
-| Script_Skip() | 跳过执行 |
-| Script_Inc(register) | 递增寄存器 |
-| Script_Dec(register) | 递减寄存器 |
-| Script_Add(register,decimal_int) | 对寄存器进行add运算 |
-| Script_Sub(register,decimal_int) | 对寄存器进行sub运算 |
-| Script_Mul(register,decimal_int) | 对寄存器进行mul乘法 |
-| Script_Div(register,decimal_int) | 对寄存器进行div除法 |
-| Script_And(register,decimal_int) | 对寄存器进行and与运算 |
-| Script_Or(register,decimal_int) | 对寄存器进行or或运算 |
-| Script_Xor(register,decimal_int) | 对寄存器进行xor或运算 |
-| Script_Neg(register,decimal_int) | 对寄存器参数进行neg反转 |
-| Script_Rol(register,decimal_int) | 对寄存器进行rol循环左移 |
-| Script_Ror(register,decimal_int) | 对寄存器进行ror循环右移 |
-| Script_Shl(register,decimal_int) | 对寄存器进行shl逻辑左移 |
-| Script_Shr(register,decimal_int) | 对寄存器进行shr逻辑右移 |
-| Script_Sal(register,decimal_int) | 对寄存器进行sal算数左移 |
-| Script_Sar(register,decimal_int) | 对寄存器进行sar算数右移 |
-| Script_Not(register,decimal_int) | 对寄存器进行not按位取反 |
-| Script_Bswap(register,decimal_int) | 进行字节交换也就是反转 |
-| Script_Push(register_or_value) | 对寄存器入栈 |
-| Script_Pop(register_or_value) | 对寄存器弹出元素 |
-| Pause() | 内置API暂停 |
-| Run() | 内置API运行 |
-| StepIn() | 内置API步入 |
-| StepOut() | 内置API步过 |
-| StepOut() | 内置API到结束 |
-| Stop() | 内置API停止 |
-| Wait() | 内置API等待 |
-| IsDebug() | 内置API判断调试器是否在调试 |
-| IsRunning() | 内置API判断调试器是否在运行 |
+| get_eax() | 获取通用寄存器系列 |
+| set_eax(decimal_value) | 设置特定寄存器中的值(十进制) |
+| get_zf() | 获取标志寄存器系列 |
+| set_zf(decimal_bool) | 设置标志寄存器的值(布尔型) |
+| script_initdebug(path) | 传入文件路径,载入被调试程序 |
+| script_closedebug() | 终止当前被调试进程 |
+| script_detachdebug() | 让进程脱离当前调试器 |
+| script_rundebug() | 让进程运行起来 |
+| script_erun() | 释放锁并允许程序运行，忽略异常 |
+| script_serun() | 释放锁并允许程序运行，跳过异常中断 |
+| script_pause() | 暂停调试器运行 |
+| script_stepinto() | 步进 |
+| script_estepinfo() | 步进,跳过异常 |
+| script_sestepinto() | 步进,跳过中断 |
+| script_stepover() | 步过到结束 |
+| script_stepout() | 普通步过f8 |
+| script_skip() | 跳过执行 |
+| script_inc(register) | 递增寄存器 |
+| script_dec(register) | 递减寄存器 |
+| script_add(register,decimal_int) | 对寄存器进行add运算 |
+| script_sub(register,decimal_int) | 对寄存器进行sub运算 |
+| script_mul(register,decimal_int) | 对寄存器进行mul乘法 |
+| script_div(register,decimal_int) | 对寄存器进行div除法 |
+| script_and(register,decimal_int) | 对寄存器进行and与运算 |
+| script_or(register,decimal_int) | 对寄存器进行or或运算 |
+| script_xor(register,decimal_int) | 对寄存器进行xor或运算 |
+| script_neg(register,decimal_int) | 对寄存器参数进行neg反转 |
+| script_rol(register,decimal_int) | 对寄存器进行rol循环左移 |
+| script_ror(register,decimal_int) | 对寄存器进行ror循环右移 |
+| script_shl(register,decimal_int) | 对寄存器进行shl逻辑左移 |
+| script_shr(register,decimal_int) | 对寄存器进行shr逻辑右移 |
+| script_sal(register,decimal_int) | 对寄存器进行sal算数左移 |
+| script_sar(register,decimal_int) | 对寄存器进行sar算数右移 |
+| script_not(register,decimal_int) | 对寄存器进行not按位取反 |
+| script_bswap(register,decimal_int) | 进行字节交换也就是反转 |
+| script_push(register_or_value) | 对寄存器入栈 |
+| script_pop(register_or_value) | 对寄存器弹出元素 |
+| pause() | 内置api暂停 |
+| run() | 内置api运行 |
+| stepin() | 内置api步入 |
+| stepout() | 内置api步过 |
+| stepout() | 内置api到结束 |
+| stop() | 内置api停止 |
+| wait() | 内置api等待 |
+| is_debug() | 内置api判断调试器是否在调试 |
+| is_running() | 内置api判断调试器是否在运行 |
 
 自动控制类主要功能如上表示，其中Script开头的API是调用的脚本命令实现，其他的是API实现，我们以批量自动载入程序为例，演示该类内函数是如何使用的。
 ```Python
