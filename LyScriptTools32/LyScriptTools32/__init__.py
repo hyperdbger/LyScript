@@ -2,6 +2,20 @@
 import os,sys,time
 from LyScript32 import MyDebug
 
+# 有符号整数转无符号数
+def long_to_ulong(inter, is_64=False):
+    if is_64 == False:
+        return inter & ((1 << 32) - 1)
+    else:
+        return inter & ((1 << 64) - 1)
+
+# 无符号整数转有符号数
+def ulong_to_long(inter, is_64=False):
+    if is_64 == False:
+        return (inter & ((1 << 31) - 1)) - (inter & (1 << 31))
+    else:
+        return (inter & ((1 << 63) - 1)) - (inter & (1 << 63))
+
 # ----------------------------------------------------------------------
 # 纯脚本封装
 # ----------------------------------------------------------------------
@@ -2333,7 +2347,7 @@ class Stack(object):
         return False
 
     # 获取当前栈帧顶部内存地址
-    def get_stack_top(self):
+    def get_current_stack_top(self):
         try:
             return self.dbg.get_register("esp")
         except Exception:
@@ -2341,7 +2355,7 @@ class Stack(object):
         return False
 
     # 获取当前栈帧底部内存地址
-    def get_stack_bottom(self):
+    def get_current_stack_bottom(self):
         try:
             return self.dbg.get_register("ebp")
         except Exception:
@@ -2349,7 +2363,7 @@ class Stack(object):
         return False
 
     # 获取当前栈帧长度
-    def get_stackframe_size(self):
+    def get_current_stackframe_size(self):
         try:
             bottom = self.dbg.get_register("ebp")
             top = self.dbg.get_register("esp")
@@ -2378,6 +2392,48 @@ class Stack(object):
         except Exception:
             return False
         return False
+
+    # 堆当前栈地址反汇编
+    def get_current_stack_disassemble(self):
+        try:
+            stack_address = self.dbg.peek_stack()
+            if stack_address != False or stack_address != None:
+                dasm = self.dbg.get_disasm_one_code(stack_address)
+                if dasm != False or dasm != None:
+                    return dasm
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 对当前栈帧地址反汇编
+    def get_current_stack_frame_disassemble(self):
+        try:
+            stack_address = self.dbg.get_register("esp")
+            if stack_address != False or stack_address != None:
+                dasm = self.dbg.get_disasm_one_code(stack_address)
+                if dasm != False or dasm != None:
+                    return dasm
+                return False
+            return False
+        except Exception:
+            return False
+        return False
+
+    # 得到当前栈地址的基地址
+    def get_current_stack_base(self):
+        try:
+            stack_address = self.dbg.peek_stack()
+            return self.dbg.get_base_from_address(long_to_ulong(stack_address))
+        except Exception:
+            return False
+        return False
+
+
+
+
+
 
 
 
