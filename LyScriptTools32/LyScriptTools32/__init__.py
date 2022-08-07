@@ -2430,21 +2430,86 @@ class Stack(object):
             return False
         return False
 
+    # 得到当前栈地址返回到的模块名
+    def get_current_stack_return_name(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
 
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
 
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("name")
+            return False
+        except Exception:
+            return False
+        return False
 
+    # 得到当前栈地址返回到的模块大小
+    def get_current_stack_return_size(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
 
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
 
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("size")
+            return False
+        except Exception:
+            return False
+        return False
 
+    # 得到当前栈地址返回到的模块入口
+    def get_current_stack_return_entry(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
 
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
 
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return x.get("entry")
+            return False
+        except Exception:
+            return False
+        return False
 
+    # 得到当前栈地址返回到的模块基地址
+    def get_current_stack_return_base(self):
+        try:
+            module_list = self.dbg.get_all_module()
+            if module_list == False or module_list == None or module_list == []:
+                return False
 
+            stack_address = self.dbg.peek_stack()
+            if stack_address <= 0:
+                return False
 
-
-
-
-
-
-
-
+            mod_base = self.dbg.get_base_from_address(long_to_ulong(stack_address))
+            if mod_base>0:
+                for x in module_list:
+                    if mod_base == x.get("base"):
+                        return mod_base
+            return False
+        except Exception:
+            return False
+        return False
