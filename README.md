@@ -1614,12 +1614,124 @@ LyScript 1.0.11 插件在原有函数基础上封装实现了更多有用的功�
 | location_label_at(label) | 定位到标签,返回内存地址 |
 | clear_label() | 清空所有标签 |
 
+新版本的更新增加和许多新函数，其中比较有代表性的要属下面这些用法。
 
+**寄存器增加:** 无论32位还是64位，都可以直接获取`"CIP","CSP","CAX","CBX","CCX","CDX","CDI","CSI","CBP","CFLAGS"`这些寄存器的参数。
+```Python
+from LyScript32 import MyDebug
 
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
 
+    eip = dbg.get_register("eip")
+    print("eip寄存器 = {}".format(hex(eip)))
 
+    csp = dbg.get_register("csp")
+    print("csp寄存器 = {}".format(hex(csp)))
 
+    cflags = dbg.get_register("cflags")
+    print("cflags寄存器 = {}".format(hex(cflags)))
 
+    dbg.close()
+```
+
+**内置参数返回功能:** 在老版本中命令执行无法携带参数传出，新版本直接在插件内部实现了参数传递，目前只支持整数。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    eip = dbg.get_register("eip")
+    print("eip寄存器 = {}".format(hex(eip)))
+
+    exec_ref = dbg.run_command_exe_ref("mod.base(eip)")
+    print("base基地址 = {}".format(hex(exec_ref)))
+    
+    dbg.close()
+```
+
+**反汇编携带更多参数:** 反汇编`disasm_fast_at`命令可以携带更多参数，可供用户自行判断是否使用本条指令。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    eip = dbg.get_register("eip")
+    print("eip寄存器 = {}".format(hex(eip)))
+
+    dic_ref = dbg.disasm_fast_at(eip)
+    print("返回字典: {}".format(dic_ref))
+
+    dbg.close()
+```
+
+**脚本载入执行功能:** 增加了脚本的载入与执行功能，用户可以载入已有的x64dbg原生脚本并通过命令执行。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    # 加载x64dbg脚本
+    flag = dbg.script_loader("d://test.txt")
+    
+    # 运行脚本
+    flag = dbg.script_run()
+    
+    # 指定行号运行
+    flag = dbg.script_set_ip(1)
+    
+    # 关闭脚本
+    flag = dbg.script_unloader()
+    
+    dbg.close()
+```
+
+**弹窗提醒功能:** 此功能提供了三种对话框，一种可输入文本，一种判断是否选中，另一种则是普通弹窗。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    # 弹出输入框
+    flag = dbg.input_string_box("请输入反汇编入口地址?")
+    print("用户的输入: {}".format(flag))
+
+    # 弹出是否框
+    flag = dbg.message_box_yes_no("是否继续执行脱壳操作?")
+    if flag == True:
+        print("脱壳")
+    else:
+        print("退出")
+
+    # 提示框
+    flag = dbg.message_box("这是第 {} 次,异常了".format(1))
+    print("状态: {}".format(flag))
+
+    dbg.close()
+```
+
+**自定义获取节表:** 用户可传入当前载入的模块名，即可直接取出指定模块的节表信息。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    ref = dbg.get_section_from_module_name("user32.dll")
+    print(ref)
+
+    dbg.close()
+```
 <br>
 
 ### 官方API例程
