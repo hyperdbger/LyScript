@@ -1596,6 +1596,22 @@ LyScript 1.0.11 插件在原有函数基础上封装实现了更多有用的功�
 | clear_log() | 清空日志 |
 | switch_cpu() | 切换到CPU窗口 |
 | update_all_view() | 刷新所有视图参数 |
+| size_from_address(eip) | 传入基地址得到模块占用总大小 |
+| size_from_name(module_name) | 传入模块名称得到模块占用总大小 |
+| section_count_from_name(module_name) | 传入模块名称得到模块有多少个节区 |
+| section_count_from_address(eip) | 传入模块基址得到模块有多少个节区 |
+| path_from_name(module_name) | 传入模块名称得到模块路径 |
+| path_from_address(eip) | 传入模块地址得到模块路径 |
+| name_from_address(eip) | 传入模块地址得到模块名称 |
+| get_local_module_size() | 获取当前程序的大小 |
+| get_local_module_section_Count() | 获取自身节数量 |
+| get_local_module_path() | 获取被调试程序完整路径 |
+| get_local_module_name() | 获取自身模块名 |
+| get_local_module_entry() | 获取自身模块入口 |
+| get_local_module_base() | 获取自身模块基地址 |
+| set_label_at(address,label) | 在特定位置设置标签 |
+| location_label_at(label) | 定位到标签,返回内存地址 |
+| clear_label() | 清空所有标签 |
 
 
 
