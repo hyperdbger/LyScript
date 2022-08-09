@@ -1557,6 +1557,47 @@ if __name__ == "__main__":
 
 
 
+|  LyScript 1.0.10 新增函数   | 函数作用  |
+|  ----  | ----  |
+| run_command_exe_ref(command) | 执行脚本命令(返回整数) |
+| set_status_bar_message(message) | 在状态栏上面输出字符串提示 |
+| get_window_handle() | 取出自身进程模块句柄 |
+| get_disassembly(address) | 反汇编一条指令(新增) |
+| assemble_at(address,assemble) | 传入汇编指令,直接写出到内存 |
+| disasm_fast_at(address) | 反汇编一条指令,返回完整字典 |
+| get_module_at(eip) | 获取EIP所在位置处模块名 |
+| get_xref_count_at(eip) | 获取EIP位置处交叉引用计数 |
+| get_xref_type_at(eip) | 得到EIP位置处交叉引用类型 XREFTYPE |
+| get_bpx_type_at(address) | 得到指定地址处BP断点类型 BPXTYPE |
+| get_function_type_at(eip) | 获得EIP位置处函数类型 FUNCTYPE |
+| is_bp_disable(address) | 验证指定地址处BP断点是否被禁用 |
+| is_jmp_going_to_execute(eip) | 是否跳转到可执行内存块 |
+| is_run_locked() | 检查调试器是否被锁定(暂停) |
+| mem_find_base_addr(eip) | 返回EIP位置处内存模块基地址和大小(字典) |
+| mem_get_page_size(eip) | 得到EIP位置处内存页面长度 |
+| mem_is_valid(eip) | 验证EIP位置处内存是否可读 |
+| dbg.script_loader(file_path) | 从文件中加载x64dbg内置脚本 |
+| script_unloader() | 关闭打开的脚本 |
+| script_run() | 运行x64dbg内置脚本 |
+| script_set_ip(index) | 脚本指定运行第index条 |
+| open_debug(file_path) | 打开硬盘中的被调试程序(打开功能) |
+| close_debug() | 关闭被调试进程 |
+| detach_debug() | 进程脱离调试器 |
+| input_string_box(message) | 弹出输入框,用户输入后得到输入值 |
+| message_box_yes_no(title) | 弹出是否按钮选择框 |
+| message_box(title) | 弹出信息框,用于提示用户 |
+| get_branch_destination(address=0) | 获取call或者是跳转指令的跳转地址|
+| set_argument_brackets(start_address=0,end_address=0) | 在注释处增加括号 |
+| del_argument_brackets(start_address=0) | 删除注释处的括号 |
+| set_function_brackets(start_address=0,end_address=0) | 在机器码位置增加注释 |
+| del_function_brackets(start_address=0) | 删除机器码位置处的注释 |
+| set_loop_brackets(start_address=0,end_address=0) | 在反汇编位置添加注释 |
+| del_loop_brackets(depth=1, start_address=0) | 删除反汇编位置处的注释 |
+| GuiLogClear() | 清空日志 |
+| GuiShowCpu() | 切换到CPU窗口 |
+| GuiUpdateAllViews() | 刷新所有视图参数 |
+
+
 
 
 
