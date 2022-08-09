@@ -1576,7 +1576,7 @@ LyScript 1.0.11 插件在原有函数基础上封装实现了更多有用的功�
 | mem_find_base_addr(eip) | 返回EIP位置处内存模块基地址和大小(字典) |
 | mem_get_page_size(eip) | 得到EIP位置处内存页面长度 |
 | mem_is_valid(eip) | 验证EIP位置处内存是否可读 |
-| dbg.script_loader(file_path) | 从文件中加载x64dbg内置脚本 |
+| script_loader(file_path) | 从文件中加载x64dbg内置脚本 |
 | script_unloader() | 关闭打开的脚本 |
 | script_run() | 运行x64dbg内置脚本 |
 | script_set_ip(index) | 脚本指定运行第index条 |
