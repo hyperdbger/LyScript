@@ -1737,6 +1737,24 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**打开关闭程序:** 本次更新还增加了打开关闭调试功能，用户可以传入文件路径让调试器打开，或者关闭指定程序。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == '__main__':
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 打开被调试进程
+    ref = dbg.open_debug("d://lyshark.exe")
+
+    # 关闭被调试进程
+    ref = dbg.close_debug()
+
+    dbg.close()
+```
+
 <br>
 
 ### 官方API例程
