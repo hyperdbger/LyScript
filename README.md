@@ -1557,6 +1557,11 @@ if __name__ == "__main__":
 
 LyScript 1.0.11 插件在原有函数基础上封装实现了更多有用的功能，并解决了旧版本插件中x64无法反汇编的问题，新版本插件与旧版本保持兼容，原函数不发生变化，您依然可以使用，如果需要使用新版本中的新函数，请安装以下新版本插件，并更新您的LyScript标准包。
 
+ - 安装标准包：`pip install LyScript32==1.0.11` 或者 `pip install LyScript64==1.0.11`
+ - 插件下载：<a href="https://github.com/lyshark/LyScript/blob/master/plugins/LyScript32-1.0.11.zip">LyScript32 1.0.11 (32位插件)</a> 或者 <a href="https://github.com/lyshark/LyScript/blob/master/plugins/LyScript64-1.0.11.zip">LyScript64 1.0.11 (64位插件)</a>
+
+<br>
+
 |  LyScript 1.0.11 新增函数   | 函数作用  |
 |  ----  | ----  |
 | run_command_exe_ref(command) | 执行脚本命令(返回整数) |
