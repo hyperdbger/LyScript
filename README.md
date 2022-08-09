@@ -1593,9 +1593,9 @@ LyScript 1.0.10 插件在原有函数基础上封装实现了更多有用的功�
 | del_function_brackets(start_address=0) | 删除机器码位置处的注释 |
 | set_loop_brackets(start_address=0,end_address=0) | 在反汇编位置添加注释 |
 | del_loop_brackets(depth=1, start_address=0) | 删除反汇编位置处的注释 |
-| GuiLogClear() | 清空日志 |
-| GuiShowCpu() | 切换到CPU窗口 |
-| GuiUpdateAllViews() | 刷新所有视图参数 |
+| clear_log() | 清空日志 |
+| switch_cpu() | 切换到CPU窗口 |
+| update_all_view() | 刷新所有视图参数 |
 
 
 
