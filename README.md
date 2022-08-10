@@ -1778,7 +1778,188 @@ if __name__ == '__main__':
 
 ### LyScriptUtils 转换工具包
 
-此类工具包内提供了各类数据集的转换。更新中。。
+该工具包其目的是辅助LyScript插件实现进制与字符串或字节序列的快速转换，更好的协助反汇编任务的完成。
+
+实现对特定字节切割操作.
+```Python
+from LyScriptUtils import *
+
+# 切割32位
+ref = split_int32(0x12345678)
+print(ref)
+
+# 切割64位
+ref = split_int64(0x0FFFFFF12345678)
+print(ref)
+
+# 自定义切割字节数
+ref = split_int_bits(16,0x1234)
+print(ref)
+
+# [18, 52, 86, 120]
+# [0, 255, 255, 255, 18, 52, 86, 120]
+# [18, 52]
+```
+
+字符串转int系列
+```Python
+from LyScriptUtils import *
+
+ref = str2int16("\x12\x34\x56")
+print(hex(ref))
+
+ref = str2int32("\x12\x34\x56\x78")
+print(hex(ref))
+
+ref = str2int64("\x12\x34\x56\x78\x12\x34\x56\x78")
+print(hex(ref))
+
+ref = nstr2halfword("\x12\x34")
+print(hex(ref))
+
+ref = str2int_bits(128,"\x12\x34\x56\x78\x12\34\x56\x78\x12\x34\x56\x78\x12\34\x56\x78")
+print(hex(ref))
+
+0x1234
+0x12345678
+0x121c5678121c5678
+0x1234
+0x12345678121c567812345678121c5678
+```
+
+字符串转换并对调顺序
+```Python
+from LyScriptUtils import *
+
+ref = str2int16_swapped("\x12\x34\x56")
+print(hex(ref))
+
+ref = str2int32_swapped("\x12\x34\x56\x12\x34\x56")
+print(hex(ref))
+
+ref = str2int64_swapped("\x12\x34\x56\x12\x34\x56\x12\x34\x56\x12\x34\x56")
+print(hex(ref))
+
+ref = str2int_bits_swapped(16,"\x12\x34")
+print(hex(ref))
+
+0x3412
+0x12563412
+0x3412563412563412
+0x3412
+```
+
+字符串转换小端序与大端序
+```Python
+from LyScriptUtils import *
+
+# 小端序
+ref = str2littleendian("\x12\x34\x56\x78")
+print(hex(ref))
+
+ref = intel_str2int("\x12\x34\x56\x78")
+print(hex(ref))
+
+ref = intel_str2int("\x12\x34\x56\x78")
+print(hex(ref))
+
+0x78563412
+0x78563412
+0x78563412
+
+# 大端序
+ref = str2int32("\x12\x34\x56\x78")
+print(hex(ref))
+
+ref = str2bigendian("\x12\x34\x56\x78")
+print(hex(ref))
+
+0x12345678
+0x12345678
+```
+
+整数转换为字节序列
+```Python
+from LyScriptUtils import *
+
+ref = int2str16(0x1234)
+if ref == '\x12\x34':
+    print("int2str16")
+
+ref = halfword2bstr(0x1234)
+if ref == '\x12\x34':
+    print("int2str16")
+
+ref = short2bigstr(0x1234)
+if ref == '\x12\x34':
+    print("int2str16")
+
+ref = big_short(0x1234)
+if ref == '\x12\x34':
+    print("int2str16")
+```
+整数转为字节序列，并反转
+```Python
+from LyScriptUtils import *
+
+ref = int2str16_swapped(0x1234)
+if ref == '\x34\x12':
+    print("int2str16_swapped")
+
+ref = halfword2istr(0x1234)
+if ref == '\x34\x12':
+    print("halfword2istr")
+
+ref = intel_short(0x1234)
+if ref == '\x34\x12':
+    print("intel_short")
+
+ref = intel_short(0x123445678)
+if ref == '\x78\x56':
+    print("intel_short")
+```
+
+int32位转str32位字节序列
+```Python
+from LyScriptUtils import *
+
+ref = int2str32(0x12345678)
+if ref == '\x12\x34\x56\x78':
+    print("int2str32")
+
+ref = big_order(0x12345678)
+if ref == '\x12\x34\x56\x78':
+    print("big_order")
+```
+int32位转str32位字节序列并反转
+```Python
+ref = int2str32_swapped(0x12345678)
+if ref == '\x78\x56\x34\x12':
+    print("int2str32_swapped")
+
+ref = intel_order(0x12345678)
+if ref == '\x78\x56\x34\x12':
+    print("intel_order")
+```
+二进制与字符串互相转换
+```Python
+from LyScriptUtils import *
+
+ref = print_binary(0x12345678)
+if ref == '00010010001101000101011001111000':
+    print(ref)
+
+ref = binary_string_short(0x12345678)
+if ref == '0101011001111000':
+    print(ref)
+	
+00010010001101000101011001111000
+0101011001111000
+```
+
+
+
+
 
 
 
