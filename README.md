@@ -2075,6 +2075,43 @@ if __name__ == '__main__':
         print("64位反转")
 ```
 
+对一个字符串执行十六进制格式化输出
+```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
+if __name__ == '__main__':
+	# 十六进制格式输出
+	# [0x12][0x34]
+	hexpr = hexprint("".join(int2list(uint16(0x1234))[2:4]))
+	print(hexpr)
+
+	# 字节序列转换成字符串
+	# [8b][ec][12][ff][8b][ec][12][ff]
+	byte_string = prettyprint("\x8b\xec\x12\xff\x8b\xec\x12\xff")
+	print(byte_string)
+
+	# 字符串转换成shellcode
+	# unsigned char buf[] = "\x6c\x79\x73\x68\x61\x72\x6b"; // 7 bytes
+	shellcode = c_array("lyshark")
+	print(shellcode)
+
+	# dump shellcode
+	dump = shellcode_dump("\x6c\x79\x73\x68\x61\x72\x6b")
+
+	# 将字符串转为二进制数组
+	# [0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1]
+	ref = binary_from_string("lushark")
+	print(ref)
+
+	# 输出字符串的十六进制格式
+	# [('6C 79 73 68 61 72 6B ', 'lyshark')]
+	ref = hexdump("lyshark")
+	print(ref)
+```
+
+
+
 
 
 
