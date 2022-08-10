@@ -1851,7 +1851,7 @@ ref = str2int_bits_swapped(16,"\x12\x34")
 print(hex(ref))
 ```
 
-字符串转换小端序与大端序
+将字符串转换成对等小端序或大端序的十六进制整数
 ```Python
 from LyScript32 import MyDebug
 from LyScriptUtils import *
