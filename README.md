@@ -2134,7 +2134,7 @@ if __name__ == '__main__':
 
 LyScript 模块中的通用案例，用于演示插件内置方法如何组合使用，用户可以自行研究学习API函数是如何灵活的调用的，并自己编写一些有用的案例。
 
-**PEFile 载入内存格式:** 案例演示，如何将一个可执行文件中的内存数据通过PEfile模块打开。
+**PEFile载入PE程序到内存:** 将PE可执行文件中的内存数据通过PEfile模块打开并读入内存，实现PE参数解析。
 ```Python
 from LyScript32 import MyDebug
 import pefile
