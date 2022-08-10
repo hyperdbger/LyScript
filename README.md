@@ -2409,6 +2409,40 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**得到_PEB_LDR_DATA线程环境块:** 想要得到线程环境块最好的办法就是在目标内存中执行获取线程块的汇编指令，我们可以写出到内存并执行取值。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug(address="127.0.0.1")
+    dbg.connect()
+
+    # 保存当前EIP
+    eip = dbg.get_register("eip")
+
+    # 创建堆
+    heap_addres = dbg.create_alloc(1024)
+    print("堆空间地址: {}".format(hex(heap_addres)))
+
+    # 写出汇编指令
+    # mov eax,fs:[0x30] 得到 _PEB
+    dbg.assemble_at(heap_addres,"mov eax,fs:[0x30]")
+    asmfs_size = dbg.get_disasm_operand_size(heap_addres)
+
+    # 写出汇编指令
+    # mov eax,[eax+0x0C] 得到 _PEB_LDR_DATA
+    dbg.assemble_at(heap_addres + asmfs_size, "mov eax, [eax + 0x0C]")
+    asmeax_size = dbg.get_disasm_operand_size(heap_addres + asmfs_size)
+
+    # 跳转回EIP位置
+    dbg.assemble_at(heap_addres+ asmfs_size + asmeax_size , "jmp {}".format(hex(eip)))
+
+    # 设置EIP到堆首地址
+    dbg.set_register("eip",heap_addres)
+
+    dbg.close()
+```
+
 **内存字节变更后回写:** 封装字节函数`write_opcode_list()`传入内存地址，对该地址中的字节更改后再回写到原来的位置。
 
  - 加密算法在内存中会通过S盒展开解密，有时需要特殊需求，捕捉解密后的S-box写入内存，或对矩阵进行特殊处理后替换，这样写即可实现。
