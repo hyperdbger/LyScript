@@ -1780,106 +1780,106 @@ if __name__ == '__main__':
 
 该工具包其目的是辅助LyScript插件实现进制与字符串或字节序列的快速转换，更好的协助反汇编任务的完成。
 
-实现对特定字节切割操作.
+将一个特定字节切割成等量的字节数组
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
 # 切割32位
+# [18, 52, 86, 120]
 ref = split_int32(0x12345678)
 print(ref)
 
 # 切割64位
+# [0, 255, 255, 255, 18, 52, 86, 120]
 ref = split_int64(0x0FFFFFF12345678)
 print(ref)
 
 # 自定义切割字节数
+# [18, 52]
 ref = split_int_bits(16,0x1234)
 print(ref)
-
-# [18, 52, 86, 120]
-# [0, 255, 255, 255, 18, 52, 86, 120]
-# [18, 52]
 ```
 
-字符串转int系列
+将一个十六进制字符串转成等量的INT类型
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
+# 0x1234
 ref = str2int16("\x12\x34\x56")
 print(hex(ref))
 
+# 0x12345678
 ref = str2int32("\x12\x34\x56\x78")
 print(hex(ref))
 
+# 0x121c5678121c5678
 ref = str2int64("\x12\x34\x56\x78\x12\x34\x56\x78")
 print(hex(ref))
 
+# 0x1234
 ref = nstr2halfword("\x12\x34")
 print(hex(ref))
 
+# 0x12345678121c567812345678121c5678
 ref = str2int_bits(128,"\x12\x34\x56\x78\x12\34\x56\x78\x12\x34\x56\x78\x12\34\x56\x78")
 print(hex(ref))
-
-0x1234
-0x12345678
-0x121c5678121c5678
-0x1234
-0x12345678121c567812345678121c5678
 ```
 
-字符串转换并对调顺序
+将一个十六进制字符串转成等量的INT类型,并反转参数
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
+# 0x3412
 ref = str2int16_swapped("\x12\x34\x56")
 print(hex(ref))
 
+# 0x12563412
 ref = str2int32_swapped("\x12\x34\x56\x12\x34\x56")
 print(hex(ref))
 
+# 0x3412563412563412
 ref = str2int64_swapped("\x12\x34\x56\x12\x34\x56\x12\x34\x56\x12\x34\x56")
 print(hex(ref))
 
+# 0x3412
 ref = str2int_bits_swapped(16,"\x12\x34")
 print(hex(ref))
-
-0x3412
-0x12563412
-0x3412563412563412
-0x3412
 ```
 
 字符串转换小端序与大端序
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
 # 小端序
+# 0x78563412
 ref = str2littleendian("\x12\x34\x56\x78")
 print(hex(ref))
 
+# 0x78563412
 ref = intel_str2int("\x12\x34\x56\x78")
 print(hex(ref))
 
+# 0x78563412
 ref = intel_str2int("\x12\x34\x56\x78")
 print(hex(ref))
-
-0x78563412
-0x78563412
-0x78563412
 
 # 大端序
+# 0x12345678
 ref = str2int32("\x12\x34\x56\x78")
 print(hex(ref))
 
+# 0x12345678
 ref = str2bigendian("\x12\x34\x56\x78")
 print(hex(ref))
-
-0x12345678
-0x12345678
 ```
 
-整数转换为字节序列
+将一个十六进制整数转换为字节序列
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
 ref = int2str16(0x1234)
@@ -1898,8 +1898,10 @@ ref = big_short(0x1234)
 if ref == '\x12\x34':
     print("int2str16")
 ```
-整数转为字节序列，并反转
+
+将一个十六进制整数转换为字节序列,并反转参数
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
 ref = int2str16_swapped(0x1234)
@@ -1919,8 +1921,9 @@ if ref == '\x78\x56':
     print("intel_short")
 ```
 
-int32位转str32位字节序列
+将INT类型十六进制数值,转换为str32位字节序列
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
 ref = int2str32(0x12345678)
@@ -1931,8 +1934,12 @@ ref = big_order(0x12345678)
 if ref == '\x12\x34\x56\x78':
     print("big_order")
 ```
-int32位转str32位字节序列并反转
+
+将一个INT类型,转换为str32字节序列,并反转参数
 ```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
 ref = int2str32_swapped(0x12345678)
 if ref == '\x78\x56\x34\x12':
     print("int2str32_swapped")
@@ -1941,20 +1948,115 @@ ref = intel_order(0x12345678)
 if ref == '\x78\x56\x34\x12':
     print("intel_order")
 ```
-二进制与字符串互相转换
+
+将一个十六进制INT整数,转换成一个二进制字符串
 ```Python
+from LyScript32 import MyDebug
 from LyScriptUtils import *
 
+# 00010010001101000101011001111000
 ref = print_binary(0x12345678)
 if ref == '00010010001101000101011001111000':
     print(ref)
 
+# 0101011001111000
 ref = binary_string_short(0x12345678)
 if ref == '0101011001111000':
     print(ref)
-	
-00010010001101000101011001111000
-0101011001111000
+```
+
+针对有符号数与无符号数的类型转换函数
+```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
+# 无符号数转换
+if uint16(0xffff) == 0xffff:
+    print("uint16")
+
+if uint64(0x0000000ffffffff) == 0x0000000ffffffff:
+    print("uint64")
+
+# 有符号数转换
+if sint16(0xffff) == -1:
+    print("sint16")
+
+if sint16(0xffff) == sint16(-1):
+    print("sint16==sint16")
+
+if signedshort(0xffff) == -1:
+    print("signedshort")
+
+# 有符号大整数
+if sint32(-1) == -1:
+    print("sint32")
+
+if big2int(0x123456789) == 0x23456789:
+    print("big2int")
+```
+
+将一个无符号数格式化为十六进制字符串
+```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
+if(uintfmt_bits(32,0x12345678)=='0x12345678'):
+    print("uintfmt_bits")
+
+if(uintfmt_bits(16,0x1234)=='0x1234'):
+    print("uintfmt_bits")
+
+if(uint16fmt(0x123456)=='0x3456'):
+    print("uintfmt_bits")
+
+if(uint16fmt(-0x123456)=='0xcbaa'):
+    print("uintfmt_bits")
+
+if(uint32fmt(0x1234)=='0x00001234'):
+    print("uintfmt_bits")
+
+if(uint64fmt(0x12345678)=='0x0000000012345678'):
+    print("uintfmt_bits")
+
+if(uint64fmt(-1)=='0xffffffffffffffff'):
+    print("uintfmt_bits")
+
+if(uint8fmt(0x0f)=='0x0f'):
+    print("uint8fmt")
+```
+
+将一个有符号数格式化为十六进制字符串
+```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
+# sint16fmt
+if(sint16fmt(0x1234)=='0x1234'):
+    print("sint16fmt")
+
+if(sint16fmt(-0x1234)=='-0x1234'):
+    print("sint16fmt")
+
+# sint32fmt
+if(sint32fmt(-0x1234)=='-0x00001234'):
+    print("sint32fmt")
+
+# sint64fmt
+if(sint64fmt(-1)=='-0x0000000000000001'):
+    print("sint64fmt")
+```
+将一个十六进制INT整数反转
+```Python
+from LyScript32 import MyDebug
+from LyScriptUtils import *
+
+# 0x78563412
+if(byteswap_32(0x12345678)==0x78563412):
+    print("32位反转")
+
+# 0x5634129078563412
+if(byteswap_64(0x1234567890123456)==0x5634129078563412):
+    print("64位反转")
 ```
 
 
