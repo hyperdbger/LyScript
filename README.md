@@ -15,7 +15,7 @@
 [![python3](https://cdn.lyshark.com/archive/LyScript/python3.svg)](https://github.com/lyshark/LyScript) [![platform](https://cdn.lyshark.com/archive/LyScript/platform.svg)](https://github.com/lyshark/LyScript)
 
 <br><br>
-一款 x64dbg 自动化控制插件，通过Python控制x64dbg的行为，实现远程动态调试，解决了逆向工作者分析漏洞，反病毒人员脱壳，漏洞分析者寻找指令片段，原生脚本不够强大的问题，通过与Python相结合利用Python语法的灵活性以及丰富的第三方库，加速漏洞利用程序的开发，辅助漏洞挖掘以及恶意软件分析。
+一款 x64dbg 自动化控制插件，通过Python控制x64dbg的行为，实现远程动态调试，解决了逆向工作者分析程序，反病毒人员脱壳，漏洞分析者寻找指令片段，原生脚本不够强大的问题，通过与Python相结合利用Python语法的灵活性以及丰富的第三方库，加速漏洞利用程序的开发，辅助漏洞挖掘以及恶意软件分析。
   
 </div>
 <br>
