@@ -1215,20 +1215,6 @@ from LyScript32 import MyDebug
 from LyScriptTools32 import DebugControl
 from LyScriptTools32 import Script
 
-# 有符号整数转无符号数
-def long_to_ulong(inter, is_64=False):
-    if is_64 == False:
-        return inter & ((1 << 32) - 1)
-    else:
-        return inter & ((1 << 64) - 1)
-
-# 无符号整数转有符号数
-def ulong_to_long(inter, is_64=False):
-    if is_64 == False:
-        return (inter & ((1 << 31) - 1)) - (inter & (1 << 31))
-    else:
-        return (inter & ((1 << 63) - 1)) - (inter & (1 << 63))
-
 if __name__ == "__main__":
     dbg = MyDebug()
     connect_flag = dbg.connect()
