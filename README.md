@@ -2262,7 +2262,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**全模块特征匹配:** 针对所有模块中的特征码模糊匹配，找到会返回内存地址。
+**扫描所有模块匹配特征:** 针对程序内加载的所有模块扫描特征码，如果找到了会返回内存地址，以及模块详细参数。
 ```Python
 from LyScript32 import MyDebug
 
@@ -2270,19 +2270,30 @@ if __name__ == "__main__":
     dbg = MyDebug()
     dbg.connect()
 
+    # 获取所有模块
     for entry in dbg.get_all_module():
         eip = entry.get("entry")
+        base = entry.get("base")
+        name = entry.get("name")
 
         if eip != 0:
+            # 设置EIP到模块入口处
             dbg.set_register("eip",eip)
 
+            # 开始搜索特征
             search = dbg.scan_memory_one("ff 25 ??")
-            print(hex(search))
+            if search != 0 or search != None:
+
+                # 如果找到了,则反汇编此行
+                dasm = dbg.disasm_fast_at(search)
+
+                print("addr = {} | base = {} | module = {} | search_addr = {} | dasm = {}"
+                      .format(eip,base,name,eip,dasm.get("disasm")))
 
     dbg.close()
 ```
 
-**搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
+**简单的搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
 ```Python
 from LyScript32 import MyDebug
 
