@@ -2189,7 +2189,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**验证PE程序启用的保护方式:** 验证保护方式需要通过`dbg.get_all_module()`遍历加载过的模块，并依次读入`DllCharacteristics`与操作数进行与运算得到保护方式。
+**验证PE启用的保护方式:** 验证保护方式需要通过`dbg.get_all_module()`遍历加载过的模块，并依次读入`DllCharacteristics`与操作数进行与运算得到保护方式。
 ```Python
 from LyScript32 import MyDebug
 import pefile
@@ -2237,6 +2237,47 @@ if __name__ == "__main__":
         else:
             print("False\t\t\t",end="")
         print()
+    dbg.close()
+```
+
+**计算PE节区内存特征:** 通过循环读入节区数据，并动态计算出该节的MD5以及CRC32特征值输出。
+```Python
+import binascii
+import hashlib
+from LyScript32 import MyDebug
+
+def crc32(data):
+    return "0x{:X}".format(binascii.crc32(data) & 0xffffffff)
+
+def md5(data):
+    md5 = hashlib.md5(data)
+    return md5.hexdigest()
+
+if __name__ == "__main__":
+    dbg = MyDebug(address="127.0.0.1")
+    dbg.connect()
+
+    # 循环节
+    section = dbg.get_section()
+    for index in section:
+        # 定义字节数组
+        mem_byte = bytearray()
+
+        address = index.get("addr")
+        section_name = index.get("name")
+        section_size = index.get("size")
+
+        # 读出节内的所有数据
+        for item in range(0,int(section_size)):
+            mem_byte.append( dbg.read_memory_byte(address + item))
+
+        # 开始计算特征码
+        md5_sum = md5(mem_byte)
+        crc32_sum = crc32(mem_byte)
+
+        print("[*] 节名: {:10s} | 节长度: {:10d} | MD5特征: {} | CRC32特征: {}"
+              .format(section_name,section_size,md5_sum,crc32_sum))
+
     dbg.close()
 ```
 
