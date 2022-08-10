@@ -2183,7 +2183,8 @@ if __name__ == "__main__":
     oPE = pefile.PE(data = byte_array)
 
     for section in oPE.sections:
-        print("%10s %10x %10x %10x" %(section.Name.decode("utf-8"), section.VirtualAddress, section.Misc_VirtualSize, section.SizeOfRawData))
+        print("%10s %10x %10x %10x" 
+	%(section.Name.decode("utf-8"), section.VirtualAddress, section.Misc_VirtualSize, section.SizeOfRawData))
     dbg.close()
 ```
 
@@ -2588,7 +2589,8 @@ if __name__ == "__main__":
             search_address = dbg.scan_memory_all(opcode[index])
 
             if search_address != False:
-                print("指令: {} --> 模块: {} --> 个数: {}".format(search_asm[index],base_name,len(search_address)))
+                print("指令: {} --> 模块: {} --> 个数: {}".
+		format(search_asm[index],base_name,len(search_address)))
 
                 for search_index in search_address:
                     print("[*] {}".format(hex(search_index)))
@@ -3118,7 +3120,8 @@ def is_cond(dbg,address):
         dis = dbg.get_disasm_one_code(address)
         if dis != False or dis != None:
 
-            if dis.split(" ")[0].replace(" ","") in ["je","jne","jz","jnz","ja","jna","jp","jnp","jb","jnb","jg","jng","jge","jl","jle"]:
+            if dis.split(" ")[0].replace(" ","") 
+	    	in ["je","jne","jz","jnz","ja","jna","jp","jnp","jb","jnb","jg","jng","jge","jl","jle"]:
                 return True
             return False
         return False
@@ -3434,7 +3437,9 @@ if __name__ == "__main__":
 
         # 使用转换
         print("默认有符号数: {:15} --> 转为无符号数: {:15} --> 转为有符号数: {:15}".
-              format(stack_address, long_to_ulong(stack_address),ulong_to_long(long_to_ulong(stack_address))))
+              format(stack_address, 
+	      long_to_ulong(stack_address),
+	      ulong_to_long(long_to_ulong(stack_address))))
 
     dbg.close()
 ```
@@ -3477,7 +3482,8 @@ if __name__ == "__main__":
         else:
             mod_base = dbg.get_base_from_address(long_to_ulong(stack_address))
 
-        print("stack => [{}] addr = {:10} base = {:10} dasm = {}".format(index, hex(long_to_ulong(stack_address)),hex(mod_base), dasm))
+        print("stack => [{}] addr = {:10} base = {:10} dasm = {}".
+		format(index, hex(long_to_ulong(stack_address)),hex(mod_base), dasm))
 
     dbg.close()
 ```
@@ -3524,7 +3530,8 @@ if __name__ == "__main__":
         else:
             mod_base = dbg.get_base_from_address(long_to_ulong(stack_address))
 
-        # print("stack => [{}] addr = {:10} base = {:10} dasm = {}".format(index, hex(long_to_ulong(stack_address)),hex(mod_base), dasm))
+        # print("stack => [{}] addr = {:10} base = {:10} dasm = {}"
+		.format(index, hex(long_to_ulong(stack_address)),hex(mod_base), dasm))
         if mod_base > 0:
             for x in module_list:
                 if mod_base == x.get("base"):
@@ -3652,6 +3659,7 @@ if __name__ == "__main__":
     for index in range(0,len(dasm_file_list)):
         if dasm_memory_list[index] != dasm_file_list[index]:
             print("地址: {:8} --> 内存反汇编: {:32} --> 磁盘反汇编: {:32}".
-                  format(dasm_memory_list[index].get("address"),dasm_memory_list[index].get("opcode"),dasm_file_list[index].get("opcode")))
+                  format(dasm_memory_list[index].get("address"),
+		  	dasm_memory_list[index].get("opcode"),dasm_file_list[index].get("opcode")))
     dbg.close()
 ```
