@@ -1187,7 +1187,7 @@ if __name__ == "__main__":
     connect_flag = dbg.connect()
     print("连接状态: {}".format(connect_flag))
 
-    # 定义堆栈类
+    # 定义调试类与脚本类
     control = DebugControl(dbg)
     script = Script(dbg)
 
@@ -1206,6 +1206,44 @@ if __name__ == "__main__":
 
     hash = long_to_ulong(script.hash(eip))
     print("无符号hash值: {}".format(hex(hash)))
+
+    dbg.close()
+```
+如果觉得上面的函数封装不够，或自己需要调用特定命令，那么可以直接调用该类内的`script.GetScriptValue("")`方法，自定义一个参数传递，目前只能接受返回值是整数的命令。
+```Python
+from LyScript32 import MyDebug
+from LyScriptTools32 import DebugControl
+from LyScriptTools32 import Script
+
+# 有符号整数转无符号数
+def long_to_ulong(inter, is_64=False):
+    if is_64 == False:
+        return inter & ((1 << 32) - 1)
+    else:
+        return inter & ((1 << 64) - 1)
+
+# 无符号整数转有符号数
+def ulong_to_long(inter, is_64=False):
+    if is_64 == False:
+        return (inter & ((1 << 31) - 1)) - (inter & (1 << 31))
+    else:
+        return (inter & ((1 << 63) - 1)) - (inter & (1 << 63))
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 定义控制类与脚本类
+    control = DebugControl(dbg)
+    script = Script(dbg)
+
+    # 得到EIP
+    eip = control.get_eip()
+
+    # 调用脚本命令执行函数
+    ref = script.GetScriptValue("mod.size(eip)")
+    print("模块返回值: {}".format(hex(ref)))
 
     dbg.close()
 ```
