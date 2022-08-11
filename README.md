@@ -2526,7 +2526,7 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-如何执行函数呢？很简单，看以下代码是如何实现的，相信你能看懂，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
+执行劫持函数很简单，看以下代码是如何实现的，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
 ```Python
 from LyScript32 import MyDebug
 
@@ -2591,6 +2591,43 @@ if __name__ == "__main__":
     # 设置EIP到堆首地址
     dbg.set_register("eip",heap_addres)
 
+    dbg.close()
+```
+
+**通过断点检测监视函数:** 通过运用`check_breakpoint()`断点检测函数，在断下后遍历堆栈，即可实现特定函数参数枚举。
+```Python
+import time
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+
+    # 连接到调试器
+    connect_flag = dbg.connect()
+    dbg.is_connect()
+
+    # 获取函数内存地址
+    addr = dbg.get_module_from_function("user32.dll","MessageBoxA")
+
+    # 设置断点
+    dbg.set_breakpoint(addr)
+
+    # 循环监视
+    while True:
+        # 检查断点是否被命中
+        check = dbg.check_breakpoint(addr)
+        if check == True:
+            # 命中则取出堆栈参数
+            esp = dbg.get_register("esp")
+            arg4 = dbg.read_memory_dword(esp)
+            arg3 = dbg.read_memory_dword(esp + 4)
+            arg2 = dbg.read_memory_dword(esp + 8)
+            arg1 = dbg.read_memory_dword(esp + 12)
+            print("arg1 = {:x} arg2 = {:x} arg3 = {:x} arg4 = {:x}".
+                  format(arg1,arg2,arg3,arg4))
+
+            dbg.set_debug("Run")
+            time.sleep(1)
     dbg.close()
 ```
 
