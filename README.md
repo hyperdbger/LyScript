@@ -2262,7 +2262,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**文件FOA与内存VA转换:** 封装实现`get_offset_from_va()`用于将VA虚拟转为FOA文件偏移，封装实现`get_va_from_foa()`用于将FOA文件偏移转为VA虚拟地址。
+**文件FOA与内存VA转换:** 封装实现`get_offset_from_va()`用于将VA内存虚拟地址转为FOA文件偏移地址，封装实现`get_va_from_foa()`用于将FOA文件偏移地址转为VA内存虚拟地址。
 ```Python
 from LyScript32 import MyDebug
 import pefile
