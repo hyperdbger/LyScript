@@ -2327,7 +2327,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**验证SafeSEH内存地址:** 通过读入PE自身PE文件到内存，验证该程序的SEH保护是否开启，如果开启则尝试输出SEH内存地址。
+**查找SafeSEH内存地址:** 读入PE文件到内存，验证该程序的SEH保护是否开启，如果开启则尝试输出SEH内存地址。
 ```Python
 from LyScript32 import MyDebug
 import struct
