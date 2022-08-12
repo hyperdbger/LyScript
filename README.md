@@ -2409,6 +2409,59 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**绕过反调试机制:** 最常用的反调试机制就是用`IsDebuggerPresent`该标志检查`PEB+2`位置处的内容，如果为1则表示正在被调试，我们运行脚本直接将其设置为0即可绕过反调试机制。
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    # 初始化
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 通过PEB找到调试标志位
+    peb = dbg.get_peb_address(dbg.get_process_id())
+    print("调试标志地址: 0x{:x}".format(peb+2))
+
+    flag = dbg.read_memory_byte(peb+2)
+    print("调试标志位: {}".format(flag))
+
+    # 将调试标志设置为0即可过掉反调试
+    nop_debug = dbg.write_memory_byte(peb+2,0)
+    print("反调试绕过状态: {}".format(nop_debug))
+    
+    dbg.close()
+```
+
+**绕过进程枚举:** 病毒会枚举所有运行的进程以确认是否有调试器在运行，我们可以在函数开头写入RET指令让其枚举失效。
+```Python
+from LyScript32 import MyDebug
+
+# 得到所需要的机器码
+def set_assemble_opcde(dbg,address):
+    # 得到第一条长度
+    opcode_size = dbg.assemble_code_size("sub eax,eax")
+
+    # 写出汇编指令
+    dbg.assemble_at(address, "sub eax,eax")
+    dbg.assemble_at(address + opcode_size , "ret")
+
+if __name__ == "__main__":
+    # 初始化
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 得到函数所在内存地址
+    process32first = dbg.get_module_from_function("kernel32","Process32FirstW")
+    process32next = dbg.get_module_from_function("kernel32","Process32NextW")
+    print("process32first = 0x{:x} | process32next = 0x{:x}".format(process32first,process32next))
+
+    # 替换函数位置为sub eax,eax ret
+    set_assemble_opcde(dbg, process32first)
+    set_assemble_opcde(dbg, process32next)
+
+    dbg.close()
+```
+
 **简单的搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
 ```Python
 from LyScript32 import MyDebug
