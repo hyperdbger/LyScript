@@ -2613,6 +2613,41 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**逐条进行反汇编输出:** 封装函数`disasm_code()`实现了通过循环的方式逐条输出反汇编代码完整信息，并打印到屏幕。
+```Python
+from LyScript32 import MyDebug
+
+# 封装反汇编多条函数
+def disasm_code(dbg_ptr, eip, count):
+    disasm_length = 0
+
+    for index in range(0, count):
+        # 获取一条反汇编代码
+        disasm_asm = dbg_ptr.get_disasm_one_code(eip + disasm_length)
+        disasm_addr = eip + disasm_length
+        disasm_size = dbg_ptr.assemble_code_size(disasm_asm)
+
+        print("内存地址: 0x{:08x} | 反汇编: {:35} | 长度: {}  | 机器码: ".format(disasm_addr, disasm_asm, disasm_size),end="")
+
+        # 逐字节读入机器码
+        for length in range(0, disasm_size):
+            read = dbg_ptr.read_memory_byte(disasm_addr + length)
+            print("{:02x} ".format(read),end="")
+        print()
+
+        # 递增地址
+        disasm_length = disasm_length + disasm_size
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    eip = dbg.get_register("eip")
+    disasm_code(dbg, eip, 25)
+
+    dbg.close()
+```
+
 **实现劫持EIP指针:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存。
 ```Python
 from LyScript32 import MyDebug
@@ -2688,7 +2723,7 @@ if __name__ == "__main__":
     dbg.set_debug("Run")
     dbg.close()
 ```
-执行劫持函数很简单，看以下代码是如何实现的，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
+执行劫持函数很简单，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
 
 **得到_PEB_LDR_DATA线程环境块:** 想要得到线程环境块最好的办法就是在目标内存中执行获取线程块的汇编指令，我们可以写出到内存并执行取值。
 ```Python
