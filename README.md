@@ -2650,7 +2650,8 @@ if __name__ == "__main__":
             search_address = dbg.scan_memory_all(opcode[index])
 
             if search_address != False:
-                print("搜索模块: {} --> 匹配个数: {} --> 机器码: {}".format(base_name,len(search_address),opcode[index]))
+                print("搜索模块: {} --> 匹配个数: {} --> 机器码: {}"
+			.format(base_name,len(search_address),opcode[index]))
                 # 输出地址
                 for search_index in search_address:
                     print("[*] {}".format(hex(search_index)))
@@ -2673,7 +2674,8 @@ def disasm_code(dbg_ptr, eip, count):
         disasm_addr = eip + disasm_length
         disasm_size = dbg_ptr.assemble_code_size(disasm_asm)
 
-        print("内存地址: 0x{:08x} | 反汇编: {:35} | 长度: {}  | 机器码: ".format(disasm_addr, disasm_asm, disasm_size),end="")
+        print("内存地址: 0x{:08x} | 反汇编: {:35} | 长度: {}  | 机器码: "
+		.format(disasm_addr, disasm_asm, disasm_size),end="")
 
         # 逐字节读入机器码
         for length in range(0, disasm_size):
