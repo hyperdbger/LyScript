@@ -2583,6 +2583,36 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**指令机器码内存搜索:** 在当前载入程序的所有模块中搜索特定的一组机器码指令，找到后返回该指令集内存地址。
+```Python
+from LyScript32 import MyDebug
+import time
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    dbg.connect()
+
+    # 需要搜索的指令集片段
+    opcode = ['ff 25','ff 55 fc','8b fe']
+
+    # 循环搜索指令集内存地址
+    for index,entry in zip(range(0,len(opcode)), dbg.get_all_module()):
+        eip = entry.get("entry")
+        base_name = entry.get("name")
+        if eip != 0:
+            dbg.set_register("eip",eip)
+            search_address = dbg.scan_memory_all(opcode[index])
+
+            if search_address != False:
+                print("搜索模块: {} --> 匹配个数: {} --> 机器码: {}".format(base_name,len(search_address),opcode[index]))
+                # 输出地址
+                for search_index in search_address:
+                    print("[*] {}".format(hex(search_index)))
+
+        time.sleep(0.3)
+    dbg.close()
+```
+
 **实现劫持EIP指针:** 这里我们演示一个案例，你可以自己实现一个`write_opcode_from_assemble()`函数批量将列表中的指令集写出到内存。
 ```Python
 from LyScript32 import MyDebug
@@ -2608,13 +2638,31 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
-执行劫持函数很简单，看以下代码是如何实现的，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
+封装实现`write_opcode_from_assemble()`函数，传入一个汇编指令列表，自动转为机器码并写出到堆内，控制EIP执行流实现劫持指令的目的。
 ```Python
 from LyScript32 import MyDebug
 
 # 传入汇编指令列表,直接将机器码写入对端内存
 def write_opcode_from_assemble(dbg_ptr,asm_list):
-              pass
+    addr_count = 0
+    addr = dbg_ptr.create_alloc(1024)
+    if addr != 0:
+        for index in asm_list:
+            asm_size = dbg_ptr.assemble_code_size(index)
+            if asm_size != 0:
+                # print("长度: {}".format(asm_size))
+                write = dbg_ptr.assemble_write_memory(addr + addr_count, index)
+                if write == True:
+                    addr_count = addr_count + asm_size
+                else:
+                    dbg_ptr.delete_alloc(addr)
+                    return 0
+            else:
+                dbg_ptr.delete_alloc(addr)
+                return 0
+    else:
+        return 0
+    return addr
 
 if __name__ == "__main__":
     dbg = MyDebug()
@@ -2638,9 +2686,9 @@ if __name__ == "__main__":
 
     # 执行代码
     dbg.set_debug("Run")
-
     dbg.close()
 ```
+执行劫持函数很简单，看以下代码是如何实现的，运行后会看到一个错误弹窗，说明程序执行流已经被转向了。
 
 **得到_PEB_LDR_DATA线程环境块:** 想要得到线程环境块最好的办法就是在目标内存中执行获取线程块的汇编指令，我们可以写出到内存并执行取值。
 ```Python
