@@ -1579,6 +1579,55 @@ class DebugControl(object):
     def set_if(self,decimal_bool):
         return self.dbg.set_flag_register("if",decimal_bool)
 
+    # 附加寄存器设置
+    def get_cax(self):
+        return self.dbg.get_register("cax")
+
+    def set_cax(self,decimal_value):
+        return self.dbg.set_register("cax",decimal_value)
+
+    def get_cbx(self):
+        return self.dbg.get_register("cbx")
+
+    def set_cbx(self,decimal_value):
+        return self.dbg.set_register("cbx",decimal_value)
+
+    def get_ccx(self):
+        return self.dbg.get_register("ccx")
+
+    def set_ccx(self,decimal_value):
+        return self.dbg.set_register("ccx",decimal_value)
+
+    def get_cdx(self):
+        return self.dbg.get_register("cdx")
+
+    def set_cdx(self,decimal_value):
+        return self.dbg.set_register("cdx",decimal_value)
+
+    def get_cdi(self):
+        return self.dbg.get_register("cdi")
+
+    def set_cdi(self,decimal_value):
+        return self.dbg.set_register("cdi",decimal_value)
+
+    def get_csi(self):
+        return self.dbg.get_register("csi")
+
+    def set_csi(self,decimal_value):
+        return self.dbg.set_register("csi",decimal_value)
+
+    def get_cbp(self):
+        return self.dbg.get_register("cbp")
+
+    def set_cbp(self,decimal_value):
+        return self.dbg.set_register("cbp",decimal_value)
+
+    def get_cflags(self):
+        return self.dbg.get_register("cflags")
+
+    def set_cflags(self,decimal_value):
+        return self.dbg.set_register("cflags",decimal_value)
+
     # 传入文件路径,载入被调试程序
     def script_initdebug(self, path):
         try:
