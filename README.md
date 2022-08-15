@@ -2052,6 +2052,29 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**update_all_view() 函数:** 刷新试图函数，与切换CPU位置。
+
+ - 参数：无参数传递
+ 
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 刷新试图
+    dbg.update_all_view()
+    
+    # 切换到CPU窗口
+    dbg.switch_cpu()
+    
+    # 清除所有日志
+    dbg.clear_log()
+
+    dbg.close()
+```
 <br>
 
 ### Script 脚本类
