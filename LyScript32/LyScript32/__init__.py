@@ -2142,3 +2142,21 @@ class MyDebug(object):
         except Exception:
             return False
         return False
+
+    # 搜索任意位置处特征码
+    def scan_memory_any(self, address=0, size=0, pattern=""):
+        try:
+            ptr = MyStruct()
+            ptr.Command_String_A = "ScanMemoryAny".encode("utf8")
+            ptr.Command_int_A = address
+            ptr.Command_int_B = size
+            ptr.Command_String_B = pattern.encode("utf-8")
+
+            recv_struct = self.send_recv_struct(ptr)
+            if recv_struct.Flag == 1:
+                return recv_struct.Command_int_C
+            else:
+                return False
+        except Exception:
+            return False
+        return False
