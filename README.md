@@ -1073,6 +1073,95 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**get_branch_destination() 函数:** 获取call或者是jx跳转指令的跳转地址。
+
+ - 参数1：获取内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    print("当前EIP地址: {}".format(hex(eip)))
+
+    value = dbg.get_branch_destination(eip)
+    print("操作数: {}".format(hex(value)))
+
+    dbg.close()
+```
+
+**get_disassembly() 函数:** 反汇编一条指令，此函数直接输出调试其中看到的，包括符号。
+
+ - 参数1：获取内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    print("当前EIP地址: {}".format(hex(eip)))
+
+    dasm = dbg.get_disassembly(eip)
+    print("反汇编一条: {}".format(dasm))
+
+    dbg.close()
+```
+
+**assemble_at() 函数:** 汇编系列函数，传入一条汇编指令，直接将指令写出到内存。
+
+ - 参数1：获取内存地址（十进制）
+ - 参数2：汇编指令（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    print("当前EIP地址: {}".format(hex(eip)))
+
+    ref = dbg.assemble_at(eip,"nop")
+    print("写出状态: {}".format(ref))
+
+    dbg.close()
+```
+
+**disasm_fast_at() 函数:** 该函数同样是反汇编一行并返回字典，但它可以获取到更多有效参数。
+
+ - 参数1：获取内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    print("当前EIP地址: {}".format(hex(eip)))
+
+    dasm = dbg.disasm_fast_at(eip)
+    print("地址: {}".format(hex(dasm.get("addr"))))
+    print("汇编指令: {}".format(dasm.get("disasm")))
+    print("汇编长度: {}".format(dasm.get("size")))
+    print("是否分支: {}".format(dasm.get("is_branch")))
+    print("是否call: {}".format(dasm.get("is_call")))
+    print("类型: {}".format(dasm.get("type")))
+
+    dbg.close()
+```
 <br>
 
 ### 其他系列函数
