@@ -1130,6 +1130,387 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**run_command_exe_ref() 函数:** 该函数是`run_command_exec()`的延申，其主要增加了传出参数的功能，目前可传出整数类型。
+
+ - 参数1：命令语句
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    ref = dbg.run_command_exe_ref("mod.base(eip)")
+    print("返回参数: {}".format(hex(ref)))
+
+    dbg.close()
+```
+
+**set_status_bar_message() 函数:** 该函数可实现在x64dbg底部状态栏上面输出一个用户传入的字符串。
+
+ - 参数1：输出字符串
+ 
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    dbg.set_status_bar_message("EIP => {}".format(hex(eip)))
+
+    dbg.close()
+```
+
+**script_loader() 函数:** 该函数接收用户传入的内置脚本所在路径，并将该脚本加载到x64dbg中。
+
+ - 参数1：脚本路径
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.script_loader("d://x64dbg_script.txt")
+    print("返回值: {}".format(flag))
+
+    dbg.close()
+```
+
+**script_unloader() 函数:** 该函数用于关闭x64dbg中打开的脚本。
+
+ - 参数：无参数传递
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.script_loader("d://x64dbg_script.txt")
+    print("返回值: {}".format(flag))
+    
+    dbg.script_unloader()
+
+    dbg.close()
+```
+
+**script_run() 函数:** 该函数用于运行一个已经载入到x64dbg中的脚本。
+
+ - 参数1：运行条数(可空)
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.script_loader("d://x64dbg_script.txt")
+    print("返回值: {}".format(flag))
+
+    dbg.script_run()
+
+    dbg.close()
+```
+
+**script_set_ip() 函数:** 该函数用于指定从第几行开始运行脚本。
+
+ - 参数1：运行下标
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.script_loader("d://x64dbg_script.txt")
+    print("返回值: {}".format(flag))
+
+    dbg.script_set_ip(3)
+
+    dbg.close()
+```
+
+**open_debug() 函数:** 该函数用于打开磁盘中的一个被调试程序。
+
+ - 参数1：被打开程序完整路径
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.open_debug("d://win32.exe")
+
+    dbg.close()
+```
+
+**close_debug() 函数:** 该函数用于关闭当前打开的调试程序，之关闭程序不关闭调试器。
+
+ - 参数：无参数传递
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.open_debug("d://win32.exe")
+    
+    if flag == True:
+        dbg.close_debug()
+    
+    dbg.close()
+```
+
+**detach_debug() 函数:** 该函数用于让调试器脱离进程，进程会被运行起来。
+
+ - 参数：无参数传递
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    flag = dbg.open_debug("d://win32.exe")
+
+    if flag == True:
+        dbg.detach_debug()
+
+    dbg.close()
+```
+
+**message_box() 函数:** 此功能提供了三种对话框，一种可输入文本，一种判断是否选中，另一种则是普通弹窗。
+
+ - 参数1：弹出的提示信息
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    conn = dbg.connect()
+
+    # 弹出输入框
+    flag = dbg.input_string_box("请输入反汇编入口地址?")
+    print("用户的输入: {}".format(flag))
+
+    # 弹出是否框
+    flag = dbg.message_box_yes_no("是否继续执行脱壳操作?")
+    if flag == True:
+        print("脱壳")
+    else:
+        print("退出")
+
+    # 提示框
+    flag = dbg.message_box("这是第 {} 次,异常了".format(1))
+    print("状态: {}".format(flag))
+
+    dbg.close()
+```
+
+**set_argument_brackets() 函数:** 该函数可在`注释`处增加括号。
+
+ - 参数1：开始位置（十进制）
+ - 参数2：结束位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    ref = dbg.set_argument_brackets(eip, eip +100)
+    print("是否增加注释: {}".format(ref))
+    
+    dbg.close()
+```
+
+**del_argument_brackets() 函数:** 该函数可清除通过`set_argument_brackets`设置的括号。
+
+ - 参数1：开始位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    
+    dbg.del_argument_brackets(eip)
+
+    dbg.close()
+```
+
+**set_function_brackets() 函数:** 该函数可实现在`机器码`位置增加括号。
+
+ - 参数1：开始位置（十进制）
+ - 参数2：结束位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    flag = dbg.set_function_brackets(eip,eip+10)
+
+    dbg.close()
+```
+
+**del_function_brackets() 函数:** 该函数可清除通过`del_function_brackets`设置的括号。
+
+ - 参数1：开始位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    
+    dbg.del_function_brackets(eip)
+
+    dbg.close()
+```
+
+**set_loop_brackets() 函数:** 该函数可实现在`反汇编`位置增加括号。
+
+ - 参数1：开始位置（十进制）
+ - 参数2：结束位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    ref = dbg.set_loop_brackets(eip,eip + 10)
+    print("设置状态: {}".format(ref))
+
+    dbg.close()
+```
+
+**del_loop_brackets() 函数:** 该函数可清除通过`set_loop_brackets`设置的括号。
+
+ - 参数1：清除层级（默认1）
+ - 参数2：开始位置（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    ref = dbg.del_loop_brackets(1,eip)
+    print("清除状态: {}".format(ref))
+
+    dbg.close()
+```
+
+**set_label_at() 函数:** 该函数可在特定位置设置一个标签。
+
+ - 参数1：设置标签的地址（十进制）
+ - 参数2：标签名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    
+    dbg.set_label_at(eip,"test1")
+    dbg.set_label_at(eip+10,"test2")
+
+    dbg.close()
+```
+
+**location_label_at() 函数:** 该函数可通过已有的标签定位到所在位置，并返回内存地址。
+
+ - 参数1：标签名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    
+    lab_addr = dbg.location_label_at("test2")
+    print("标签所在内存: {}".format(hex(lab_addr)))
+
+    dbg.close()
+```
+
+**clear_label() 函数:** 该函数用于清除当前程序内所有的标签。
+
+ - 参数：无参数传递
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    ref = dbg.clear_label()
+
+    dbg.close()
+```
+
 <br>
 
 ### Script 脚本类
