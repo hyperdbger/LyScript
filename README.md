@@ -584,6 +584,230 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**get_section_from_module_name() 函数:** 用户可传入当前载入的模块名，即可直接取出指定模块的节表信息。
+
+ - 参数1：模块名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    section_user32 = dbg.get_section_from_module_name("user32.dll")
+    print(section_user32)
+
+    section_ntdll = dbg.get_section_from_module_name("ntdll.dll")
+    print(section_ntdll)
+
+    dbg.close()
+```
+
+**size_from_address() 函数:** 传入一个模块的基地址得到该模块占用总大小。
+
+ - 参数1：模块地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    base = dbg.get_local_base()
+    print("模块基地址: {}".format(hex(base)))
+
+    size = dbg.size_from_address(base)
+    print("模块长度: {}".format(size))
+
+    dbg.close()
+```
+
+**size_from_name() 函数:** 传入模块名称得到模块占用总大小。
+
+ - 参数1：模块名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    size = dbg.size_from_name("win32.exe")
+    print("长度: {}".format(size))
+
+    dbg.close()
+```
+
+**section_count_from_name() 函数:** 传入模块名称得到模块有多少个节区。
+
+ - 参数1：模块名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    size = dbg.section_count_from_name("win32.exe")
+    print("节区个数: {}".format(size))
+
+    dbg.close()
+```
+
+**section_count_from_address() 函数:** 传入模块基址得到模块有多少个节区。
+
+ - 参数1：模块地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    base = dbg.get_local_base()
+    print("模块基地址: {}".format(hex(base)))
+
+    size = dbg.section_count_from_address(base)
+    print("节个数: {}".format(size))
+
+    dbg.close()
+```
+
+**path_from_name() 函数:** 传入模块名称得到模块路径。
+
+ - 参数1：模块名（字符串）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    size = dbg.path_from_name("win32.exe")
+    print("模块路径: {}".format(size))
+
+    dbg.close()
+```
+
+**path_from_address() 函数:** 传入模块地址得到模块路径。
+
+ - 参数1：模块地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    base = dbg.get_local_base()
+    print("模块基地址: {}".format(hex(base)))
+
+    path = dbg.path_from_address(base)
+    print("模块路径: {}".format(path))
+
+    dbg.close()
+```
+
+**name_from_address() 函数:** 传入模块地址得到模块名称。
+
+ - 参数1：模块地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    base = dbg.get_local_base()
+    print("模块基地址: {}".format(hex(base)))
+
+    path = dbg.name_from_address(base)
+    print("模块名: {}".format(path))
+
+    dbg.close()
+```
+
+**get_window_handle() 函数:** 取出自身进程模块句柄。
+
+ - 参数：无参数传递
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    base = dbg.get_window_handle()
+    print("进程句柄: {}".format(base))
+
+    dbg.close()
+```
+
+**get_module_at() 函数:** 获取指定内存地址处模块名，此处得到的模块名无后缀。
+
+ - 参数1：模块地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    ref = dbg.get_module_at(eip)
+    print("模块名: {}".format(ref))
+
+    dbg.close()
+```
+
+**get_local_module() 函数:** 该系列函数可用于得到当前载入程序停留EIP位置的模块详细信息。
+
+ - get_local_module_size() 获取当前程序的大小
+ - get_local_module_section_Count() 获取自身节数量
+ - get_local_module_path() 获取被调试程序完整路径
+ - get_local_module_name() 获取自身模块名
+ - get_local_module_entry() 获取自身模块入口
+ - get_local_module_base() 获取自身模块基地址
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    print("程序大小: {}".format( dbg.get_local_module_size()))
+    print("节个数: {}".format(dbg.get_local_module_section_Count()))
+    print("完整路径: {}".format(dbg.get_local_module_path()))
+    print("模块名: {}".format(dbg.get_local_module_name()))
+    print("模块入口: {}".format(dbg.get_local_module_entry()))
+    print("模块基地址: {}".format(dbg.get_local_module_base()))
+
+    dbg.close()
+```
 <br>
 
 ### 内存系列函数
