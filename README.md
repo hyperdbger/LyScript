@@ -369,6 +369,143 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**is_bp_disable() 函数:** 该函数用于验证指定地址处BP断点是否被禁用。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    is_false = dbg.is_bp_disable(eip)
+    print("bp断点状态: {}".format(is_false))
+
+    dbg.close()
+```
+
+**get_xref_count_at() 函数:** 获取指定内存地址位置处交叉引用计数。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    types = dbg.get_xref_count_at(eip)
+    print("引用计数: {}".format(types))
+
+    dbg.close()
+```
+
+**get_function_type_at() 函数:** 获取指定内存地址位置处函数类型，函数`FUNCTYPE`枚举类型。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    types = dbg.get_function_type_at(eip)
+    print("函数类型: {}".format(types))
+
+    if(types == 0):
+        print("FUNC_NONE")
+    elif(types == 1):
+        print("FUNC_BEGIN")
+    elif(types == 2):
+        print("FUNC_MIDDLE")
+    elif(types == 3):
+        print("FUNC_END")
+    elif(types == 4):
+        print("FUNC_SINGLE")
+    else:
+        print("error")
+
+    dbg.close()
+```
+
+**get_bpx_type_at() 函数:** 获取指定地址处BP断点类型，类型`BPXTYPE`枚举。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    types = dbg.get_bpx_type_at(eip)
+    print("BPX类型: {}".format(types))
+
+    if(types == 0):
+        print("bp_none")
+    elif(types == 1):
+        print("bp_normal")
+    elif(types == 2):
+        print("bp_hardware")
+    elif(types == 4):
+        print("bp_memory")
+    elif(types == 8):
+        print("bp_dll")
+    elif(types == 16):
+        print("bp_exception")
+    else:
+        print("error")
+
+    dbg.close()
+```
+
+**get_xref_type_at() 函数:** 得到指定内存地址位置处交叉引用类型，枚举`XREFTYPE`类型。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    types = dbg.get_xref_type_at(eip)
+    print("引用类型: {}".format(types))
+
+    if(types == 0):
+        print("XREF_NONE")
+    elif(types == 1):
+        print("XREF_DATA")
+    elif(types == 2):
+        print("XREF_JMP")
+    elif(types == 3):
+        print("XREF_CALL")
+    else:
+        print("error")
+
+    dbg.close()
+```
 <br>
 
 ### 模块系列函数
@@ -2382,205 +2519,6 @@ if __name__ == "__main__":
         time.sleep(0.3)
         # 关闭调试
         debug.Script_CloseDebug()
-
-    dbg.close()
-```
-<br>
-
-### LyScript 1.0.13 新版特性
-
-LyScript 1.0.13 插件在原有函数基础上封装实现了更多有用的功能，并解决了旧版本插件中x64无法反汇编的问题，新版本插件与旧版本保持兼容，原函数不发生变化，您依然可以使用，如果需要使用新版本中的新函数，请安装以下新版本插件，并更新您的LyScript标准包。
-<br>
-
-|  LyScript 1.0.13 新增函数   | 函数作用  |
-|  ----  | ----  |
-| run_command_exe_ref(command) | 执行脚本命令(返回整数) |
-| set_status_bar_message(message) | 在状态栏上面输出字符串提示 |
-| get_window_handle() | 取出自身进程模块句柄 |
-| get_disassembly(address) | 反汇编一条指令(新增) |
-| assemble_at(address,assemble) | 传入汇编指令,直接写出到内存 |
-| disasm_fast_at(address) | 反汇编一条指令,返回完整字典 |
-| get_module_at(eip) | 获取EIP所在位置处模块名 |
-| get_xref_count_at(eip) | 获取EIP位置处交叉引用计数 |
-| get_xref_type_at(eip) | 得到EIP位置处交叉引用类型 XREFTYPE |
-| get_bpx_type_at(address) | 得到指定地址处BP断点类型 BPXTYPE |
-| get_function_type_at(eip) | 获得EIP位置处函数类型 FUNCTYPE |
-| is_bp_disable(address) | 验证指定地址处BP断点是否被禁用 |
-| is_jmp_going_to_execute(eip) | 是否跳转到可执行内存块 |
-| is_run_locked() | 检查调试器是否被锁定(暂停) |
-| mem_find_base_addr(eip) | 返回EIP位置处内存模块基地址和大小(字典) |
-| mem_get_page_size(eip) | 得到EIP位置处内存页面长度 |
-| mem_is_valid(eip) | 验证EIP位置处内存是否可读 |
-| script_loader(file_path) | 从文件中加载x64dbg内置脚本 |
-| script_unloader() | 关闭打开的脚本 |
-| script_run() | 运行x64dbg内置脚本 |
-| script_set_ip(index) | 脚本指定运行到第index条 |
-| open_debug(file_path) | 打开硬盘中的被调试程序(打开功能) |
-| close_debug() | 关闭被调试进程 |
-| detach_debug() | 进程脱离调试器 |
-| input_string_box(message) | 弹出输入框,用户输入后得到输入值 |
-| message_box_yes_no(title) | 弹出是否按钮选择框 |
-| message_box(title) | 弹出信息框,用于提示用户 |
-| get_branch_destination(address=0) | 获取call或者是跳转指令的跳转地址|
-| set_argument_brackets(start_address=0,end_address=0) | 在注释处增加括号 |
-| del_argument_brackets(start_address=0) | 删除注释处的括号 |
-| set_function_brackets(start_address=0,end_address=0) | 在机器码位置增加注释 |
-| del_function_brackets(start_address=0) | 删除机器码位置处的注释 |
-| set_loop_brackets(start_address=0,end_address=0) | 在反汇编位置添加注释 |
-| del_loop_brackets(depth=1, start_address=0) | 删除反汇编位置处的注释 |
-| get_section_from_module_name(module_name) | 传入模块名称,获取其节表并输出 |
-| clear_log() | 清空日志 |
-| switch_cpu() | 切换到CPU窗口 |
-| update_all_view() | 刷新所有视图参数 |
-| size_from_address(eip) | 传入基地址得到模块占用总大小 |
-| size_from_name(module_name) | 传入模块名称得到模块占用总大小 |
-| section_count_from_name(module_name) | 传入模块名称得到模块有多少个节区 |
-| section_count_from_address(eip) | 传入模块基址得到模块有多少个节区 |
-| path_from_name(module_name) | 传入模块名称得到模块路径 |
-| path_from_address(eip) | 传入模块地址得到模块路径 |
-| name_from_address(eip) | 传入模块地址得到模块名称 |
-| get_local_module_size() | 获取当前程序的大小 |
-| get_local_module_section_Count() | 获取自身节数量 |
-| get_local_module_path() | 获取被调试程序完整路径 |
-| get_local_module_name() | 获取自身模块名 |
-| get_local_module_entry() | 获取自身模块入口 |
-| get_local_module_base() | 获取自身模块基地址 |
-| set_label_at(address,label) | 在特定位置设置标签 |
-| location_label_at(label) | 定位到标签,返回内存地址 |
-| clear_label() | 清空所有标签 |
-
-新版本的更新增加和许多新函数，其中比较有代表性的要属下面这些用法。
-
-**寄存器增加:** 无论32位还是64位，都可以直接获取`"CIP","CSP","CAX","CBX","CCX","CDX","CDI","CSI","CBP","CFLAGS"`这些寄存器的参数。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    eip = dbg.get_register("eip")
-    print("eip寄存器 = {}".format(hex(eip)))
-
-    csp = dbg.get_register("csp")
-    print("csp寄存器 = {}".format(hex(csp)))
-
-    cflags = dbg.get_register("cflags")
-    print("cflags寄存器 = {}".format(hex(cflags)))
-
-    dbg.close()
-```
-
-**内置参数返回功能:** 在老版本中命令执行无法携带参数传出，新版本直接在插件内部实现了参数传递，目前只支持整数。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    eip = dbg.get_register("eip")
-    print("eip寄存器 = {}".format(hex(eip)))
-
-    exec_ref = dbg.run_command_exe_ref("mod.base(eip)")
-    print("base基地址 = {}".format(hex(exec_ref)))
-    
-    dbg.close()
-```
-
-**反汇编携带更多参数:** 反汇编`disasm_fast_at`命令可以携带更多参数，可供用户自行判断是否使用本条指令。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    eip = dbg.get_register("eip")
-    print("eip寄存器 = {}".format(hex(eip)))
-
-    dic_ref = dbg.disasm_fast_at(eip)
-    print("返回字典: {}".format(dic_ref))
-
-    dbg.close()
-```
-
-**脚本载入执行功能:** 增加了脚本的载入与执行功能，用户可以载入已有的x64dbg原生脚本并通过命令执行。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    # 加载x64dbg脚本
-    flag = dbg.script_loader("d://test.txt")
-    
-    # 运行脚本
-    flag = dbg.script_run()
-    
-    # 指定行号运行
-    flag = dbg.script_set_ip(1)
-    
-    # 关闭脚本
-    flag = dbg.script_unloader()
-    
-    dbg.close()
-```
-
-**弹窗提醒功能:** 此功能提供了三种对话框，一种可输入文本，一种判断是否选中，另一种则是普通弹窗。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    # 弹出输入框
-    flag = dbg.input_string_box("请输入反汇编入口地址?")
-    print("用户的输入: {}".format(flag))
-
-    # 弹出是否框
-    flag = dbg.message_box_yes_no("是否继续执行脱壳操作?")
-    if flag == True:
-        print("脱壳")
-    else:
-        print("退出")
-
-    # 提示框
-    flag = dbg.message_box("这是第 {} 次,异常了".format(1))
-    print("状态: {}".format(flag))
-
-    dbg.close()
-```
-
-**自定义获取节表:** 用户可传入当前载入的模块名，即可直接取出指定模块的节表信息。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    conn = dbg.connect()
-
-    ref = dbg.get_section_from_module_name("user32.dll")
-    print(ref)
-
-    dbg.close()
-```
-
-**打开关闭程序:** 本次更新还增加了打开关闭调试功能，用户可以传入文件路径让调试器打开，或者关闭指定程序。
-```Python
-from LyScript32 import MyDebug
-
-if __name__ == '__main__':
-    dbg = MyDebug()
-    dbg.connect()
-
-    # 打开被调试进程
-    ref = dbg.open_debug("d://lyshark.exe")
-
-    # 关闭被调试进程
-    ref = dbg.close_debug()
 
     dbg.close()
 ```
