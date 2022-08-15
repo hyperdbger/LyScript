@@ -2462,42 +2462,6 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**简单的搜索汇编特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
-```Python
-from LyScript32 import MyDebug
-
-# 检索指定序列中是否存在一段特定的指令集
-def SearchOpCode(OpCodeList,SearchCode,ReadByte):
-            pass
-
-if __name__ == "__main__":
-    dbg = MyDebug()
-    connect_flag = dbg.connect()
-    print("连接状态: {}".format(connect_flag))
-
-    # 得到EIP位置
-    eip = dbg.get_register("eip")
-
-    # 反汇编前1000行
-    disasm_dict = dbg.get_disasm_code(eip,1000)
-
-    # 搜索一个指令序列,用于快速查找构建漏洞利用代码
-    SearchCode = [
-        ["push 0xC0000409", "call 0x003F1B38", "pop ecx"],
-        ["mov ebp, esp", "sub esp, 0x324"]
-    ]
-
-    # 检索内存指令集
-    for item in range(0,len(SearchCode)):
-        Search = SearchCode[item]
-        # disasm_dict = 返回汇编指令 Search = 寻找指令集 1000 = 向下检索长度
-        ret = SearchOpCode(disasm_dict,Search,1000)
-        if ret != None:
-            print("指令集: {} --> 首次出现地址: {}".format(SearchCode[item],hex(ret)))
-
-    dbg.close()
-```
-
 **批量搜索反汇编代码:** 与搜索机器码类似，此功能实现了搜索代码段中所有指令集，匹配列表中是否存在，存在则返回地址。
 ```Python
 from LyScript32 import MyDebug
@@ -2523,6 +2487,92 @@ if __name__ == "__main__":
 
         # 递增计数器
         local_base_start = local_base_start + dbg.get_disasm_operand_size(local_base_start)
+
+    dbg.close()
+```
+
+**搜索反汇编列表特征:** 使用python实现方法，通过特定方法扫描内存范围，如果出现我们所需要的指令集序列，则输出该指令的具体内存地址。
+```Python
+from LyScript32 import MyDebug
+
+# 传入汇编代码,得到对应机器码
+def get_opcode_from_assemble(dbg_ptr,asm):
+    byte_code = bytearray()
+
+    addr = dbg_ptr.create_alloc(1024)
+    if addr != 0:
+        asm_size = dbg_ptr.assemble_code_size(asm)
+        # print("汇编代码占用字节: {}".format(asm_size))
+
+        write = dbg_ptr.assemble_write_memory(addr,asm)
+        if write == True:
+            for index in range(0,asm_size):
+                read = dbg_ptr.read_memory_byte(addr + index)
+                # print("{:02x} ".format(read),end="")
+                byte_code.append(read)
+        dbg_ptr.delete_alloc(addr)
+        return byte_code
+    else:
+        return bytearray(0)
+
+# 搜索机器码,如果存在则返回
+def SearchOpCode(dbg_ptr, Search):
+
+    # 搜索机器码并转换为列表
+    op_code = []
+    for index in Search:
+        byte_array = get_opcode_from_assemble(dbg, index)
+        for index in byte_array:
+            op_code.append(hex(index))
+
+    # print("机器码列表: {}".format(op_code))
+
+    # 将机器码列表转换为字符串
+    # 1.先转成字符串列表
+    x = [str(i) for i in op_code]
+
+    # 2.将字符串列表转为字符串
+    # search_code = ' '.join(x).replace("0x","")
+    search_code = []
+
+    # 增加小于三位前面的0
+    for l in range(0,len(x)):
+        if len(x[l]) <= 3:
+            # 如果是小于3位数则在前面增加0
+            # print(''.join(x[l]).replace("0x","").zfill(2))
+            search_code.append(''.join(x[l]).replace("0x","").zfill(2))
+        else:
+            search_code.append(''.join(x[l]).replace("0x", ""))
+
+    # 3.变成字符串
+    search_code = ' '.join(search_code).replace("0x", "")
+    print("被搜索字符串: {}".format(search_code))
+
+    # 调用搜索命令
+    ref = dbg.scan_memory_one(search_code)
+    if ref != None or ref != 0:
+        return ref
+    else:
+        return 0
+    return 0
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 搜索一个指令序列,用于快速查找构建漏洞利用代码
+    SearchCode = [
+        ["pop ecx", "pop ebp", "ret", "push ebp"],
+        ["push ebp", "mov ebp,esp"],
+        ["mov ecx, dword ptr ds:[eax+0x3C]", "add ecx, eax"]
+    ]
+
+    # 检索内存指令集
+    for item in range(0, len(SearchCode)):
+        Search = SearchCode[item]
+        ret = SearchOpCode(dbg, Search)
+        print("所搜指令所在内存: {}".format(hex(ret)))
 
     dbg.close()
 ```
