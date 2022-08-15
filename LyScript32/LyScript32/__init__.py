@@ -555,7 +555,7 @@ class MyDebug(object):
                 recv_address = recv_struct.Command_int_A
                 return recv_address
             else:
-                return False
+                return 0
         except Exception:
             return False
         return False
@@ -572,7 +572,7 @@ class MyDebug(object):
                 recv_address = recv_struct.Command_int_A
                 return recv_address
             else:
-                return False
+                return 0
         except Exception:
             return False
         return False
@@ -589,7 +589,7 @@ class MyDebug(object):
                 recv_address = recv_struct.Command_int_A
                 return recv_address
             else:
-                return False
+                return 0
         except Exception:
             return False
         return False
@@ -606,7 +606,7 @@ class MyDebug(object):
                 recv_address = recv_struct.Command_int_A
                 return recv_address
             else:
-                return False
+                return 0
         except Exception:
             return False
         return False
