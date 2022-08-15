@@ -687,6 +687,31 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**scan_memory_any() 函数:** 该函数可实现对特定位置，向下扫描特定长度的特征字段。
+
+ - 参数1：扫描起始地址（十进制）
+ - 参数2：扫描长度（十进制）
+ - 参数3：特征码字段
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    # 初始化
+    dbg = MyDebug()
+
+    # 连接到调试器
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 任意地址扫描
+    eip = dbg.get_register("eip")
+    ref = dbg.scan_memory_any(eip,1024,"8b 50 04 8b fe")
+    print("得到扫描结果: {}".format(hex(ref)))
+
+    dbg.close()
+```
+
 **get_local_protect() 函数:** 获取内存属性传值，该函数进行更新，取消了只能得到EIP所指的位置的内存属性，用户可随意检测。
 ```Python
 from LyScript32 import MyDebug
