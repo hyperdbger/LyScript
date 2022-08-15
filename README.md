@@ -225,7 +225,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**is_debugger() /is_running() 函数:** is_debugger可用于验证当前调试器是否处于调试状态，is_running则用于验证是否在运行。
+**is_debugger() /is_running()/is_run_locked() 函数:** 函数`is_debugger`可用于验证当前调试器是否处于调试状态，`is_running`则用于验证是否在运行，`is_run_locked()`用于检查调试器是否被锁定(暂停)。
 
 - 无参数传递
 
@@ -240,6 +240,9 @@ if __name__ == "__main__":
     print(ref)
 
     ref = dbg.is_running()
+    print(ref)
+
+    ref = dbg.is_run_locked()
     print(ref)
 
     dbg.close()
@@ -937,6 +940,9 @@ if __name__ == "__main__":
 ```
 
 **get_local_protect() 函数:** 获取内存属性传值，该函数进行更新，取消了只能得到EIP所指的位置的内存属性，用户可随意检测。
+
+ - 参数1：内存地址（十进制）
+
 ```Python
 from LyScript32 import MyDebug
 
@@ -952,6 +958,11 @@ if __name__ == "__main__":
 ```
 
 **set_local_protect() 函数:** 新增设置内存属性函数，传入eip内存地址，设置属性32，以及设置内存长度1024即可。
+
+ - 参数1：内存地址（十进制）
+ - 参数2：权限类型（32=执行/读取 30=执行 2=读取/写入）
+ - 参数3：属性长度（十进制）
+
 ```Python
 from LyScript32 import MyDebug
 
@@ -997,6 +1008,86 @@ if __name__ == "__main__":
 
     ref = dbg.get_memory_section()
     print(ref)
+    dbg.close()
+```
+
+**is_jmp_going_to_execute() 函数:** 判断内存地址是否跳转到可执行内存块。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+
+    flag = dbg.is_jmp_going_to_execute(eip)
+    print("是否是跳转(是否可执行): {}".format(flag))
+
+    dbg.close()
+```
+
+**mem_find_base_addr() 函数:** 返回特定位置处内存模块基地址和大小，以字典形式返回。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    dic = dbg.mem_find_base_addr(eip)
+
+    print("内存基地址: {}".format(hex(dic.get("base"))))
+    print("内存大小: {}".format(dic.get("size")))
+
+    dbg.close()
+```
+
+**mem_get_page_size() 函数:** 得到指定位置处内存页面长度。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    addr = dbg.mem_get_page_size(eip)
+
+    print("内存页面长度: {}".format(hex(addr)))
+
+    dbg.close()
+```
+
+**mem_is_valid() 函数:** 验证指定位置处内存地址是否可读取。
+
+ - 参数1：内存地址（十进制）
+
+```Python
+from LyScript32 import MyDebug
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    eip = dbg.get_register("eip")
+    is_read = dbg.mem_is_valid(eip)
+    print("内存地址属性: {}".format(is_read))
+
     dbg.close()
 ```
 <br>
