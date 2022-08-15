@@ -4144,9 +4144,3 @@ if __name__ == "__main__":
 		  	dasm_memory_list[index].get("opcode"),dasm_file_list[index].get("opcode")))
     dbg.close()
 ```
-<br>
-
-### BUG 问题公告
-
-1.内存读取系列函数存在当读入内存数值为0时，默认输出为False  （下次更新修复，也可自行更改LyScript模块中对应位置）
-
