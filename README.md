@@ -7,7 +7,7 @@
   <img width="100" src="https://cdn.lyshark.com/archive/LyScript/bug_black.png"/><tr>
     <img width="100" src="https://cdn.lyshark.com/archive/LyScript/python.png"/>
 -->
- <br><br><br>
+ <br><br>
   
   [简体中文](README.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
 
