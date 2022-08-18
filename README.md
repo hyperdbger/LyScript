@@ -44,10 +44,6 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
 
 ![image](https://user-images.githubusercontent.com/52789403/161062393-df04aabb-2d70-4434-80b9-a46974bccf8a.png)
 
-本插件客户端支持跨平台，目前支持Windows平台，Mac平台，以及Linux平台。
-
-![image](https://user-images.githubusercontent.com/52789403/185293572-4c778cf2-4a3d-409d-8477-63ca454c1ded.png)
-
 运行x64dbg程序并手动载入需要分析的可执行文件，然后我们可以通过`connect()`方法连接到调试器，连接后会创建一个持久会话直到python脚本结束则连接会被强制断开，在此期间可调用`is_connect()`检查该链接是否还存在，具体代码如下所示。
 ```Python
 from LyScript32 import MyDebug
