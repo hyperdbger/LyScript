@@ -34,7 +34,7 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
 
 插件下载好以后，请将该插件复制到x64dbg的plugins目录下，程序运行后会自动加载插件。
 
-![](https://img2022.cnblogs.com/blog/1379525/202203/1379525-20220327190905044-1815692787.png)
+![image](https://user-images.githubusercontent.com/52789403/185293618-68102ea6-8c37-493e-8be3-ca46eca0f0b5.png)
 
 当插件加载成功后，会在日志位置看到具体的绑定信息以及输出调试，该插件并不会在插件栏显示。
 
@@ -43,6 +43,10 @@ Python 包请安装与插件一致的版本，在cmd命令行下执行pip命令�
 如果需要远程调试，则只需要在初始化`MyDebug()`类时传入对端IP地址即可，如果不填写参数则默认使用`127.0.0.1`地址，请确保对端放行了`6589`端口，否则无法连接。
 
 ![image](https://user-images.githubusercontent.com/52789403/161062393-df04aabb-2d70-4434-80b9-a46974bccf8a.png)
+
+本插件客户端支持跨平台，目前支持Windows平台，Mac平台，以及Linux平台。
+
+![image](https://user-images.githubusercontent.com/52789403/185293572-4c778cf2-4a3d-409d-8477-63ca454c1ded.png)
 
 运行x64dbg程序并手动载入需要分析的可执行文件，然后我们可以通过`connect()`方法连接到调试器，连接后会创建一个持久会话直到python脚本结束则连接会被强制断开，在此期间可调用`is_connect()`检查该链接是否还存在，具体代码如下所示。
 ```Python
