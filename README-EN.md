@@ -1103,6 +1103,8 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-<center>
+<br>
+
+### notes
+
 <b>The English version is not comprehensive. Please read the Chinese version for complete instructions.</b>
-</center>
