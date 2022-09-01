@@ -3351,6 +3351,140 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
+**搜索内存中的机器码:** 相比于文件机器码而言，内存机器码则需要配合`LyScript`插件，从内存中寻找指令片段。
+```Python
+from LyScript32 import MyDebug
+
+# 将可执行文件中的单数转换为 0x00 格式
+def ReadHexCode(code):
+    hex_code = []
+
+    for index in code:
+        if index >= 0 and index <= 15:
+            #print("0" + str(hex(index).replace("0x","")))
+            hex_code.append("0" + str(hex(index).replace("0x","")))
+        else:
+            hex_code.append(hex(index).replace("0x",""))
+            #print(hex(index).replace("0x",""))
+
+    return hex_code
+
+# 获取到内存中的机器码
+def GetCode():
+    try:
+        ref_code = []
+        dbg = MyDebug()
+        connect_flag = dbg.connect()
+        if connect_flag != 1:
+            return None
+
+        start_address = dbg.get_local_base()
+        end_address = start_address + dbg.get_local_size()
+
+        # 循环得到机器码
+        for index in range(start_address,end_address):
+            read_bytes = dbg.read_memory_byte(index)
+            ref_code.append(read_bytes)
+
+        dbg.close()
+        return ref_code
+    except Exception:
+        return False
+
+# 在字节数组中匹配是否与特征码一致
+def SearchHexCode(Code,SearchCode,ReadByte):
+    SearchCount = len(SearchCode)
+    #print("特征码总长度: {}".format(SearchCount))
+    for item in range(0,ReadByte):
+        count = 0
+        # 对十六进制数切片,每次向后遍历SearchCount
+        OpCode = Code[ 0+item :SearchCount+item ]
+        #print("切割数组: {} --> 对比: {}".format(OpCode,SearchCode))
+        try:
+            for x in range(0,SearchCount):
+                if OpCode[x] == SearchCode[x]:
+                    count = count + 1
+                    #print("寻找特征码计数: {} {} {}".format(count,OpCode[x],SearchCode[x]))
+                    if count == SearchCount:
+                        # 如果找到了,就返回True,否则返回False
+                        return True
+                        exit(0)
+        except Exception:
+            pass
+    return False
+
+if __name__ == "__main__":
+    # 读取到内存机器码
+    ref_code = GetCode()
+    if ref_code != False:
+        # 转为十六进制
+        hex_code = ReadHexCode(ref_code)
+        code_size = len(hex_code)
+
+        # 指定要搜索的特征码序列
+        search = ['c0', '74', '0d', '66', '3b', 'c6', '77', '08']
+
+        # 搜索特征: hex_code = exe的字节码,search=搜索特征码,code_size = 搜索大小
+        ret = SearchHexCode(hex_code, search, code_size)
+        if ret == True:
+            print("特征码 {} 存在".format(search))
+        else:
+            print("特征码 {} 不存在".format(search))
+    else:
+        print("读入失败")
+```
+
+**搜索内存反汇编代码:** 通过`LyScript`插件读入内存机器码，并在该机器码中寻找指令片段，找到后返回内存首地址。
+```Python
+from LyScript32 import MyDebug
+
+# 检索指定序列中是否存在一段特定的指令集
+def SearchOpCode(OpCodeList,SearchCode,ReadByte):
+    SearchCount = len(SearchCode)
+    for item in range(0,ReadByte):
+        count = 0
+        OpCode_Dic = OpCodeList[ 0 + item : SearchCount + item ]
+        # print("切割字典: {}".format(OpCode_Dic))
+        try:
+            for x in range(0,SearchCount):
+                if OpCode_Dic[x].get("opcode") == SearchCode[x]:
+                    #print(OpCode_Dic[x].get("addr"),OpCode_Dic[x].get("opcode"))
+                    count = count + 1
+                    if count == SearchCount:
+                        #print(OpCode_Dic[0].get("addr"))
+                        return OpCode_Dic[0].get("addr")
+                        exit(0)
+        except Exception:
+            pass
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 得到EIP位置
+    eip = dbg.get_register("eip")
+
+    # 反汇编前1000行
+    disasm_dict = dbg.get_disasm_code(eip,1000)
+
+    # 搜索一个指令序列,用于快速查找构建漏洞利用代码
+    SearchCode = [
+        ["push 0xC0000409", "call 0x003F1B38", "pop ecx"],
+        ["mov ebp, esp", "sub esp, 0x324"]
+    ]
+
+    # 检索内存指令集
+    for item in range(0,len(SearchCode)):
+        Search = SearchCode[item]
+        # disasm_dict = 返回汇编指令 Search = 寻找指令集 1000 = 向下检索长度
+        ret = SearchOpCode(disasm_dict,Search,1000)
+        if ret != None:
+            print("指令集: {} --> 首次出现地址: {}".format(SearchCode[item],hex(ret)))
+
+    dbg.close()
+```
+
 **得到汇编指令机器码:** 该功能主要实现，得到用户传入汇编指令所对应的机器码，这段代码你可以这样来实现。
 ```Python
 from LyScript32 import MyDebug
