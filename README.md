@@ -5111,3 +5111,86 @@ if __name__ == "__main__":
 
     dbg.close()
 ```
+
+**汇编弹窗替换:** 通过钩子劫持技术，实现用户点击弹窗后，弹出我们自己的版权信息。
+```Python
+from LyScript32 import MyDebug
+
+# 传入汇编列表,写出到内存
+def assemble(dbg, address=0, asm_list=[]):
+    asm_len_count = 0
+    for index in range(0,len(asm_list)):
+        # 写出到内存
+        dbg.assemble_at(address, asm_list[index])
+        # print("地址: {} --> 长度计数器: {} --> 写出: {}".format(hex(address + asm_len_count), asm_len_count,asm_list[index]))
+        # 得到asm长度
+        asm_len_count = dbg.assemble_code_size(asm_list[index])
+        # 地址每次递增
+        address = address + asm_len_count
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect_flag = dbg.connect()
+    print("连接状态: {}".format(connect_flag))
+
+    # 找到MessageBoxA
+    messagebox_address = dbg.get_module_from_function("user32.dll","MessageBoxA")
+    print("MessageBoxA内存地址 = {}".format(hex(messagebox_address)))
+
+    # 分配空间
+    HookMem = dbg.create_alloc(1024)
+    print("自定义内存空间: {}".format(hex(HookMem)))
+
+    # 写出FindWindowA内存地址,跳转地址
+    asm = [
+        f"push {hex(HookMem)}",
+        "ret"
+    ]
+
+    # 将列表中的汇编指令写出到内存
+    assemble(dbg,messagebox_address,asm)
+
+    # 定义两个变量,存放字符串
+    MsgBoxAddr = dbg.create_alloc(512)
+    MsgTextAddr = dbg.create_alloc(512)
+
+    # 填充字符串内容
+    # lyshark 标题
+    txt = [0x6c, 0x79, 0x73, 0x68, 0x61, 0x72, 0x6b]
+    # 内容 lyshark.com
+    box = [0x6C, 0x79, 0x73, 0x68, 0x61, 0x72, 0x6B, 0x2E, 0x63, 0x6F, 0x6D]
+
+    for txt_count in range(0,len(txt)):
+        dbg.write_memory_byte(MsgBoxAddr + txt_count, txt[txt_count])
+
+    for box_count in range(0,len(box)):
+        dbg.write_memory_byte(MsgTextAddr + box_count, box[box_count])
+
+    print("标题地址: {} 内容: {}".format(hex(MsgBoxAddr),hex(MsgTextAddr)))
+
+    # 此处是MessageBox替换后的片段
+    PatchCode =\
+    [
+        "mov edi, edi",
+        "push ebp",
+        "mov ebp,esp",
+        "push -1",
+        "push 0",
+        "push dword ptr ss:[ebp+0x14]",
+        f"push {hex(MsgBoxAddr)}",
+        f"push {hex(MsgTextAddr)}",
+        "push dword ptr ss:[ebp+0x8]",
+        "call 0x76030E20",
+        "pop ebp",
+        "ret 0x10"
+    ]
+
+    # 写出到自定义内存
+    assemble(dbg, HookMem, PatchCode)
+
+    print("地址已被替换,可以运行了.")
+    dbg.set_debug("Run")
+    dbg.set_debug("Run")
+
+    dbg.close()
+```
