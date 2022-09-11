@@ -5122,7 +5122,8 @@ def assemble(dbg, address=0, asm_list=[]):
     for index in range(0,len(asm_list)):
         # 写出到内存
         dbg.assemble_at(address, asm_list[index])
-        # print("地址: {} --> 长度计数器: {} --> 写出: {}".format(hex(address + asm_len_count), asm_len_count,asm_list[index]))
+        # print("地址: {} --> 长度计数器: {} --> 写出: {}".
+	# format(hex(address + asm_len_count), asm_len_count,asm_list[index]))
         # 得到asm长度
         asm_len_count = dbg.assemble_code_size(asm_list[index])
         # 地址每次递增
