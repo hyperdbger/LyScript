@@ -5074,7 +5074,8 @@ def getKernelModuleBase(dbg):
     # esi = 模块链表指针InInitializationOrderModuleList
     ptr = PEB_LDR_DATA + 0x1c
     InInitializationOrderModuleList = dbg.read_memory_ptr(ptr)
-    # print("读入InInitializationOrderModuleList里面的地址: {}".format(hex(InInitializationOrderModuleList)))
+    # print("读入InInitializationOrderModuleList里面的地址: {}".
+    format(hex(InInitializationOrderModuleList)))
 
     # 取出kernel32.dll模块基址
     ptr = InInitializationOrderModuleList + 0x08
