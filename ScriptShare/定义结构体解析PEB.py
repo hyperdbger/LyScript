@@ -1,11 +1,11 @@
 from LyScript32 import MyDebug
-from struct import unpack
+import struct
 
 class _PEB():
     def __init__(self, dbg):
         # 内置函数得到进程PEB
         self.base = dbg.get_peb_address(dbg.get_process_id())
-        self.PEB = []
+        self.PEB = bytearray()
 
         # 填充前488字节
         for index in range(0,488):
@@ -233,7 +233,8 @@ class _PEB():
         return self.BeingDebugged
 
     def get_ProcessHeaps(self):
-        return self.ProcessHeaps
+        pack = struct.unpack('<L', bytes(self.ProcessHeap))
+        return hex(pack[0])
 
 if __name__ == "__main__":
     dbg = MyDebug()
@@ -244,7 +245,9 @@ if __name__ == "__main__":
 
     # 获取进程调试状态
     is_debug = peb.get_BeingDebugged()
-
     print("是否被调试: {}".format(is_debug))
-    
+
+    heap = peb.get_ProcessHeaps()
+    print("堆地址: {}".format(heap))
+
     dbg.close()
