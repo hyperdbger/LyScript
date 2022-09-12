@@ -2550,6 +2550,54 @@ if __name__ == "__main__":
 ```
 <br>
 
+### LyPeUtils 工具包
+
+该工具包用于辅助实现文件内PE结构的解析转换。
+
+ - 安装工具包: `pip install LyPeUtils`
+
+| 函数名 | 函数作用 |
+| ---- | ---- |
+| get_memory_base() | 得到自身程序基址 |
+| get_memory_size() | 得到自身程序大小 |
+| init_pe_module() |  设置模块,如果为空则设置自身 |
+| get_file_oep_va() | 得到文件OEP位置 |
+| get_memory_oep_va() | 得到内存OEP位置 |
+| get_offset_from_va(va_address) | 传入一个VA值获取到FOA文件地址 |
+| get_va_from_foa(foa_address)  | 传入一个FOA文件地址得到VA虚拟地址 |
+| get_rva_from_foa(foa_address) | 传入一个FOA文件地址转为RVA地址 |
+| get_file_section() | 获取文件节表 |
+| get_memory_section() |获取内存节表 |
+| get_memory_addr_from_section(section_name) | 获取内存特定节内节表 |
+| get_file_section_count() |得到文件节表数量 |
+| get_section_name_all() | 得到当前所有节名称 |
+|  get_hash_from_section(section_name)|得到特定节内存hash |
+| get_va_from_section(section_name) |得到特定节对应到虚拟内存中的地址 |
+| get_file_import() |  获取文件内导入表|
+| get_memory_import() | 获取内存内导入表 |
+
+这里给出简单的使用案例，如下所示用户传入文件偏移，得到对应到内存中的VA地址。
+```Python
+from LyScript32 import MyDebug
+from LyPeUtils import PE
+
+if __name__ == "__main__":
+    dbg = MyDebug()
+    connect = dbg.connect()
+
+    # 初始化PE
+    pe = PE(dbg)
+
+    # 初始化模块,默认设置主进程
+    flag = pe.init_pe_module()
+
+    va = pe.get_va_from_foa(0x123)
+    print("文件偏移转为VA是: {}".format(hex(va)))
+
+    dbg.close()
+```
+<br>
+
 ### LyScriptUtils 转换工具包
 
 该工具包其目的是辅助LyScript插件实现进制与字符串或字节序列的快速转换，协助逆向工作者更好的反汇编，工具包默认支持32位与64位环境。
