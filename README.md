@@ -5424,7 +5424,8 @@ class Segment():
                         Items.append(readbyte)
 
                     (C_Next, C_Addr, C_Size, C_Filler) = struct.unpack("LLLL", Items)
-                    print("Memory: {} Address: {} (a: {}) Size: {}".format(hex(self.address),hex(C_Next), C_Addr,C_Size))
+                    print("Memory: {} Address: {} (a: {}) Size: {}"
+		    .format(hex(self.address),hex(C_Next), C_Addr,C_Size))
                     Pages.append(C_Addr + C_Size)
                     addr = C_Next
 
