@@ -5385,7 +5385,6 @@ class _PEB():
         pack = struct.unpack('<L', bytes(self.ProcessHeap))
         return pack[0]
 
-# 段
 class Segment():
     def __init__(self, dbg, heap_addr):
         self.address = heap_addr
@@ -5451,7 +5450,7 @@ if __name__ == "__main__":
     dbg.close()
 ```
 
-**通过PEB结构解析低堆内存:** 低内存堆的输出也可以使用如上方法实现，只是在输出是需要解析的结构体程序稍多一些，但总体上原理与上方代码一致。
+**通过PEB结构解析低内存堆:** 低内存堆的输出也可以使用如上方法实现，只是在输出是需要解析的结构体程序稍多一些，但总体上原理与上方代码一致。
 ```Python
 from LyScript32 import MyDebug
 import struct
@@ -5469,7 +5468,7 @@ def readLong(address):
     return dbg.read_memory_dword(address)
 
 # 得到进程PEB
-class _PEB:
+class _PEB():
     def __init__(self, dbg):
         # 内置函数得到进程PEB
         self.base = dbg.get_peb_address(dbg.get_process_id())
@@ -5484,23 +5483,24 @@ class _PEB:
         pack = struct.unpack('<L', bytes(self.ProcessHeap))
         return pack[0]
 
-class UserMemoryCache:
+class UserMemoryCache():
     def __init__(self, addr, mem):
         self.address = addr
         (self.Next, self.Depth, self.Sequence, self.AvailableBlocks,\
          self.Reserved) = struct.unpack("LHHLL", mem[ 0 : 16 ])
 
-class Bucket:
+class Bucket():
     def __init__(self, addr, mem):
         self.address = addr
         (self.BlockUnits, self.SizeIndex, Flag) =\
          struct.unpack("HBB", mem[:4])
-        # Theoretically, this is how the Flag are separated:
+
+        # 从理论上讲，这是标志的分离方式
         self.UseAffinity = Flag & 0x1
         self.DebugFlags  = (Flag >1) & 0x3
 
 # 低内存堆
-class LFHeap:
+class LFHeap():
     def __init__(self, addr):
         mem = readMemory(addr, 0x300)
 
