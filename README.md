@@ -5503,7 +5503,6 @@ class Bucket():
 class LFHeap():
     def __init__(self, addr):
         mem = readMemory(addr, 0x300)
-
         index = 0
         self.address = addr
 
@@ -5515,7 +5514,6 @@ class LFHeap():
          self.CacheFrees) = struct.unpack("L" * 0x10, mem[index:index+0x40])
 
         index += 0x40
-
         self.UserBlockCache = []
         for a in range(0,12):
             umc = UserMemoryCache(addr + index, mem[index:index + 0x10])
@@ -5528,7 +5526,6 @@ class LFHeap():
             b = Bucket(addr + index, entry)
             index = index + 4
             self.Buckets.append(b)
-
 
 if __name__ == "__main__":
     dbg = MyDebug()
