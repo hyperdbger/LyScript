@@ -5305,10 +5305,14 @@ if __name__ == "__main__":
 
     headings = ["VA地址", "计算长度", "MD5", "SHA256", "SHA512","CRC32"]
     data = [
-        [ref.get("va"),ref.get("size"),ref.get("md5"),ref.get("sha256"),ref.get("sha512"),ref.get("crc32")],
-        [ref2.get("va"), ref2.get("size"), ref2.get("md5"), ref2.get("sha256"), ref2.get("sha512"), ref2.get("crc32")],
-        [ref3.get("va"), ref3.get("size"), ref3.get("md5"), ref3.get("sha256"), ref3.get("sha512"), ref3.get("crc32")],
-        [ref4.get("va"), ref4.get("size"), ref4.get("md5"), ref4.get("sha256"), ref4.get("sha512"), ref4.get("crc32")]
+        [ref.get("va"),ref.get("size"),ref.get("md5"),
+	ref.get("sha256"),ref.get("sha512"),ref.get("crc32")],
+        [ref2.get("va"), ref2.get("size"), ref2.get("md5"),
+	ref2.get("sha256"), ref2.get("sha512"), ref2.get("crc32")],
+        [ref3.get("va"), ref3.get("size"), ref3.get("md5"),
+	ref3.get("sha256"), ref3.get("sha512"), ref3.get("crc32")],
+        [ref4.get("va"), ref4.get("size"), ref4.get("md5"),
+	ref4.get("sha256"), ref4.get("sha512"), ref4.get("crc32")]
     ]
 
     # 定义表格样式
@@ -5400,9 +5404,14 @@ class Segment():
 
         if DEBUG == True:
             print("SEGMENT: {} Sig: {}".format(hex(self.address),hex(self.Signature)))
-            print("Heap: {} LargetUncommit {} Base: {}".format(hex(self.Heap),hex(self.LargestUnCommitedRange),hex(self.BaseAddress)))
-            print("NumberOfPages {} FirstEntry: {} LastValid: {}".format(hex(self.NumberOfPages), hex(self.FirstEntry), hex(self.LastValidEntry)))
-            print("Uncommited: {}".format(self.UnCommittedRanges))
+            
+	    print("Heap: {} LargetUncommit {} Base: {}"
+	    .format(hex(self.Heap),hex(self.LargestUnCommitedRange),hex(self.BaseAddress)))
+            
+	    print("NumberOfPages {} FirstEntry: {} LastValid: {}"
+	    .format(hex(self.NumberOfPages), hex(self.FirstEntry), hex(self.LastValidEntry)))
+            
+	    print("Uncommited: {}".format(self.UnCommittedRanges))
 
             Pages = []
             Items = bytearray()
