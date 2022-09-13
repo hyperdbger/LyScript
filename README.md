@@ -5399,8 +5399,10 @@ class GrabHeap():
 
         index = 0x8
         (self.Signature, self.Flags, self.ForceFlags, self.VirtualMemoryThreshold, \
-         self.SegmentReserve, self.SegmentCommit, self.DeCommitFreeBlockThreshold, self.DeCommitTotalBlockThreshold, \
-         self.TotalFreeSize, self.MaximumAllocationSize, self.ProcessHeapListIndex, self.HeaderValidateLength, \
+         self.SegmentReserve, self.SegmentCommit, self.DeCommitFreeBlockThreshold, \
+	 self.DeCommitTotalBlockThreshold, \
+         self.TotalFreeSize, self.MaximumAllocationSize, self.ProcessHeapListIndex, \
+	 self.HeaderValidateLength, \
          self.HeaderValidateCopy, self.NextAvailableTagIndex, self.MaximumTagIndex, self.TagEntries, \
          self.UCRSegments, self.UnusedUnCommittedRanges, self.AlignRound, self.AlignMask) = \
             struct.unpack("LLLLLLLLLLHHLHHLLLLL", self.buffer[index:index + (0x50 - 8)])
@@ -5413,7 +5415,8 @@ class GrabHeap():
         index += 64 * 4
         self.FreeListInUseLong = struct.unpack("LLLL", self.buffer[index:index + 16])
         index += 16
-        (self.FreeListInUseTerminate, self.AllocatorBackTraceIndex) = struct.unpack("HH", self.buffer[index: index + 4])
+        (self.FreeListInUseTerminate, self.AllocatorBackTraceIndex) = \
+	struct.unpack("HH", self.buffer[index: index + 4])
         index += 4
         (self.Reserved1, self.LargeBlocksIndex) = struct.unpack("LL", self.buffer[index: index + 8])
 
