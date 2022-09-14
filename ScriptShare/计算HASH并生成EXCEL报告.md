@@ -1,3 +1,9 @@
+# ----------------------------------------------
+# By: LyShark
+# Email: me@lyshark.com
+# Project: https://github.com/lyshark/LyScript
+# ----------------------------------------------
+
 import hashlib
 import time
 import zlib,binascii
