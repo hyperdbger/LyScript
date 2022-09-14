@@ -14,7 +14,12 @@ def disasm_code(dbg_ptr, eip, count):
         # 获取一条反汇编代码
         disasm_asm = dbg_ptr.get_disasm_one_code(eip + disasm_length)
         disasm_addr = eip + disasm_length
-        disasm_size = dbg_ptr.assemble_code_size(disasm_asm)
+
+        # 某些指令无法被计算出长度,此处可以添加直接跳过
+        if(disasm_asm == "push 0xC0000409"):
+            disasm_size = 5
+        else:
+            disasm_size = dbg_ptr.assemble_code_size(disasm_asm)
 
         print("内存地址: 0x{:08x} | 反汇编: {:35} | 长度: {}  | 机器码: "
 		.format(disasm_addr, disasm_asm, disasm_size),end="")
@@ -33,6 +38,6 @@ if __name__ == "__main__":
     dbg.connect()
 
     eip = dbg.get_register("eip")
-    disasm_code(dbg, eip, 25)
+    disasm_code(dbg, eip, 55)
 
     dbg.close()
