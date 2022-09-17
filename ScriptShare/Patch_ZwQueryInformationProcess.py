@@ -83,13 +83,14 @@ def Patch_ZwQueryInformationProcess(dbg):
         else:
             flag = 0
 
-    # 填充跳转位置
+    # 填充跳转位置ZwQueryInformationProcess开头位置
     jmp_shellcode = GetOpCode(dbg,
                               [
                                   f"push {hex(create_address)}",
                                   "ret"
                               ]
                               )
+    # 将跳转写出替换掉
     for index in range(0,len(jmp_shellcode)):
         flag = dbg.write_memory_byte(ispresent + index,jmp_shellcode[index])
         if flag:
