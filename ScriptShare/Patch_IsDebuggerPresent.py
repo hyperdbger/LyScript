@@ -47,7 +47,14 @@ def Patch_IsDebuggerPresent(dbg):
         return 0
 
     # 将反调试语句转为机器码
-    ShellCode = GetOpCode(dbg, ["DB 0x64", "mov eax,dword ptr ds:[18]", "sub eax,eax", "ret"])
+    ShellCode = GetOpCode(dbg, 
+                          [
+                              "DB 0x64", 
+                              "mov eax,dword ptr ds:[18]", 
+                              "sub eax,eax", 
+                              "ret"
+                          ]
+                          )
     print(ShellCode)
 
     flag = 0
