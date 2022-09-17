@@ -1,3 +1,9 @@
+# ----------------------------------------------
+# By: LyShark
+# Email: me@lyshark.com
+# Project: https://github.com/lyshark/LyScript
+# ----------------------------------------------
+
 from LyScript32 import MyDebug
 
 # 传入汇编代码,得到对应机器码
