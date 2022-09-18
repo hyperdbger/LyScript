@@ -9,7 +9,7 @@
 -->
  <br><br>
   
-  [简体中文](README.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
+  [简体中文](README.md) | [繁體中文(中國)](README-TC.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
 
   <br>
   
@@ -30,6 +30,7 @@ Please install the python package with the same version as the plug-in. Execute 
 
 Secondly, you need to manually download the driver file corresponding to `x64dbg` version and put it in the specified `plugins` directory.
 
+ - x64dbg download：<a href="https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2022-09-11_15-59.zip/download">snapshot_2022-09-11_15-59.zip</a>
  - Plug in download：<a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript32-1.0.13.zip">LyScript32-1.0.13 (32bit)</a> OR <a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript64-1.0.13.zip">LyScript64-1.0.13 (64bit)</a>
 
 After downloading the plug-in, please copy the plug-in to the plugins directory of x64dbg. The plug-in will be loaded automatically after the program runs.
