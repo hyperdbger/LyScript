@@ -9,7 +9,7 @@
 -->
  <br><br>
   
-  [简体中文](README.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
+  [简体中文](README.md) | [繁體中文(中國)](README-TC.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
 
   <br>
   
@@ -30,6 +30,7 @@
 
 Во вторых, вам нужно вручную загрузить драйвер, соответствующий версии x64dbg, и поместить его в указанный каталог `plugins`.
 
+ - x64dbg модулей：<a href="https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2022-09-11_15-59.zip/download">snapshot_2022-09-11_15-59.zip</a>
  - Загрузка модулей ：<a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript32-1.0.13.zip">LyScript32-1.0.13 (32bit)</a> или <a href="https://github.com/lyshark/LyScript/raw/master/plugins/LyScript64-1.0.13.zip">LyScript64-1.0.13 (64bit)</a>
 
 после загрузки модуля, пожалуйста, скопируйте этот модуль в каталог plugins x64dbg, который будет загружен автоматически после запуска программы.
