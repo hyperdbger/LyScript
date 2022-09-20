@@ -2,20 +2,16 @@
 
 <br>
 <div align=center>
-	<img width="150" src="https://cdn.lyshark.com/archive/LyScript/lyscript_png.jpg" />
-<!--
-  <img width="100" src="https://cdn.lyshark.com/archive/LyScript/bug_black.png"/><tr>
-    <img width="100" src="https://cdn.lyshark.com/archive/LyScript/python.png"/>
--->
+	<img width="150" src="/image/lyscript_png.jpg" />
  <br><br>
   
   [简体中文](README.md) | [繁體中文(中國)](README-TC.md) | [ENGLISH](README-EN.md) | [русский язык ](README-RU.md)
 
   <br>
   
-[![Build status](https://cdn.lyshark.com/archive/LyScript/build.svg)](https://github.com/lyshark/LyScript) [![Open Source Helpers](https://cdn.lyshark.com/archive/LyScript/users.svg)](https://github.com/lyshark/LyScript) [![Crowdin](https://cdn.lyshark.com/archive/LyScript/email.svg)](mailto:me@lyshark.com) [![Download x64dbg](https://cdn.lyshark.com/archive/LyScript/x64dbg.svg)](https://github.com/lyshark/LyScript/releases/tag/LyScript) [![OSCS Status](https://www.oscs1024.com/platform/badge/lyshark/LyScript.svg?size=small)](https://www.oscs1024.com/project/lyshark/LyScript?ref=badge_small)
+[![Build status](/image/build.svg)](https://github.com/lyshark/LyScript) [![Open Source Helpers](/image/users.svg)](https://github.com/lyshark/LyScript) [![Crowdin](/image/email.svg)](mailto:me@lyshark.com) [![Download x64dbg](/image/x64dbg.svg)](https://github.com/lyshark/LyScript/releases/tag/LyScript) [![OSCS Status](https://www.oscs1024.com/platform/badge/lyshark/LyScript.svg?size=small)](https://www.oscs1024.com/project/lyshark/LyScript?ref=badge_small)
 
-[![python3](https://cdn.lyshark.com/archive/LyScript/python3.svg)](https://github.com/lyshark/LyScript) [![platform](https://cdn.lyshark.com/archive/LyScript/platform.svg)](https://github.com/lyshark/LyScript) [![lyscriptver](https://cdn.lyshark.com/archive/LyScript/lyscript_version.svg)](https://github.com/lyshark/LyScript)
+[![python3](/image/python3.svg)](https://github.com/lyshark/LyScript) [![platform](/image/platform.svg)](https://github.com/lyshark/LyScript) [![lyscriptver](/image/lyscript_version.svg)](https://github.com/lyshark/LyScript)
 
 <br><br>
 An x64dbg automation control plug-in, which controls the behavior of x64dbg through python, realizes remote dynamic debugging, solves the problems of reverse workers analyzing programs, anti-virus personnel shelling, vulnerability analysts looking for instruction fragments, and native scripts not strong enough. By combining with Python, it makes use of the flexibility of Python syntax and its rich third-party libraries to accelerate the development of vulnerability exploitation programs, Assist in vulnerability mining and malware analysis.
